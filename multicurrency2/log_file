@@ -1,8 +1,0 @@
-2015-05-01 03:55:42ERROR: Errfile = C:\xampp\htdocs\eod\multicurrency2\read_ca_files.php, Errline = 16, Errno = 8.
-2015-05-01 03:55:42ERROR: Errstr = Undefined index: date.
-2015-05-01 04:08:01ERROR: Errfile = C:\xampp\htdocs\eod\multicurrency2\read_ca_files.php, Errline = 16, Errno = 8.
-2015-05-01 04:08:01ERROR: Errstr = Undefined index: date.
-2015-05-04 02:23:16ERROR: Errfile = C:\xampp\htdocs\eod\multicurrency2\read_ca_files.php, Errline = 16, Errno = 8.
-2015-05-04 02:23:16ERROR: Errstr = Undefined index: date.
-2015-05-04 02:35:47ERROR: Errfile = C:\xampp\htdocs\eod\multicurrency2\read_ca_files.php, Errline = 16, Errno = 8.
-2015-05-04 02:35:47ERROR: Errstr = Undefined index: date.

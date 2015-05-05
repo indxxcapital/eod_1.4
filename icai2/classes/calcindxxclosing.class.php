@@ -111,14 +111,16 @@ class Calcindxxclosing extends Application{
 		
 		
 		
-			$indxxprices=	mysql_query($query);	
+			$indxxpricesres=	mysql_query($query);	
 		
 		//$this->pr($indxxprices,true);
-		
+		$indxxprices=array();
 			
 				
-		while(false != ($indxxprice = mysql_fetch_assoc($indxxprices)))
+		while(false != ($indxxprice = mysql_fetch_assoc($indxxpricesres)))
 		{
+			$indxxprices[]=$indxxprice;
+			
 				
 			$indxx_dp_value=$this->db->getResult("select tbl_dividend_ph.* from tbl_dividend_ph where indxx_id='".$row['id']."' and ticker_id ='".$indxxprice['id']."' ",false,1);	
 			if(!empty($indxx_dp_value))
@@ -146,8 +148,8 @@ class Calcindxxclosing extends Application{
 			
 			
 			$final_array[$row['id']]['values']=$indxxprices;
-		
-			mysql_free_result($indxxprices);
+		unset($indxxprices);
+			mysql_free_result($indxxpricesres);
 		//$this->pr($indxxprices);	
 			
 			
