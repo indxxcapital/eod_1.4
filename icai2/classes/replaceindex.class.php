@@ -49,7 +49,7 @@ log_info("In Replace Index (Go-live) of index ");
 		$finalArray[$k1]['oldindxxvalue']=$oldindxxvalue;
 		
 		
-		
+	// "Select * from  tbl_final_price_temp where indxx_id ='".$oldindxx['id']."' and date='".$oldindxxvalue['date']."'";	
 		$oldPrices=$this->db->getResult("Select * from  tbl_final_price_temp where indxx_id ='".$oldindxx['id']."' and date='".$oldindxxvalue['date']."'",true) ;
 		$finalArray[$k1]['prices']=$oldPrices;
 		
@@ -284,7 +284,7 @@ $tickerTempArray=array();
 	
 	foreach($newIndxx['shares'] as $k4=> $newShares)
 	{
-	$insertShareArray[]="('".$newShares['dateAdded']."','".$newShares['isin']."','".$newShares['date']."','".$newShares['share']."','".$NewIndxxId."'); ";
+	$insertShareArray[]="('".$newShares['dateAdded']."','".$newShares['isin']."','".$newShares['date']."','".$newShares['share']."','".$NewIndxxId."') ";
 	
 
 	
@@ -333,7 +333,7 @@ $tickerTempArray=array();
 	 $insertPriceQuery.=implode(",",$insertPriceArray).";";
 	$this->db->query($insertPriceQuery);
 	
-	//$this->db->query("delete from tbl_final_price_temp where indxx_id='".$newIndxx['id']."' and date='".$newPrices['date']."'");
+	$this->db->query("delete from tbl_final_price_temp where indxx_id='".$newIndxx['id']."' and date='".$newPrices['date']."'");
 
 	}
 	
