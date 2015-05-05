@@ -1,0 +1,43 @@
+indexdetails|id|13
+indexdetails|name|index 11
+indexdetails|code|I11
+indexdetails|investmentammount|100000
+indexdetails|divpvalue|
+indexdetails|indexvalue|id|175
+indexdetails|indexvalue|dateAdded|2015-04-29 04:48:03
+indexdetails|indexvalue|indxx_id|13
+indexdetails|indexvalue|code|SPO
+indexdetails|indexvalue|market_value|0
+indexdetails|indexvalue|indxx_value|0.00
+indexdetails|indexvalue|date|2015-04-29
+indexdetails|indexvalue|olddivisor|89.559053209285
+indexdetails|indexvalue|newdivisor|89.559053209285
+indexdetails|divisor|0
+indexdetails|type|1
+indexdetails|cash_adjust|0
+indexdetails|curr|USD
+indexdetails|status|1
+indexdetails|dateAdded|2015-05-04 02:55:23
+indexdetails|lastupdated|2015-05-04 04:52:32
+indexdetails|dateStart|2015-05-04
+indexdetails|usersignoff|1
+indexdetails|dbusersignoff|1
+indexdetails|submitted|1
+indexdetails|finalsignoff|1
+indexdetails|runindex|1
+indexdetails|addtype|1
+indexdetails|zone|1
+indexdetails|calcdate|0000-00-00
+indexdetails|rebalance|0
+indexdetails|client_id|2
+indexdetails|display_currency|1
+indexdetails|ireturn|0
+indexdetails|ica|0
+indexdetails|recalc|0
+indexdetails|div_type|0
+indexdetails|currency_hedged|0
+indexdetails|priority|0
+indexdetails|tickers|null
+indexdetails|price|null
+indexdetails|shares|null
+indexdetails|users|null
