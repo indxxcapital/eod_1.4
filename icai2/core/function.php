@@ -438,6 +438,12 @@ function saveProcess($type=0)
 $query="Insert into tbl_system_progress (url,type,path,stime)  values ('".mysql_real_escape_string($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'])."','".$type."','".mysql_real_escape_string($_SERVER['SCRIPT_FILENAME'])."','".date("Y-m-d H:i:s",$_SERVER['REQUEST_TIME'])."')";
 mysql_query($query);
 }
-
+function checkformemorial(){
+ $query='update  `tbl_ca_values` 
+set `field_value` =  "1001" WHERE  `field_value` =  "1011"
+AND field_name =  "CP_DVD_TYP"';    
+ mysql_query($query);
+//exit;    
+}
 
 ?>

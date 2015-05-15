@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2014-06-18 15:35:38
+<?php /* Smarty version 2.6.14, created on 2015-05-14 05:01:52
          compiled from caupcomingindex/addnext.tpl */ ?>
 <div class="row-fluid">
                     <div class="span22">

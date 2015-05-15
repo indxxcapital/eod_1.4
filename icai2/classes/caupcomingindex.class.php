@@ -393,7 +393,7 @@ function uploadSharesforRunning(){
 		
 		//$this->pr($_FILES);
 			if($this->validatPost()){	
-			$fields=array("1",'2','3');		
+			$fields=array("1",'2','3','4');		
 				$data = csv::import($fields,$_FILES['inputfile']['tmp_name']);	
 
 //echo count($data);
@@ -407,6 +407,13 @@ $tickerdata=$this->db->getResult("select tbl_indxx_ticker_temp.* from tbl_indxx_
 //echo count($tickerdata);
 //echo $_SESSION['tempindexid'];
 //exit;
+$isinArray=array();
+if(!empty($tickerdata))
+{
+	foreach($tickerdata as $ticker)
+	$isinArray[]=$ticker['isin'];
+}
+//$this->pr($isinArray,true);
 
 if(count($data)!=count($tickerdata))
 {
@@ -417,46 +424,159 @@ if(count($data)!=count($tickerdata))
 
 	$added=0;
 	$flag=false;
-	
-		
+	$check=true;
+		$i=0;
+		$checkforWeights=false;
+		$sumofWeights=0;
 				if(!empty($data))
 				{
+					$weightQuery=array();
 					
-					
-					foreach($data as $security)
-					{
-						$tickerdata2=$this->db->getResult("select tbl_indxx_ticker_temp.* from tbl_indxx_ticker_temp where indxx_id='".$_SESSION['tempindexid']."' and isin='".$security[2]."' ",true);
-					//$this->pr($tickerdata2,true);
-					if(empty($tickerdata2))
-					{
-					//echo "exit;";
-					//exit;
-					$this->Redirect("index.php?module=caupcomingindex&event=uploadSharesforRunning","ISIN Mismatch of Ticker ".$security[1]." !!! <br> Please add again","error");	
-					
-					}
-					
-					}
-					
+					$query='INSERT into tbl_share_temp (isin,date,share,indxx_id) values ';
+					$queryArray=array();
 					
 					foreach($data as $security)
 					{
-						if($security[2]!='' && $security[3]!='')
+						//$this->pr($security,true);
+	if($i==0)
+	{
+	if($security['4'])
+	{
+	//echo "check Passed";
+	$checkforWeights=true;
+	$i++;
+	}
+	
+	}
+	
+					if(count($security)!=4)
 						{
-							$this->db->query("INSERT into tbl_share_temp set isin='".mysql_real_escape_string($security[2])."',date='".$this->_date."',share='".mysql_real_escape_string($security[3])."',indxx_id='".mysql_real_escape_string($_SESSION['tempindexid'])."'");
+							//echo count($security);
+						//	$this->pr($security);
+							
+							//exit;
+						$check=false;
+						$errormsg=" Column Count Not matched  for ".$security['1'];
+						break;
+						}elseif(strlen($security['2'])!=12)
+						{
+							
+						$check=false;
+						$errormsg="ISIN not valid for ".$security['1'];
+						break;
+						}elseif (preg_match('/[\'^£$&()}{@#~?><>,|=_+¬-]/', $security['1']) || preg_match('/[\'^£$&()}{@#~?><>,|=_+¬-]/', $security['2']) || preg_match('/[\'^£$&()}{@#~?><>,|=_+¬-]/', $security['3']) || preg_match('/[\'^£$&()}{@#~?><>,|=_+¬-]/', $security['4']) )
+{
+  
+   $check=false;
+						$errormsg="one or more of the 'special characters' found for ".$security['3'];
+						break;
+    // one or more of the 'special characters' found in $string
+}
+
+	
+					if($checkforWeights)
+					{
+					if($security['4'])
+					{
+					 $sumofWeights+=str_replace("%","",$security['4']);
+					//echo "deepak <br>";
+					}
+					}				
+					
+					
+						//$tickerdata2=$this->db->getResult("select tbl_indxx_ticker_temp.* from tbl_indxx_ticker_temp where indxx_id='".$_SESSION['tempindexid']."' and isin='".$security['2']."' ",true);
+					//$this->pr($tickerdata2,true);
+					if(!in_array($security['2'],$isinArray))
+					{
+						//echo "Check Not Passed".$security['2'];
+						//print_r($isinArray);
+						//$check=false;
+						$errormsg="isin not found for ".$security['1'];
+						break;
+					}
+					else{
+					$weightQuery[]="update tbl_indxx_ticker_temp set weight='".mysql_real_escape_string(str_replace("%","",$security[4]))."' where indxx_id='".$_SESSION['tempindexid']."' and isin='".mysql_real_escape_string($security['2'])."'";
+					}
+				
+				
+						if($security['2']!='' && $security['3']!='')
+						{
+							$queryArray[]="('".mysql_real_escape_string($security['2'])."','".$this->_date."','".mysql_real_escape_string($security['3'])."','".mysql_real_escape_string($_SESSION['tempindexid'])."')";
 						
 							$added++;
 		
 						}
+					
 					}
+					
+					
+				
+				
+			//	echo $sumofWeights;
+				//exit;
+					if(!empty($queryArray) && $check)
+					{
+					$this->db->query($query.implode(",",$queryArray).";");
+					unset($queryArray);
+					}
+					//echo $check;
+					//exit;
+					
+					
+				/*	if(!empty($weightQuery))
+					{
+					echo "weight check passed";
+					}
+					else{
+					echo "weight check not passed";
+					
+					}
+					
+					if($sumofWeights)
+					{
+					echo "Check Passed".$sumofWeights;
+					}else{
+						echo "Check Not Passed";
+					}
+					//exit;
+					*/
+					//$sumofWeights+=.01;
+					/*echo strval($sumofWeights);
+					if( strval($sumofWeights) == 100)
+					{
+					echo "sum passed=".floatval($sumofWeights);
+					}else
+					{
+					echo "sum not passed=".floatval($sumofWeights);
+					}
+					exit;*/
+					if(!empty($weightQuery) &&  strval($sumofWeights)==100)
+					{
+					foreach($weightQuery as $weightupdateQuery)
+					{
+					$this->db->query($weightupdateQuery);
+					}
+					unset($weightupdateQuery);
+					}else{
+					$check=false;
+						$errormsg="Sum of Weights is  ". $sumofWeights;
+						//break;
+					}
+					
 				}
 
-	if($added>=1)
+	if(!$check)
+{
+
+$this->Redirect("index.php?module=caupcomingindex&event=uploadSharesforRunning","Error in input :".$errormsg,"error");	
+}
+	elseif($added>=1)
 		{
 			$this->Redirect("index.php?module=caupcomingindex&event=addedrunning&id=".$added,"Index added successfully!!! <br> Please Wait for Approval","success");	
 		}
 		else
 		{
-			$this->Redirect("index.php?module=caupcomingindex&event=addNew2","No security added!!! <br> Please add again","error");	
+			$this->Redirect("index.php?module=caupcomingindex&event=uploadSharesforRunning","No security added!!! <br> Please add again","error");	
 		}
 
 			}
@@ -968,7 +1088,84 @@ $body.='Your Upcoming Indxx '.$indxx['name'].'('.$indxx['code'].') has been dele
 	
 	
 	
+	function approveindex_temp(){
 	
+	//$this->pr($_POST,true);
+	if(!empty($_POST))
+	{
+		foreach($_POST as $key=>$val)
+		{
+			foreach($val as $key2=>$val2)
+			{
+				if(!empty($val2))
+				{
+				//echo $val2;	
+				
+				
+				 $approveindexdata=$this->db->getResult("select * from tbl_indxx_temp where tbl_indxx_temp.id='".$val2."'");
+				$indxxadmins =	$this->db->getResult('Select  user_id from tbl_assign_index_temp where indxx_id="'.$val2.'" ',true);
+$indxxadmin='';
+//print_r($indxxadmins );
+$emailto=array();
+
+if(!empty($indxxadmins))
+{
+foreach($indxxadmins as $array)
+{
+	$emailto[]=$array['user_id'];
+}
+
+
+}
+
+//print_r($emailto);
+
+	//exit;
+	if(!empty($emailto))
+	{	
+//	echo  'Select  email from tbl_ca_user where type="1" or id in ('.implode(',',$emailto).') ';
+	$admins =	$this->db->getResult('Select  email from tbl_ca_user where type="1" or id in ('.implode(',',$emailto).') ',true);
+	}
+else
+{	$admins =	$this->db->getResult('Select  email from tbl_ca_user where 1=1 ',true);
+}
+//$this->pr($admins,true);	
+	
+	$user=array();
+	if(!empty($admins))	
+	foreach($admins as $admin)
+	{
+	$user[]=$admin['email'];
+	}
+		
+  $to=implode(',',$user);		
+ 
+		$headers  = 'MIME-Version: 1.0' . "\r\n";
+$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+
+// Additional headers
+$headers .= 'From: Indexing <indexing@indxx.com>' . "\r\n"."CC: indexing@indxx.com". "\r\n";
+$body='Hi <br>';
+$body.='Your Upcoming Indxx '.$indxx['name'].'('.$indxx['code'].') has been approved by '.$_SESSION['User']['name'].' , <br> Please  <a href="'.$this->siteconfig->base_url.'index.php?module=caupcomingindex">Click here </a> to do more.<br>Thanks ';
+
+
+		mail($to,"ICAI :Upcoming Indxx Deleted " ,$body,$headers);
+		
+	if($_SESSION['User']["type"]==3)
+	{
+	$this->db->query("update tbl_indxx_temp set dbusersignoff ='1' where id='".$val2."'");		
+	}	
+	if($_SESSION['User']["type"]==1)
+	{
+	$this->db->query("update tbl_indxx_temp set finalsignoff ='1' where id='".$val2."'");		
+	}	
+				
+				}
+			}
+		}
+	
+	}
+	}
 	
 	protected function deleteindex(){
 		 

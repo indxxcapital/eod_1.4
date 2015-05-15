@@ -1,7 +1,7 @@
-<?php /* Smarty version 2.6.14, created on 2014-04-24 11:49:55
+<?php /* Smarty version 2.6.14, created on 2015-05-05 01:55:18
          compiled from header.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
-smarty_core_load_plugins(array('plugins' => array(array('block', 'block', 'header.tpl', 23, false),)), $this); ?>
+smarty_core_load_plugins(array('plugins' => array(array('block', 'block', 'header.tpl', 35, false),)), $this); ?>
 <div id="navbar" class="navbar">
             <div class="navbar-inner">
                 <div class="container-fluid">
@@ -25,19 +25,16 @@ smarty_core_load_plugins(array('plugins' => array(array('block', 'block', 'heade
                     
                     <ul class="nav flaty-nav pull-right">
                         <!-- BEGIN Button Tasks -->
-                        <?php $this->_tag_stack[] = array('block', array('file' => 'catoday','class' => 'block_catoday')); $_block_repeat=true;smarty_block_block($this->_tag_stack[count($this->_tag_stack)-1][1], null, $this, $_block_repeat);while ($_block_repeat) { ob_start();  $_block_content = ob_get_contents(); ob_end_clean(); $_block_repeat=false;echo smarty_block_block($this->_tag_stack[count($this->_tag_stack)-1][1], $_block_content, $this, $_block_repeat); }  array_pop($this->_tag_stack); ?>
                         
                         <!-- END Button Tasks -->
 
                         <!-- BEGIN Button Notifications -->
                         
-                        <?php $this->_tag_stack[] = array('block', array('file' => 'caweekly','class' => 'block_caweekly')); $_block_repeat=true;smarty_block_block($this->_tag_stack[count($this->_tag_stack)-1][1], null, $this, $_block_repeat);while ($_block_repeat) { ob_start();  $_block_content = ob_get_contents(); ob_end_clean(); $_block_repeat=false;echo smarty_block_block($this->_tag_stack[count($this->_tag_stack)-1][1], $_block_content, $this, $_block_repeat); }  array_pop($this->_tag_stack); ?>
                        
                         <!-- END Button Notifications -->
 
                         <!-- BEGIN Button Messages -->
                         
-                        <?php $this->_tag_stack[] = array('block', array('file' => 'messages','class' => 'block_messages')); $_block_repeat=true;smarty_block_block($this->_tag_stack[count($this->_tag_stack)-1][1], null, $this, $_block_repeat);while ($_block_repeat) { ob_start();  $_block_content = ob_get_contents(); ob_end_clean(); $_block_repeat=false;echo smarty_block_block($this->_tag_stack[count($this->_tag_stack)-1][1], $_block_content, $this, $_block_repeat); }  array_pop($this->_tag_stack); ?>
                         <!-- BEGIN Button User -->
                         
                         <?php $this->_tag_stack[] = array('block', array('file' => 'logintab','class' => 'block_logintab')); $_block_repeat=true;smarty_block_block($this->_tag_stack[count($this->_tag_stack)-1][1], null, $this, $_block_repeat);while ($_block_repeat) { ob_start();  $_block_content = ob_get_contents(); ob_end_clean(); $_block_repeat=false;echo smarty_block_block($this->_tag_stack[count($this->_tag_stack)-1][1], $_block_content, $this, $_block_repeat); }  array_pop($this->_tag_stack); ?>

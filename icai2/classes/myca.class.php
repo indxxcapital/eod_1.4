@@ -79,7 +79,7 @@ $date=date("Y-m-d",strtotime($this->_date)-(86400*3));
 			//echo "<br>";
 			//echo "select id,action_id,identifier,mnemonic,company_name,ann_date,eff_date,action_id,status,(if(action_id in (select ca_action_id from tbl_ca_admin_approve where ca_action_id=cat.action_id),1,0)) as approved from tbl_ca cat where identifier ='".$identifier."' and eff_date>='".$date."'";
 			//echo "<br>";
-		$ca=	$this->db->getResult("select id,action_id,identifier,mnemonic,company_name,ann_date,eff_date,action_id,status,(if(action_id in (select ca_action_id from tbl_ca_admin_approve where ca_action_id=cat.action_id),1,0)) as approved from tbl_ca cat where identifier ='".$identifier."' and eff_date>='".$date."'",true);
+		$ca=	$this->db->getResult("select id,action_id,identifier,mnemonic,company_name,ann_date,eff_date,action_id,status,flag,(if(action_id in (select ca_action_id from tbl_ca_admin_approve where ca_action_id=cat.action_id),1,0)) as approved from tbl_ca cat where identifier ='".$identifier."' and eff_date>='".$date."'",true);
 		
 		//$this->pr($ca); 
 		if(!empty($ca))
@@ -200,7 +200,7 @@ $date=date("Y-m-d",strtotime($this->_date)-(86400*3));
 		
 		//echo "<br>";
 			
-		$ca=	$this->db->getResult("select id,action_id,identifier,mnemonic,company_name,ann_date,eff_date,action_id,status,(if(action_id in (select ca_action_id from tbl_ca_admin_approve_temp where ca_action_id=cat.action_id),1,0)) as approved from tbl_ca cat where identifier ='".$identifier."' and eff_date>='".$date."'",true);
+		$ca=	$this->db->getResult("select id,action_id,identifier,mnemonic,company_name,ann_date,eff_date,action_id,status,flag,(if(action_id in (select ca_action_id from tbl_ca_admin_approve_temp where ca_action_id=cat.action_id),1,0)) as approved from tbl_ca cat where identifier ='".$identifier."' and eff_date>='".$date."'",true);
 		
 		//$this->pr($ca,true); 
 		if(!empty($ca))

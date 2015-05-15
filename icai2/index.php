@@ -3,9 +3,9 @@
 //header('Location: http://localhost/2013/ICAI/time/admin/index.php');
 @ob_start();
 header('Content-Type: text/html; charset=iso-8859-1');
-ini_set('display_errors', "on");
+ini_set('display_errors', "off");
 //Report all error except notice//E_ALL ^ E_NOTICE
-ini_set('error_reporting',2 );
+ini_set('error_reporting',1 );
 ini_set('allow_call_time_pass_reference',true);
 // Do not allow php_sess_id to be passed in the querystring and it's use for google search
 ini_set('session.use_only_cookies', 1);
@@ -20,7 +20,7 @@ putenv("TZ=Asia/Calcutta");
 //Start new sesstion
 session_start();
 
-ob_start ("ob_gzhandler");
+//ob_start ("ob_gzhandler");
 
 include("includes/main_configuration.php");
 $siteconfig = new INDXXConfig;

@@ -11,6 +11,9 @@ class Calcreplace extends Application{
 	
 	function index()
 	{
+		
+		 $datevalue2=$this->_date;	
+	
 			if($_GET['log_file'])
 define("log_file",get_logs_folder().$_GET['log_file']);
 if($_GET['date'])
@@ -19,8 +22,7 @@ else
 define("date","Y-m-d");
 log_info("In CalcReplace for Live  ");
 		
-	 $datevalue2=$this->_date;	
-	//exit;
+	
 	
 	/*if($_SESSION['currentPriorityIndex']==0)
 		
@@ -52,10 +54,21 @@ log_info("In CalcReplace for Live  ");
 			$datevalue=$indxx_value['date'];
 			}
 			
-				$query="SELECT  it.id,it.name,it.isin,it.ticker,curr,divcurr,sedol,cusip,countryname,(select price from tbl_final_price fp where fp.isin=it.isin  and fp.date='".$datevalue."' and fp.indxx_id='".$indxx['indxx_id']."') as calcprice,(select localprice from tbl_final_price fp where fp.isin=it.isin  and fp.date='".$datevalue."' and fp.indxx_id='".$indxx['indxx_id']."') as localprice,(select currencyfactor from tbl_final_price fp where fp.isin=it.isin  and fp.date='".$datevalue."' and fp.indxx_id='".$indxx['indxx_id']."') as currencyfactor,(select share from tbl_share sh where sh.isin=it.isin  and sh.indxx_id='".$indxx['indxx_id']."') as calcshare FROM `tbl_indxx_ticker` it where it.indxx_id='".$indxx['indxx_id']."'";			
-		
+				//$query="SELECT  it.id,it.name,it.isin,it.ticker,curr,divcurr,sedol,cusip,countryname,(select price from tbl_final_price fp where fp.isin=it.isin  and fp.date='".$datevalue."' and fp.indxx_id='".$indxx['indxx_id']."') as calcprice,(select localprice from tbl_final_price fp where fp.isin=it.isin  and fp.date='".$datevalue."' and fp.indxx_id='".$indxx['indxx_id']."') as localprice,(select currencyfactor from tbl_final_price fp where fp.isin=it.isin  and fp.date='".$datevalue."' and fp.indxx_id='".$indxx['indxx_id']."') as currencyfactor,(select share from tbl_share sh where sh.isin=it.isin  and sh.indxx_id='".$indxx['indxx_id']."') as calcshare FROM `tbl_indxx_ticker` it where it.indxx_id='".$indxx['indxx_id']."'";			
+	
+	 $query="SELECT  it.id, it.name, it.isin, it.ticker, 
+							 sh.share as calcshare ,price as calcprice,localprice,currencyfactor
+							FROM `tbl_indxx_ticker` it 
+							left join tbl_final_price fp on fp.isin=it.isin
+							left join tbl_share sh on sh.isin=it.isin where it.indxx_id='" . $indxx['indxx_id'] . "' 
+							 and sh.indxx_id='" . $indxx['indxx_id'] . "' and fp.indxx_id='".$indxx['indxx_id']."' and fp.date='".$datevalue."'";
+
 		$indxxprices=	$this->db->getResult($query,true);
-			//$this->pr($indxxprices);
+		
+		//echo $query2="select price,localprice,currencyfactor,isin from tbl_final_price where indxx_id='".$indxx['indxx_id']."' and date='".$datevalue."'";
+		//$indxxprices2=	$this->db->getResult($query2,true);
+		
+		//	$this->pr($indxxprices,true);
 			
 	$final_array[$indxx['indxx_id']]['olddata']=$indxxprices;
 
@@ -202,7 +215,7 @@ $insertPrice='Insert into tbl_final_price set date="'.$indxx_array['index_value'
 	
 		
 	//}
-		$this->Redirect("index.php?module=calccapub&log_file=".basename(log_file)."&date=".date,"","");
+		//$this->Redirect("index.php?module=calccapub&log_file=".basename(log_file)."&date=".date,"","");
 	
 	}
 }?>

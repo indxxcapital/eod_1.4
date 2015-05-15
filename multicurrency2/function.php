@@ -426,6 +426,7 @@ $query = "INSERT INTO tbl_ca_values (ca_id, ca_action_id, field_name, field_valu
 			$ca_field_id = selectrow (array('id'), 'tbl_ca_subcategory', array('code' => $security ['5']));
 				
 			$data ['field_id'] 			= "'"  .$ca_field_id ['0'] ['id']. "'";
+			$data ['flag'] 		= "'"  .$security ['6']. "'";			
 			$data ['company_name'] 		= "'"  .$security ['7']. "'";			
 			$data ['secid_type'] 		= "'"  .$security ['8']. "'";
 			$data ['secid'] 			= "'"  .$security ['9']. "'";

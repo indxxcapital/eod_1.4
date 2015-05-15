@@ -50,13 +50,13 @@ $finalArray=array();
 		
 		$finalArray[$key]['newTickers'][$tickerKey]['old_ticker']=$ticker_details;
 		
-		$lastday_value=$this->getLastDayPriceValue($indxx,$indxx['indxx_curr'],$indxx_value['date']);
+		/*$lastday_value=$this->getLastDayPriceValue($indxx,$indxx['indxx_curr'],$indxx_value['date']);
 		$lastday_local_value=$this->getLastDayLocalPriceValue($indxx,$indxx['indxx_curr'],$indxx_value['date']);
 		$lastday_currency_value=$this->getLastDayPriceCurrencyValue($indxx,$indxx['indxx_curr'],$indxx_value['date']);
 		$finalArray[$key]['newTickers'][$tickerKey]['lastdaycurrencyvalue']=$lastday_currency_value;
 		$finalArray[$key]['newTickers'][$tickerKey]['lastdaylocalvalue']=$lastday_local_value;
 		
-		$finalArray[$key]['newTickers'][$tickerKey]['lastdayvalue']=$lastday_value;
+		$finalArray[$key]['newTickers'][$tickerKey]['lastdayvalue']=$lastday_value;*/
 		$finalArray[$key]['newTickers'][$tickerKey]['lastday']=$indxx_value['date'];
 		}
 		
@@ -86,19 +86,19 @@ $finalArray=array();
 	foreach($ca['newTickers'] as $newTicker)
 	{
 //$this->pr($newTicker);
-	$oldMarketCap=$newTicker['old_ticker']['calcprice']*$newTicker['old_ticker']['calcshare'];
+	/*$oldMarketCap=$newTicker['old_ticker']['calcprice']*$newTicker['old_ticker']['calcshare'];
 	//$newPrice=$newTicker['old_ticker']['calcprice']-($newTicker['old_ticker']['calcprice']*$ca['factor']);
 	$newPrice=$newTicker['old_ticker']['calcprice']*$ca['factor'];
 		//$newlocalPrice=$newTicker['old_ticker']['localprice']-($newTicker['old_ticker']['localprice']*$ca['factor']);
 	$newlocalPrice=$newTicker['old_ticker']['localprice']*$ca['factor'];
 //echo "<br>";
-	$newMarketCap=$newPrice*$newTicker['old_ticker']['calcshare'];
-	 $currentShare=($oldMarketCap-$newMarketCap)/$newTicker['lastdayvalue'];
+	$newMarketCap=$newPrice*$newTicker['old_ticker']['calcshare'];*/
+	 $currentShare=$newTicker['old_ticker']['calcshare']*$ca['factor'];
 	 //"<br>";
 	 
 	 	 
 	 
-	 $updatePriceQuery="update tbl_final_price_temp set price='".$newPrice."',localprice='".$newlocalPrice."'  where indxx_id='".$newTicker['indxx_id']."' and date='".$newTicker['lastday']."' and isin='".$newTicker['old_ticker']['isin']."'";
+	// $updatePriceQuery="update tbl_final_price_temp set price='".$newPrice."',localprice='".$newlocalPrice."'  where indxx_id='".$newTicker['indxx_id']."' and date='".$newTicker['lastday']."' and isin='".$newTicker['old_ticker']['isin']."'";
 	 
 	  $insertTickerQuery="Insert into tbl_indxx_ticker_temp set name='".mysql_real_escape_string($newTicker['name'])."',isin='".mysql_real_escape_string($newTicker['isin'])."',ticker='".mysql_real_escape_string($newTicker['ticker'])."',weight='0',curr='".mysql_real_escape_string($newTicker['curr'])."',divcurr='".mysql_real_escape_string($newTicker['divcurr'])."',status='1', indxx_id='".$newTicker['indxx_id']."' ";
 	
@@ -106,7 +106,7 @@ $finalArray=array();
 	 $insertShareQuery="Insert into tbl_share_temp set dateAdded='".$date."',isin='".$newTicker['isin']."',date='".$date."',share='". $currentShare."', indxx_id='".$newTicker['indxx_id']."' ";
 	
 	
-	 $insertPriceQuery="Insert into tbl_final_price_temp set dateAdded='".$date."',isin='".$newTicker['isin']."',date='".$newTicker['lastday']."',price='".$newTicker['lastdayvalue']."',currencyfactor='".$newTicker['lastdaycurrencyvalue']."',  	localprice='".$newTicker['lastdaylocalvalue']."', indxx_id='".$newTicker['indxx_id']."' ";
+	 $insertPriceQuery="Insert into tbl_final_price_temp set dateAdded='".$date."',isin='".$newTicker['isin']."',date='".$newTicker['lastday']."',price='0',currencyfactor='0',  	localprice='0', indxx_id='".$newTicker['indxx_id']."' ";
 	
 	
 	 $insertIgnoreQuery="Insert into tbl_ignore_index_temp set ca_id='".$ca['ca_id']."',ca_action_id='".$ca['action_id']."', indxx_id='".$newTicker['indxx_id']."' ";
@@ -121,7 +121,7 @@ $this->db->query($insertTickerQuery);
 	 
 	$this->db->query($insertIgnoreQuery); 
 	 
-	 	 $this->db->query($updatePriceQuery); 
+	 	// $this->db->query($updatePriceQuery); 
 	}
 	
 	

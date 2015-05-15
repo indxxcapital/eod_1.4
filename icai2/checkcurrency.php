@@ -16,7 +16,7 @@ define("date","Y-m-d");
 
 
 log_info("In Check Dividend Currency for Live Index");
-
+checkformemorial();
 $securities =selectrow(array('ticker','curr','divcurr','indxx_id'),'tbl_indxx_ticker');	
 //print_r($securities);
 $text='Currency Mismatch <br>';

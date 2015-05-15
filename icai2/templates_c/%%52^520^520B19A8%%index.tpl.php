@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-04-22 10:36:15
+<?php /* Smarty version 2.6.14, created on 2015-05-06 02:20:42
          compiled from caupcomingindex/index.tpl */ ?>
 <!-- BEGIN Main Content -->
 
@@ -33,9 +33,11 @@ window.open('http://97.74.65.118/icai/index.php?module=calcindxxclosingid&id='+<
 
 
 $(document).ready(function(){
+
+	
  $("#deleteSelected").click(function(){
 	 
-	 var temp=confirm("Are you sure you want to delete this record ")
+	 var temp=decision();
   if(temp)
    {	
 	 
@@ -79,8 +81,79 @@ $.ajax({
 	
 	 
  
-}); 
+
+	
+	
+	
+ $("#approve_selected").click(function(){
+	 
+	 var temp=confirm("Are you sure you want to Approve this record ")
+  if(temp)
+   {	
+	 
+	 
+	 
+ var checkedArray=Array();
+ var i=0;
+  $(\'input[name="checkboxid"]:checked\').each(function() {
+i++;
+checkedArray[i]=$(this).val();
+});
+var parameters = {
+  "array1":checkedArray
+};
+
+
+$.ajax({
+    url : "index.php?module=caupcomingindex&event=approveindex_temp",
+    type: "POST",
+    data : parameters,
+    success: function(data, textStatus, jqXHR)
+    {
+	  window.location.href=\'index.php?module=caupcomingindex\';
+	    //data - response from server
+    },
+    error: function (jqXHR, textStatus, errorThrown)
+    {
  
+    }
+});
+
+}
+	else{
+	return false;
+	}
+
+
+});
+	 
+	 
+	
+	 
+ 
+}); 
+ function decision(){
+if(confirm("Are you sure to delete?")) {
+	var text=makeid();
+	var replytext= prompt("Please fill text : "+text,"")
+	if(replytext!= null && replytext==text)
+	{
+	return true;
+	}else{
+	alert("Input Text Not Match, Please Try Again.")
+	}
+	
+}}
+function makeid()
+{
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < 5; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
 </script>
  
  '; ?>
@@ -99,10 +172,14 @@ unset($_smarty_tpl_vars);
                             <div class="box-content">
                                 <div class="btn-toolbar pull-right clearfix">
                                     <div class="btn-group">
-                                       <!-- <a class="btn btn-circle show-tooltip" title="Add new record" href="index.php?module=caindex&event=addNew" ><i class="icon-plus"></i></a>
-                                        <a class="btn btn-circle show-tooltip" title="Edit selected" href="#"><i class="icon-edit"></i></a>-->
-                                        <a class="btn btn-circle show-tooltip" title="Delete selected" id="deleteSelected" href="#"><i class="icon-trash"></i></a>
-                                    </div>
+                                       <!-- <a class="btn btn-circle show-tooltip" title="Add new record" href="index.php?module=caindex&event=addNew" ><i class="icon-plus"></i></a>-->
+                                      
+                                      <?php if ($this->_tpl_vars['sessData']['User']['type'] != 2): ?>
+                                        <a class="btn btn-circle show-tooltip" title="Approve selected" id="approve_selected" href="#">Approve Selected</a>
+ <?php endif; ?>                                   <?php if ($this->_tpl_vars['sessData']['User']['type'] == 1): ?>
+      <a class="btn btn-circle show-tooltip" title="Delete selected" id="deleteSelected" href="#">Delete Selected</a>
+                                    
+                                    <?php endif; ?></div>
                                     <!--<div class="btn-group">
                                         <a class="btn btn-circle show-tooltip" title="Print" href="#"><i class="icon-print"></i></a>
                                         <a class="btn btn-circle show-tooltip" title="Export to PDF" href="#"><i class="icon-file-text-alt"></i></a>

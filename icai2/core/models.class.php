@@ -146,7 +146,24 @@ function GetAdmin_group ()
 			return $name;
 		}
 		
-		
+function getDBUsers(){
+$query2='Select *  from tbl_database_users where status = "1"';
+$result2=mysql_query($query2);
+$users=array();
+if(mysql_num_rows($result2)>0)
+{
+while($row=mysql_fetch_assoc($result2))
+{
+$users[]=$row['email'];
+
+}
+}
+if(!empty($users))
+return implode(",",$users);
+else 
+return null;
+
+}		
 	function 	setSessionvariable()
 	{
 			$values=	$this->db->getResult("select code ,name from tbl_ca_subcategory  union select field_name as code ,definition as name from tbl_ca_action_fields   ");
@@ -820,6 +837,8 @@ $returnArray=array();
 		
 		if(strcmp(strtoupper($indxxcurr.$curr),$indxxcurr.$curr)==0)
 		$returnArray['calcprice']=$ca_values['price']/$cfactor;
+		elseif($curr=='KWd')
+		$returnArray['calcprice']=$ca_values['price']/($cfactor*1000);
 		else
 		$returnArray['calcprice']=$ca_values['price']/($cfactor*100);
 		
@@ -918,7 +937,9 @@ $returnArray['op_value_local_price']=$localprice;
 		
 		if(strcmp(strtoupper($index_currency.$ca_currency),$index_currency.$ca_currency)==0)
 		$priceinlocal=$localprice/$cfactor;
-		else
+		elseif($ca_currency=="KWd")
+			$priceinlocal= $localprice/($cfactor*1000);
+	else
 		$priceinlocal= $localprice/($cfactor*100);
 		
 		$returnArray['op_value_local_price']=$localprice;
@@ -939,13 +960,17 @@ $returnArray['op_value_local_price']=$localprice;
 		
 		if(strcmp(strtoupper($index_currency.$ca_currency),$index_currency.$ca_currency)==0)
 		$indxxCurrecnyPrice=$localprice/$cfactor;
-		else
+		elseif($ca_currency=="KWd")
+			$indxxCurrecnyPrice= $localprice/($cfactor*1000);
+			else
 		$indxxCurrecnyPrice=$localprice/($cfactor*100);
 			
 			
 			$cfactor_local=$this->getPriceforCurrency($ca_currency,$localcurrency,$date,$id,$action_id);
 				if(strcmp(strtoupper($index_currency.$ca_currency),$index_currency.$ca_currency)==0)
 			$localcurrencyprice=($localprice/$cfactor_local);
+			elseif($ca_currency=="KWd")
+			$localcurrencyprice= $localprice/($cfactor_local*1000);
 			else
 				$localcurrencyprice=$localprice/($cfactor_local*100);
 			$returnArray['op_value_local_price']=$localprice;
@@ -978,6 +1003,8 @@ $returnArray['op_value_local_price']=$localprice;
 			$cfactor_local=$this->getPriceforCurrency($ca_currency,$localcurrency,$date,$id,$action_id);
 				if(strcmp(strtoupper($localcurrency.$ca_currency),$localcurrency.$ca_currency)==0)
 			$localcurrencyprice=($localprice/$cfactor_local);
+			elseif($ca_currency=="KWd")
+			$localcurrencyprice= $localprice/($cfactor_local*1000);
 			else
 				$localcurrencyprice=$localprice/($cfactor_local*100);
 			$returnArray['op_value_local_price']=$localprice;
@@ -1146,6 +1173,8 @@ $returnArray['ca_value_local_price']=$localprice;
 		$cfactor_local=$this->getPriceforCurrency($index_currency,$localcurrency,$date,$id,$action_id);
 		if(strcmp(strtoupper($index_currency.$localcurrency),$index_currency.$localcurrency)==0)
 			$localcurrencyprice=$localprice/$cfactor_local;
+			elseif($ca_currency=="KWd")
+			$localcurrencyprice= $localprice/($cfactor_local*1000);
 			else
 				$localcurrencyprice=$localprice/($cfactor_local*100);
 			$returnArray['ca_value_local_price']=$localprice;
@@ -1178,6 +1207,8 @@ $returnArray['ca_value_local_price']=$localprice;
 				$cfactor_local=$this->getPriceforCurrency($ca_currency,$localcurrency,$date,$id,$action_id);
 				if(strcmp(strtoupper($localcurrency.$ca_currency),$localcurrency.$ca_currency)==0)
 			$localcurrencyprice=$localprice/$cfactor_local;
+			elseif($ca_currency=="KWd")
+			$localcurrencyprice= $localprice/($cfactor_local*1000);
 			else
 				$localcurrencyprice=$localprice/($cfactor_local*100);
 			$returnArray['ca_value_local_price']=$localprice;
@@ -1346,7 +1377,9 @@ $returnArray['ca_value_local_price']=$localprice;
 		
 		if(strcmp(strtoupper($index_currency.$ca_currency),$index_currency.$ca_currency)==0)
 		$priceinlocal=$localprice/$cfactor;
-		else
+		elseif($ca_currency=="KWd")
+			$priceinlocal= $localprice/($cfactor*1000);
+			else
 		$priceinlocal= $localprice/($cfactor*100);
 		
 		$returnArray['ca_value_local_price']=$localprice;
@@ -1367,6 +1400,8 @@ $returnArray['ca_value_local_price']=$localprice;
 		
 		if(strcmp(strtoupper($index_currency.$ca_currency),$index_currency.$ca_currency)==0)
 		$priceinlocal=$localprice/$cfactor;
+		elseif($ca_currency=="KWd")
+			$priceinlocal= $localprice/($cfactor*1000);
 		else
 		$priceinlocal= $localprice/($cfactor*100);
 		
@@ -1394,7 +1429,9 @@ $returnArray['ca_value_local_price']=$localprice;
 			$cfactor_local=$this->getPriceforCurrency($ca_currency,$localcurrency,$date,$id,$action_id);
 				if(strcmp(strtoupper($index_currency.$ca_currency),$index_currency.$ca_currency)==0)
 			$localcurrencyprice=$localprice/$cfactor_local;
-			else
+			elseif($ca_currency=="KWd")
+			$localcurrencyprice= $localprice/($cfactor_local*1000);
+		else
 				$localcurrencyprice=$localprice/($cfactor_local*100);
 		
 		
@@ -1403,6 +1440,8 @@ $returnArray['ca_value_local_price']=$localprice;
 		
 		if(strcmp(strtoupper($index_currency.$ca_currency),$index_currency.$ca_currency)==0)
 		$indxxCurrecnyPrice=$localcurrencyprice/$cfactor;
+			elseif($ca_currency=="KWd")
+			$indxxCurrecnyPrice= $localcurrencyprice/($cfactor*1000);
 		else
 		$indxxCurrecnyPrice=$localcurrencyprice/($cfactor*100);
 	
@@ -1445,7 +1484,9 @@ $returnArray['ca_value_local_price']=$localprice;
 				$cfactor_local=$this->getPriceforCurrency($ca_currency,$localcurrency,$date,$id,$action_id);
 				if(strcmp(strtoupper($localcurrency.$ca_currency),$localcurrency.$ca_currency)==0)
 			$localcurrencyprice=$localprice/$cfactor_local;
-			else
+			elseif($ca_currency=="KWd")
+			$localcurrencyprice= $localprice/($cfactor_local*1000);
+	else
 				$localcurrencyprice=$localprice/($cfactor_local*100);
 			$returnArray['ca_value_local_price']=$localprice;
 			$returnArray['ca_value_local_currency']=$localcurrency;
@@ -1648,6 +1689,8 @@ if(empty($ca_values))
 	
 	function getnewISIN($id,$action_id,$indxxKey=0)
 	{
+			
+			$returnArray=array();
 				$ca_value_query="Select field_name,field_value,field_id from tbl_ca_values_user_edited where ca_id='".$id."'  and ca_action_id='".$action_id."'  and indxx_id='".$indxxKey."'";
 		$ca_values=$this->db->getResult($ca_value_query,true);
 
@@ -1660,10 +1703,52 @@ if(empty($ca_values))
 	
 		$adj=0;
 	if(!empty($ca_values))
+	{$return=array();
+	foreach ($ca_values as $ca_value)
+	{
+	
+	$return[$ca_value['field_name']]=$ca_value['field_value'];
+	
+		/*if($ca_value['field_name']=='CP_NEW_ISIN')
+			{
+			$adj=$ca_value['field_value'];
+			}*/
+	}
+	$returnArray=$return;
+	}
+	if(empty($returnArray))
+	{
+	//echo "New ISIn Not Available ";
+	//exit;
+	return false;
+	
+	}
+	else{
+	return 	$returnArray;
+	}
+	
+	
+	}
+	
+	function getnewTicker($id,$action_id,$indxxKey=0)
+	{
+				$ca_value_query="Select field_name,field_value,field_id from tbl_ca_values_user_edited where ca_id='".$id."'  and ca_action_id='".$action_id."'  and indxx_id='".$indxxKey."' and field_name='CP_NEW_TKR'";
+		$ca_values=$this->db->getResult($ca_value_query,true);
+
+//echo $date;
+
+if(empty($ca_values))
+{	$ca_value_query="Select field_name,field_value,field_id from tbl_ca_values where ca_id='".$id."'  and ca_action_id='".$action_id."' and field_name='CP_NEW_TKR' ";
+		$ca_values=$this->db->getResult($ca_value_query,true);
+}
+//$this->pr($ca_values,true);
+	
+		$adj=0;
+	if(!empty($ca_values))
 	{
 	foreach ($ca_values as $ca_value)
 	{
-		if($ca_value['field_name']=='CP_NEW_ISIN')
+		if($ca_value['field_name']=='CP_NEW_TKR')
 			{
 			$adj=$ca_value['field_value'];
 			}
@@ -1888,6 +1973,8 @@ if(empty($ca_values))
 	$cfactor_local=$this->getPriceforCurrency($curr,$data['curr'],$date);
 	if(strcmp(strtoupper($curr.$data['curr']),$curr.$data['curr'])==0)
 			 $data['price']= $data['price']/$cfactor_local;
+	elseif($data['curr']=="Kwd")
+				 $data['price']= $data['price']/($cfactor_local*1000);
 			else
 				 $data['price']= $data['price']/($cfactor_local*100);
 	

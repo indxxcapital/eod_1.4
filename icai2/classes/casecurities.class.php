@@ -303,24 +303,65 @@ unset($_SESSION['NewIndxxsecurities']);
 			if($this->validatPost()){	
 			$fields=array("1",'2','3','4','5','6','7','8');		
 				$data = csv::import($fields,$_FILES['inputfile']['tmp_name']);	
-//$this->pr($data,true);
+$this->pr($data,true);
 	$added=0;
-		
+		$errormsg='';
+		$check=true;
 				if(!empty($data))
 				{
+					
+					
+					$query="INSERT into tbl_indxx_ticker_temp (status,name,isin,ticker,weight,curr,divcurr,sedol,cusip,countryname,indxx_id) values ";
+					$queryArray=array();
 					foreach($data as $security)
 					{
+						if(count($security)!=8)
+						{
+						$check=false;
+						$errormsg=" Column Count Not matched  for ".$security[3];
+						break;
+						}elseif(strlen($security['2'])!=12)
+						{
+						$check=false;
+						$errormsg="ISIN not valid for ".$security['3'];
+						break;
+						}elseif(strlen($security['4'])!=3)
+						{
+						$check=false;
+						$errormsg="Currency not valid for ".$security['3'];
+						break;
+						}
+						elseif(strlen($security['5'])!=3)
+						{
+						$check=false;
+						$errormsg="Dividend Currency not valid for ".$security['3'];
+						break;
+						}
+						
+						
+						
+						
 						if($security[2]!='' && $security[3]!='')
 						{
-						$this->db->query("INSERT into tbl_indxx_ticker_temp set status='0',name='".mysql_real_escape_string($security[1])."',isin='".mysql_real_escape_string($security[2])."',ticker='".mysql_real_escape_string($security[3])."',weight='0',curr='".mysql_real_escape_string($security[4])."',divcurr='".mysql_real_escape_string($security[5])."',sedol='".mysql_real_escape_string($security[6])."',cusip='".mysql_real_escape_string($security[7])."',countryname='".mysql_real_escape_string($security[8])."',indxx_id='".mysql_real_escape_string($_SESSION['tempindexid'])."'");
+					$queryArray[]="('0','".mysql_real_escape_string($security[1])."','".mysql_real_escape_string($security[2])."','".mysql_real_escape_string($security[3])."','0','".mysql_real_escape_string($security[4])."','".mysql_real_escape_string($security[5])."','".mysql_real_escape_string($security[6])."','".mysql_real_escape_string($security[7])."','".mysql_real_escape_string($security[8])."','".mysql_real_escape_string($_SESSION['tempindexid'])."')";
 						
 							$added++;
 		
 						}
 					}
+					if(!empty($queryArray) && $check)
+					{
+						//echo $query.implode(",",$queryArray).";";
+						//exit;
+						$this->db->query($query.implode(",",$queryArray).";");
+					}
 				}
+if(!$check)
+{
 
-	if($added>=1)
+$this->Redirect("index.php?module=casecurities&event=uploadSecuritiesforRunning","Error in imput :".$errormsg,"error");	
+}
+	elseif($added>=1)
 		{
 			$this->Redirect("index.php?module=casecurities&event=addNewNextrunning&id=".$added,"Index added successfully!!! <br> Please Wait for Approval","success");	
 		}
@@ -340,6 +381,8 @@ unset($_SESSION['NewIndxxsecurities']);
 	}
 	function uploadSecuritiesforRunning()
 	{
+		
+	//	$this->pr($_SESSION,true);
 		$this->_baseTemplate="inner-template";
 			$this->_bodyTemplate="casecurities/uploadforrunning";
 			
@@ -351,23 +394,95 @@ unset($_SESSION['NewIndxxsecurities']);
 			$fields=array("1",'2','3','4','5','6','7','8');		
 				$data = csv::import($fields,$_FILES['inputfile']['tmp_name']);	
 //$this->pr($data,true);
+	
+	//	$this->pr($data,true);
 	$added=0;
-		
+		$errormsg='';
+		$check=true;
 				if(!empty($data))
 				{
+					
+					
+					$query="INSERT into tbl_indxx_ticker_temp (status,name,isin,ticker,weight,curr,divcurr,sedol,cusip,countryname,indxx_id) values ";
+					$queryArray=array();
 					foreach($data as $security)
 					{
+						if(count($security)!=8)
+						{
+						$check=false;
+						$errormsg=" Column Count Not matched  for ".$security[3];
+						break;
+						}elseif(strlen($security['2'])!=12)
+						{
+						$check=false;
+						$errormsg="ISIN not valid for ".$security['3'];
+						break;
+						}elseif(strlen($security['4'])!=3)
+						{
+						$check=false;
+						$errormsg="Currency not valid for ".$security['3'];
+						break;
+						}
+						elseif(strlen($security['5'])!=3)
+						{
+						$check=false;
+						$errormsg="Dividend Currency not valid for ".$security['3'];
+						break;
+						}elseif (preg_match('/[\'^£$%&()}{@#~?><>,|=_+¬-]/', $security['1']) || preg_match('/[\'^£$%&()}{@#~?><>,|=_+¬-]/', $security['2']) || preg_match('/[\'^£$%&()}{@#~?><>,|=_+¬-]/', $security['3']) || preg_match('/[\'^£$%&()}{@#~?><>,|=_+¬-]/', $security['4']) || preg_match('/[\'^£$%&()}{@#~?><>,|=_+¬-]/', $security['5']) || preg_match('/[\'^£$%&()}{@#~?><>,|=_+¬-]/', $security['6']) || preg_match('/[\'^£$%&()}{@#~?><>,|=_+¬-]/', $security['7']) || preg_match('/[\'^£$%&()}{@#~?><>,|=_+¬-]/', $security['8']) )
+{
+   
+   $check=false;
+						$errormsg="one or more of the 'special characters' found for ".$security['3'];
+						break;
+    // one or more of the 'special characters' found in $string
+}
+						
+						$indxx_id=0;
+						if($_SESSION['NewIndxxId'])
+						{
+						$indxx_id=$_SESSION['NewIndxxId'];
+						}elseif($_SESSION['tempindexid'])
+						{
+						$indxx_id=$_SESSION['NewIndxxId'];
+						}else{
+						
+						 $check=false;
+						$errormsg="Invalid Index";
+						break;
+						}
+						
 						if($security[2]!='' && $security[3]!='')
 						{
-						$this->db->query("INSERT into tbl_indxx_ticker_temp set status='0',name='".mysql_real_escape_string($security[1])."',isin='".mysql_real_escape_string($security[2])."',ticker='".mysql_real_escape_string($security[3])."',weight='0',curr='".mysql_real_escape_string($security[4])."',divcurr='".mysql_real_escape_string($security[5])."',sedol='".mysql_real_escape_string($security[6])."',cusip='".mysql_real_escape_string($security[7])."',countryname='".mysql_real_escape_string($security[8])."',indxx_id='".mysql_real_escape_string($_SESSION['NewIndxxId'])."'");
+					$queryArray[]="('0','".mysql_real_escape_string($security[1])."','".mysql_real_escape_string($security[2])."','".mysql_real_escape_string($security[3])."','0','".mysql_real_escape_string($security[4])."','".mysql_real_escape_string($security[5])."','".mysql_real_escape_string($security[6])."','".mysql_real_escape_string($security[7])."','".mysql_real_escape_string($security[8])."','".mysql_real_escape_string($indxx_id)."')";
 						
 							$added++;
 		
 						}
 					}
+					
+					
+					
+					
+					if(!empty($queryArray) && $check)
+					{
+						//echo $query.implode(",",$queryArray).";";
+						//exit;
+						
+						echo $query.implode(",",$queryArray).";";
+						$this->db->query($query.implode(",",$queryArray).";");
+					//echo "in Query";
+					}
+					else{
+					//echo "not in Query";
+					}
+					//exit;
 				}
+if(!$check)
+{
 
-	if($added>=1)
+$this->Redirect("index.php?module=casecurities&event=uploadSecuritiesforRunning","Error in imput :".$errormsg,"error");	
+}
+	elseif($added>=1)
 		{
 			$this->Redirect("index.php?module=casecurities&event=addNewNextrunning&id=".$added,"Index added successfully!!! <br> Please Wait for Approval","success");	
 		}
@@ -463,17 +578,21 @@ unset($_SESSION['NewIndxxsecurities']);
 			
 				$this->db->query("delete from tbl_indxx_ticker_temp where indxx_id='".$_SESSION['NewIndxxId']."'");
 			
+			$insertTickerQuery=" INSERT into tbl_indxx_ticker_temp (status,name,isin,ticker,weight,curr,divcurr,indxx_id,sedol,cusip,countryname) values ";
+			$insertTickerQueryArray=array();
+			
 			for($i=1;$i<=$_POST['totalfields'];$i++)
 			{
+				
 				if($_POST['name'][$i] && $_POST['isin'][$i] && $_POST['ticker'][$i] && $_POST['divcurr'][$i] && $_POST['curr'][$i])
 				{
 					if(array_key_exists($_POST['isin'][$i],$remainingfieldsarray))
 					{
-						$this->db->query("INSERT into tbl_indxx_ticker_temp set status='0',name='".mysql_real_escape_string($_POST['name'][$i])."',isin='".mysql_real_escape_string($_POST['isin'][$i])."',ticker='".mysql_real_escape_string($_POST['ticker'][$i])."',weight='".mysql_real_escape_string($_POST['weight'][$i])."',curr='".mysql_real_escape_string($_POST['curr'][$i])."',divcurr='".mysql_real_escape_string($_POST['divcurr'][$i])."',indxx_id='".mysql_real_escape_string($_SESSION['tempindexid'])."',sedol='".$remainingfieldsarray[$_POST['isin'][$i]]['sedol']."',cusip='".$remainingfieldsarray[$_POST['isin'][$i]]['cusip']."',countryname='".$remainingfieldsarray[$_POST['isin'][$i]]['countryname']."'");	
+						$insertTickerQueryArray[]="('0','".mysql_real_escape_string($_POST['name'][$i])."','".mysql_real_escape_string($_POST['isin'][$i])."','".mysql_real_escape_string($_POST['ticker'][$i])."','".mysql_real_escape_string($_POST['weight'][$i])."','".mysql_real_escape_string($_POST['curr'][$i])."','".mysql_real_escape_string($_POST['divcurr'][$i])."','".mysql_real_escape_string($_SESSION['tempindexid'])."','".$remainingfieldsarray[$_POST['isin'][$i]]['sedol']."','".$remainingfieldsarray[$_POST['isin'][$i]]['cusip']."','".$remainingfieldsarray[$_POST['isin'][$i]]['countryname']."')";	
 					}
 					else
 					{
-						$this->db->query("INSERT into tbl_indxx_ticker_temp set status='0',name='".mysql_real_escape_string($_POST['name'][$i])."',isin='".mysql_real_escape_string($_POST['isin'][$i])."',ticker='".mysql_real_escape_string($_POST['ticker'][$i])."',weight='".mysql_real_escape_string($_POST['weight'][$i])."',curr='".mysql_real_escape_string($_POST['curr'][$i])."',divcurr='".mysql_real_escape_string($_POST['divcurr'][$i])."',indxx_id='".mysql_real_escape_string($_SESSION['tempindexid'])."'");
+						$insertTickerQueryArray[]="(status='0',name='".mysql_real_escape_string($_POST['name'][$i])."',isin='".mysql_real_escape_string($_POST['isin'][$i])."',ticker='".mysql_real_escape_string($_POST['ticker'][$i])."',weight='".mysql_real_escape_string($_POST['weight'][$i])."',curr='".mysql_real_escape_string($_POST['curr'][$i])."',divcurr='".mysql_real_escape_string($_POST['divcurr'][$i])."',indxx_id='".mysql_real_escape_string($_SESSION['tempindexid'])."',sedol='',cusip='',countryname='')";
 							
 					}					
 						
@@ -483,9 +602,12 @@ unset($_SESSION['NewIndxxsecurities']);
 		
 				}	
 			}
-			
-			
-			
+			if(!empty($insertTickerQueryArray))
+			{
+				//echo implode(",",$insertTickerQueryArray).";";
+			//	exit;
+			$this->db->query($insertTickerQuery.implode(",",$insertTickerQueryArray).";");
+			}
 			if($added>=1)
 		{
 			

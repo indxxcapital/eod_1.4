@@ -41,7 +41,7 @@ class Calcindxxopening extends Application{
 		//exit;
 		// and priority='".$_SESSION['currentPriority']['priority']."'
 		
-		$indxxs=mysql_query("select tbl_indxx.* from tbl_indxx  where status='1' and usersignoff='1' and dbusersignoff='1' and submitted='1' limit  $page,$limit");
+		$indxxs=mysql_query("select tbl_indxx.* from tbl_indxx  where status='1' and usersignoff='1' and dbusersignoff='1' and submitted='1' and id='3' ");
 		
 		
 		//exit;
@@ -172,7 +172,7 @@ if($row['ireturn']==1 && $ca['mnemonic']=='DVD_CASH' && $value!=1001 )
 		}
 		mysql_free_result($indxxs);
 		
-		//	$this->pr($final_array,true);
+	//	$this->pr($final_array,true);
 			if($type="open"){
 	
 		$client_folder = "../files/backup/";
@@ -212,7 +212,7 @@ if($row['ireturn']==1 && $ca['mnemonic']=='DVD_CASH' && $value!=1001 )
 				
 				//$this->pr($closeprices);
 			$divisorImpact=0;
-			
+			$oldisin='';
 			$priceAdjfactor=1;
 			$shareAdjfactor=1;
 			$base_price=$closeprices['calcprice'];
@@ -421,11 +421,70 @@ if($row['ireturn']==1 && $ca['mnemonic']=='DVD_CASH' && $value!=1001 )
 					if($ca_actions['mnemonic']=='CHG_ID')
 					{
 						$this->log_info(log_file, "In Change ISIN Ticker : ".$closeprices['ticker']);
+						//$oldisin=$final_array[$indxxKey]['values'][$securityKey]['isin'];
+						//$oldisin=	$this->getoldISIN($ca_actions['id'],$ca_actions['action_id'],$indxxKey);
+						$newisinArray=	$this->getnewISIN($ca_actions['id'],$ca_actions['action_id'],$indxxKey);
+						if(!empty($newisinArray))
+						{
+							if($newisinArray['CP_OLD_ISIN'])
+							$oldisin=$newisinArray['CP_OLD_ISIN'];
+							if($newisinArray['CP_NEW_ISIN'])	
+							$newisin=$newisinArray['CP_NEW_ISIN'];
 						
-						$oldisin=	$this->getoldISIN($ca_actions['id'],$ca_actions['action_id'],$indxxKey);
-						$newisin=	$this->getnewISIN($ca_actions['id'],$ca_actions['action_id'],$indxxKey);
+						if($newisinArray['CP_NEW_CUSIP'])
+						{
+							$this->log_info(log_file, "In Change Cusip Ticker : ".$closeprices['ticker']);
+							
+							$newtickerUpdateQuery='UPDATE  tbl_indxx_ticker  set cusip ="'.$newisinArray['CP_NEW_CUSIP'].'" where indxx_id="'.$indxxKey.'"  and isin="'.$final_array[$indxxKey]['values'][$securityKey]['isin'].'"'; 
+				 $this->db->query($newtickerUpdateQuery);	
+					$final_array[$indxxKey]['values'][$securityKey]['cusip']=$newisinArray['CP_NEW_CUSIP'];
+						}
+						
+						if($newisinArray['CP_NEW_SEDOL'])
+						{
+							$this->log_info(log_file, "In Change Sedol Ticker : ".$closeprices['ticker']);
+							
+							$newtickerUpdateQuery='UPDATE  tbl_indxx_ticker  set sedol ="'.$newisinArray['CP_NEW_SEDOL'].'" where indxx_id="'.$indxxKey.'"  and isin="'.			$final_array[$indxxKey]['values'][$securityKey]['isin'].'"'; 
+				 $this->db->query($newtickerUpdateQuery);	
+					$final_array[$indxxKey]['values'][$securityKey]['sedol']=$newisinArray['CP_NEW_SEDOL'];
+						}
+						
+						
+						}
+						//$this->pr($ca_actions);
+						//$this->pr($newisin,true);
 						
 					}
+					
+					
+					if($ca_actions['mnemonic']=='CHG_TKR')
+					{
+						$this->log_info(log_file, "In Change Ticker : ".$closeprices['ticker']);
+						
+						//$oldisin=	$this->getoldISIN($ca_actions['id'],$ca_actions['action_id'],$indxxKey);
+						 $newTicker=	$this->getnewTicker($ca_actions['id'],$ca_actions['action_id'],$indxxKey);
+					if($newTicker)
+					{
+						 
+					
+					
+					
+					
+					$newtickerUpdateQuery='UPDATE  tbl_indxx_ticker  set ticker ="'.$newTicker.' Equity" where indxx_id="'.$indxxKey.'"  and isin="'.			$final_array[$indxxKey]['values'][$securityKey]['isin'].'"'; 
+				 $this->db->query($newtickerUpdateQuery);	
+					$final_array[$indxxKey]['values'][$securityKey]['ticker']=$newTicker;
+					
+					mail($this->getDBUsers(),"Ticker Change", " Ticker change has been done from ".$closeprices['ticker']." to ".$newTicker." Equity in index ".$closeIndxx." , Please update Request file on ".$this->siteconfig->base_url);
+					
+					
+					
+					
+					
+						$this->log_info(log_file, "Ticker change for Ticker : ".$closeprices['ticker'] ."to ".$newTicker);
+					}
+					}
+					
+					
 					if($ca_actions['mnemonic']=='CHG_NAME')
 					{
 				$this->log_info(log_file, "In Change name Ticker : ".$closeprices['ticker']);
@@ -464,6 +523,9 @@ if($row['ireturn']==1 && $ca['mnemonic']=='DVD_CASH' && $value!=1001 )
 			
 			
 			if($oldisin!='' && $newisin!=''){
+			//	echo $closeprices['isin']."=".$oldisin;
+				
+				
 				if($closeprices['isin']==$oldisin)
 				{
 				  $isinUpdateQuery='UPDATE  tbl_share  set isin ="'.$newisin.'" where indxx_id="'.$indxxKey.'"  and isin="'.$closeprices['isin'].'"'; 				$this->db->query($isinUpdateQuery);	
@@ -526,19 +588,21 @@ if($row['ireturn']==1 && $ca['mnemonic']=='DVD_CASH' && $value!=1001 )
 
 			$entry1='Date'.",";
 			$entry1.=date("Y-m-d",strtotime($datevalue2)).",\n";
-			$entry1.='INDEX VALUE'.",";
-			$entry3='EFFECTIVE DATE'.",";
-			$entry3.='TICKER'.",";
-			$entry3.='NAME'.",";
-			$entry3.='ISIN'.",";
-			$entry3.='SEDOL'.",";
-			$entry3.='CUSIP'.",";
-			$entry3.='COUNTRY'.",";
-			$entry3.='INDEX SHARES'.",";
-			$entry3.='PRICE'.",";
+			$entry1.='Index value'.",";
+			$entry3='Effective Date'.",";
+			$entry3.='Ticker'.",";
+			$entry3.='Name'.",";
+			$entry3.='Isin'.",";
+			$entry3.='Sedol'.",";
+			$entry3.='Cusip'.",";
+			$entry3.='Country'.",";
+			$entry3.='Index share'.",";
+			$entry3.='Weight'.",";
+			$entry3.='Price'.",";
+			
 			if($closeIndxx['display_currency'])
-			{$entry3.='CURRENCY'.",";
-			$entry3.='CURRENCY FACTOR'.",";
+			{$entry3.='Currency'.",";
+			$entry3.='Currency factor'.",";
 			}$entry4='';
 					
 		
@@ -556,7 +620,7 @@ if($row['ireturn']==1 && $ca['mnemonic']=='DVD_CASH' && $value!=1001 )
 
 
 
-			$entry4.= "\n".date("Ymd",strtotime($datevalue2)).",";
+			/*$entry4.= "\n".date("Ymd",strtotime($datevalue2)).",";
             $entry4.=  $security['ticker'].",";
             $entry4.= $security['name'].",";
             $entry4.=$security['isin'].","; 
@@ -568,7 +632,7 @@ if($row['ireturn']==1 && $ca['mnemonic']=='DVD_CASH' && $value!=1001 )
 			if($closeIndxx['display_currency'])
 	     	{$entry4.=$security['curr'].",";
 			$entry4.=number_format($security['currencyfactor'],6,'.','').",";
-			}			
+			}	*/		
 
 		}
 		}
@@ -593,10 +657,39 @@ if($closeIndxx['divpvalue'])
 else
  {$newindexvalue=number_format(($newMarketValue/$newDivisorforindxx),2,'.','');
  }
+ 
+ 
+ 	$weightArray=array();
+ foreach($closeIndxx['values'] as $security)
+{
+$entry4.= "\n".date("Ymd",strtotime($datevalue2)).",";
+            $entry4.=  $security['ticker'].",";
+            $entry4.= $security['name'].",";
+            $entry4.=$security['isin'].","; 
+			 $entry4.=$security['sedol'].",";;
+            $entry4.=$security['cusip'].",";;
+            $entry4.=$security['countryname'].",";
+		    $entry4.=$security['newcalcshare'].",";
+$weight=(($security['newcalcshare']*$security['newcalcprice'])/$newMarketValue)*100;
+			$entry4.=$weight.",";
+       		$entry4.=number_format($security['newlocalprice'],2,'.','').",";
+			if($closeIndxx['display_currency'])
+	     	{$entry4.=$security['curr'].",";
+			$entry4.=number_format($security['currencyfactor'],6,'.','').",";
+			}
+			$weightArray[]="('".$closeprices['isin']."','".$weight."','".$security['newcalcprice']."','".$security['newcalcshare']."','".$datevalue."','".$closeIndxx['code']."','".$closeIndxx['id']."')";
+}
+ if(!empty($weightArray))
+{
+	//echo "insert into tbl_weights (isin,weight,price,share,date,code,indxx_id) values " .implode(",",$weightArray).";";
+	 $this->db->query("insert into tbl_weights_open (isin,weight,price,share,date,code,indxx_id) values " .implode(",",$weightArray).";");
+}
  $insertQuery='INSERT into tbl_indxx_value_open (indxx_id,code,market_value,indxx_value,date,olddivisor,newdivisor) values ("'.$closeIndxx['id'].'","'.$closeIndxx['code'].'","'.$newMarketValue.'","'.$newindexvalue.'","'.$datevalue2.'","'.$closeIndxx['index_value']['olddivisor'].'","'.$newDivisorforindxx.'")';
 		$this->db->query($insertQuery);	
 		
 			$entry2=$newindexvalue.",\n";
+			$entry2.="Divisor,".$newDivisorforindxx.",\n";
+		$entry2.="Market Value,".$newMarketValue.",\n\n";
 			
 			//echo $entry1.$entry2.$entry3.$entry4;
 			//exit;

@@ -101,7 +101,7 @@ $date=date("Y-m-d",strtotime($this->_date)-(86400*3));
 		{
 		foreach ($array as $identifier)
 		{
-		$ca=	$this->db->getResult("select tbl_ca.id,tbl_ca.identifier,tbl_ca.mnemonic,tbl_ca.company_name,tbl_ca.ann_date,tbl_ca.eff_date,tbl_ca.action_id, 	tbl_ca.notifiedtoadmin ,	tbl_ca.notifiedtoclient,tbl_ca.status,(if(action_id in (select ca_action_id from tbl_ca_admin_approve where ca_action_id=tbl_ca.action_id),1,0)) as approved from tbl_ca where identifier ='".$identifier."' ",true);
+		$ca=	$this->db->getResult("select tbl_ca.id,tbl_ca.identifier,tbl_ca.mnemonic,tbl_ca.company_name,tbl_ca.ann_date,tbl_ca.eff_date,tbl_ca.action_id, 	tbl_ca.notifiedtoadmin ,	tbl_ca.notifiedtoclient,tbl_ca.status,flag,(if(action_id in (select ca_action_id from tbl_ca_admin_approve where ca_action_id=tbl_ca.action_id),1,0)) as approved from tbl_ca where identifier ='".$identifier."' ",true);
 		//$this->pr($ca); 
 		if(!empty($ca))
 		{

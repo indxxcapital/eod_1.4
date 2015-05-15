@@ -39,7 +39,7 @@ $date=date("Y-m-d",strtotime($this->_date)-86400);
 $date=date("Y-m-d",strtotime($this->_date)-(86400*3));
 
 }
-		$indexdata=$this->db->getResult("SELECT id,action_id,identifier,mnemonic,company_name,ann_date,eff_date,action_id,status,(if(action_id in (select ca_action_id from tbl_ca_admin_approve where ca_action_id=cat.action_id),1,0)) as approved FROM `tbl_ca` cat WHERE `eff_date` >= '".$date."'  order by eff_date asc",true);
+		$indexdata=$this->db->getResult("SELECT id,action_id,identifier,mnemonic,company_name,ann_date,eff_date,action_id,status,flag,(if(action_id in (select ca_action_id from tbl_ca_admin_approve where ca_action_id=cat.action_id),1,0)) as approved FROM `tbl_ca` cat WHERE `eff_date` >= '".$date."'  order by eff_date asc",true);
 		$indexes=array();
 		foreach($indexdata as $key=>$value)
 		{

@@ -253,6 +253,7 @@ $.ajax({
           <th style="width:18px"><input type="checkbox" /></th>
             <th>Identifier</th>
             <th>Type</th>
+            <th>Bloomberg Status</th>
             <th>Company Name</th>
             <th>Effective Date</th>
             <!--<th>Announce Date</th>-->
@@ -270,6 +271,7 @@ $.ajax({
             <td  {if $point.valuechange=="yes"} style="color:#F00"{/if}>{$point.identifier}</td>
 <!--            <td><a data-original-title="{$point.mnemonic}" data-content="{$sessData.variable[$point.mnemonic]}" data-placement="top" data-trigger="hover" class="show-popover" href="#">{$point.mnemonic}</a></td>-->
             <td  {if $point.valuechange=="yes"} style="color:#F00"{/if}>{if $point.notregularcash}{$sessData.variable[$point.mnemonic]}<sup>*</sup>{else}{$sessData.variable[$point.mnemonic]}{/if}</td>
+               <td  {if $point.valuechange=="yes"} style="color:#F00"{/if}>{if $point.flag=="U"}Updated{elseif  $point.flag=="N" }New{/if}</td>
             <td  {if $point.valuechange=="yes"} style="color:#F00"{/if}>{$point.company_name}</td>
             <td  {if $point.valuechange=="yes"} style="color:#F00"{/if}>{$point.eff_date}</td>
             <!--<td>{$point.ann_date}</td>-->

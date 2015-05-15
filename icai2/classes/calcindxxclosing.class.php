@@ -164,8 +164,8 @@ class Calcindxxclosing extends Application{
 			mysql_free_result($indxxs);
 		$backup_folder = "../files/output/backup/";
 		if (!file_exists($backup_folder))
-			mkdir($backup_folder, 0777, true);
-		//$this->pr($final_array,true);
+		//	mkdir($backup_folder, 0777, true);
+		$this->pr($final_array,true);
 		if($type=='close')
 {	
 		//  file_put_contents('../files/backup/preclosedata'.date("Y-m-d-H-i-s").time().'.json', json_encode($final_array));
@@ -187,20 +187,21 @@ class Calcindxxclosing extends Application{
 
 			$entry1='Date'.",";
 			$entry1.=date("Y-m-d",strtotime($datevalue)).",\n";
-			$entry1.='INDEX VALUE'.",";
-			$entry3='EFFECTIVE DATE'.",";
-			$entry3.='TICKER'.",";
-			$entry3.='NAME'.",";
-			$entry3.='ISIN'.",";
-			$entry3.='SEDOL'.",";
-			$entry3.='CUSIP'.",";
-			$entry3.='COUNTRY'.",";
-			$entry3.='INDEX SHARES'.",";
-			$entry3.='PRICE'.",";
+			$entry1.='Index value'.",";
+			$entry3='Effective Date'.",";
+			$entry3.='Ticker'.",";
+			$entry3.='Name'.",";
+			$entry3.='Isin'.",";
+			$entry3.='Sedol'.",";
+			$entry3.='Cusip'.",";
+			$entry3.='Country'.",";
+			$entry3.='Index share'.",";
+			$entry3.='Weight'.",";
+			$entry3.='Price'.",";
 			
 			if($closeIndxx['display_currency'])
-			{$entry3.='CURRENCY'.",";
-			$entry3.='CURRENCY FACTOR'.",";
+			{$entry3.='Currency'.",";
+			$entry3.='Currency factor'.",";
 			}$entry4='';
 			
 			
@@ -243,7 +244,7 @@ class Calcindxxclosing extends Application{
 		//	$sumofDividendes;
 		//exit;
 			
-			$entry4.= "\n".date("Ymd",strtotime($datevalue)).",";
+			/*$entry4.= "\n".date("Ymd",strtotime($datevalue)).",";
             $entry4.=  $closeprices['ticker'].",";
             $entry4.= $closeprices['name'].",";
             $entry4.=$closeprices['isin'].",";;
@@ -255,7 +256,7 @@ class Calcindxxclosing extends Application{
 			if($closeIndxx['display_currency'])
 	     	{$entry4.=$closeprices['curr'].",";
 			$entry4.=number_format($closeprices['currencyfactor'],6,'.','').",";
-			}
+			}*/
 
 			}
 		
@@ -275,8 +276,41 @@ else
  {$newindexvalue=number_format(($marketValue/$newDivisor),2,'.','');
  }	
  
+ $weightArray=array();
+ foreach($closeIndxx['values'] as $closeprices)
+			{
+				$localprice=(float)$closeprices['localprice'];
+				
+			$entry4.= "\n".date("Ymd",strtotime($datevalue)).",";
+            $entry4.=  $closeprices['ticker'].",";
+            $entry4.= $closeprices['name'].",";
+            $entry4.=$closeprices['isin'].",";;
+            $entry4.=$closeprices['sedol'].",";;
+            $entry4.=$closeprices['cusip'].",";;
+            $entry4.=$closeprices['countryname'].",";
+            $entry4.=$closeprices['calcshare'].",";
+       		$weight=(($closeprices['calcshare']*$closeprices['calcprice'])/$marketValue)*100;
+			$entry4.=$weight.",";
+			$entry4.=number_format($localprice,2,'.','').",";
+			if($closeIndxx['display_currency'])
+	     	{$entry4.=$closeprices['curr'].",";
+			$entry4.=number_format($closeprices['currencyfactor'],6,'.','').",";
+			}
+			$weightArray[]="('".$closeprices['isin']."','".$weight."','".$closeprices['calcprice']."','".$closeprices['calcshare']."','".$datevalue."','".$closeIndxx['code']."','".$closeIndxx['id']."')";
+			
+			
+			}
+ if(!empty($weightArray))
+{
+	//echo "insert into tbl_weights (isin,weight,price,share,date,code,indxx_id) values " .implode(",",$weightArray).";";
+	 $this->db->query("insert into tbl_weights (isin,weight,price,share,date,code,indxx_id) values " .implode(",",$weightArray).";");
+}
+ 
+ 
  //	$newindexvalue=number_format(($marketValue/$newDivisor),2,'.','');
 		$entry2=$newindexvalue.",\n";
+		$entry2.="Divisor,".$newDivisor.",\n";
+		$entry2.="Market Value,".$marketValue.",\n\n";
 		//echo $entry1.$entry2.$entry3.$entry4;
 		//exit;
 	$insertQuery='INSERT into tbl_indxx_value (indxx_id,code,market_value,indxx_value,date,olddivisor,newdivisor) values ("'.$closeIndxx['id'].'","'.$closeIndxx['code'].'","'.$marketValue.'","'.$newindexvalue.'","'.$datevalue.'","'.$oldDivisor.'","'.$newDivisor.'")';

@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2014-05-15 12:31:45
+<?php /* Smarty version 2.6.14, created on 2015-05-06 06:39:23
          compiled from casecurities/index.tpl */ ?>
 <!-- BEGIN Main Content -->
  <?php echo '

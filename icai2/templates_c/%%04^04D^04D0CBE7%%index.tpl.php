@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-04-23 05:31:44
+<?php /* Smarty version 2.6.14, created on 2015-05-15 02:39:44
          compiled from myca/index.tpl */ ?>
 <!-- BEGIN Main Content -->
 <?php $_smarty_tpl_vars = $this->_tpl_vars;
@@ -266,6 +266,7 @@ unset($_smarty_tpl_vars);
           <th style="width:18px"><input type="checkbox" /></th>
             <th>Identifier</th>
             <th>Type</th>
+            <th>Bloomberg Status</th>
             <th>Company Name</th>
             <th>Effective Date</th>
             <!--<th>Announce Date</th>-->
@@ -293,6 +294,7 @@ _<?php echo $this->_tpl_vars['point']['action_id']; ?>
 </a></td>-->
             <td  <?php if ($this->_tpl_vars['point']['valuechange'] == 'yes'): ?> style="color:#F00"<?php endif; ?>><?php if ($this->_tpl_vars['point']['notregularcash']):  echo $this->_tpl_vars['sessData']['variable'][$this->_tpl_vars['point']['mnemonic']]; ?>
 <sup>*</sup><?php else:  echo $this->_tpl_vars['sessData']['variable'][$this->_tpl_vars['point']['mnemonic']];  endif; ?></td>
+               <td  <?php if ($this->_tpl_vars['point']['valuechange'] == 'yes'): ?> style="color:#F00"<?php endif; ?>><?php if ($this->_tpl_vars['point']['flag'] == 'U'): ?>Updated<?php elseif ($this->_tpl_vars['point']['flag'] == 'N'): ?>New<?php endif; ?></td>
             <td  <?php if ($this->_tpl_vars['point']['valuechange'] == 'yes'): ?> style="color:#F00"<?php endif; ?>><?php echo $this->_tpl_vars['point']['company_name']; ?>
 </td>
             <td  <?php if ($this->_tpl_vars['point']['valuechange'] == 'yes'): ?> style="color:#F00"<?php endif; ?>><?php echo $this->_tpl_vars['point']['eff_date']; ?>

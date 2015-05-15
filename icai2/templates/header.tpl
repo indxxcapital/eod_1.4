@@ -20,19 +20,16 @@
                     
                     <ul class="nav flaty-nav pull-right">
                         <!-- BEGIN Button Tasks -->
-                        {block file="catoday" class="block_catoday"}{/block}
                         
                         <!-- END Button Tasks -->
 
                         <!-- BEGIN Button Notifications -->
                         
-                        {block file="caweekly" class="block_caweekly"}{/block}
                        
                         <!-- END Button Notifications -->
 
                         <!-- BEGIN Button Messages -->
                         
-                        {block file="messages" class="block_messages"}{/block}
                         <!-- BEGIN Button User -->
                         
                         {block file="logintab" class="block_logintab"}{/block}

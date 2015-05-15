@@ -184,7 +184,9 @@ function convert_prices()
 							$final_price_array[$index_id][$row]['price'] = $priceRow['localprice']/$cfactor;
 
 							/* Some currency tickers are in cents - GBP/GBp */
-							if(strcmp($cfactor_code, strtoupper($cfactor_code)))
+							if($priceRow['local_currency']=="KWd")
+                                                            $final_price_array[$index_id][$row]['price'] /= 1000;
+							elseif(strcmp($cfactor_code, strtoupper($cfactor_code)))
 								$final_price_array[$index_id][$row]['price'] /= 100;
 						}
 
@@ -375,7 +377,9 @@ function convert_security_to_indxx_curr_upcomingindex()
 
 							$final_price_array[$index_id][$row]['price']= $priceRow['localprice']/$cfactor;
 							
-							if(strcmp($cfactor_code,strtoupper($cfactor_code)))
+							if($priceRow['local_currency']=="KWd")
+                                $final_price_array[$index_id][$row]['price'] /= 1000;
+							elseif(strcmp($cfactor_code,strtoupper($cfactor_code)))
 								$final_price_array[$index_id][$row]['price'] /= 100;
 						}
 					

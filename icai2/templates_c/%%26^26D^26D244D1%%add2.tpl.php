@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2014-06-10 14:56:28
+<?php /* Smarty version 2.6.14, created on 2015-05-13 03:25:41
          compiled from replacerunning/add2.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('modifier', 'count', 'replacerunning/add2.tpl', 12, false),)), $this); ?>
