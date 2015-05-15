@@ -85,8 +85,17 @@ $date=date("Y-m-d",strtotime($this->_date)-(86400*3));
 		$this->smarty->assign("indxxData",$indxxData[0]);
 	//	$this->pr($indxxData,true);
 		
+	$ca_array=	$this->db->getResult("SELECT c1.id, c1.action_id, c1.identifier, c1.mnemonic, c1.company_name, c1.ann_date, c1.eff_date, c1.flag, c1.status, tbl_ca_admin_approve.user_id as approved
+FROM tbl_indxx_ticker c2, tbl_ca c1
+LEFT JOIN tbl_ca_admin_approve ON c1.action_id = tbl_ca_admin_approve.ca_action_id
+WHERE c1.identifier = c2.ticker
+AND c2.indxx_id =".$_GET['id']." and   c1.eff_date>='".$date."'
+",true);
+		
+	//	$this->pr($ca_array,true);
+		
 		$array=array();
-		$indxxticker=	$this->db->getResult("select distinct(ticker) as indxxticker from tbl_indxx_ticker where indxx_id ='".$_GET['id']."'",	true);
+		/*$indxxticker=	$this->db->getResult("select distinct(ticker) as indxxticker from tbl_indxx_ticker where indxx_id ='".$_GET['id']."'",	true);
 		
 		if(!empty($indxxticker))
 		{
@@ -121,7 +130,7 @@ $date=date("Y-m-d",strtotime($this->_date)-(86400*3));
 			
 			if(!empty($dividendvalue['0']['field_value']))
 			$ca_array[$key]['notregularcash']=	$dividendvalue['0']['field_value'];	
-		}
+		}*/
 		
 		//$this->pr($ca_array,true);
 		

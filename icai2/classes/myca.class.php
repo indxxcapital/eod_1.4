@@ -48,8 +48,36 @@ $date=date("Y-m-d",strtotime($this->_date)-(86400*3));
 	$indxx=	$this->db->getResult("select distinct(indxx_id) as indxx from tbl_assign_index",	true);
 	//$this->pr($indxx,true);
 		$array=array();
-		
 		if(!empty($indxx))
+		{
+		foreach($indxx as $ind)
+		{
+		$array[]=$ind['indxx'];
+		}
+		}
+		
+		//print_r($array);
+		
+		
+		
+		if(!empty($array))
+		$ca_array=	$this->db->getResult("SELECT distinct(c1.id), c1.action_id, c1.identifier, c1.mnemonic, c1.company_name, c1.ann_date, c1.eff_date, c1.flag, c1.status, tbl_ca_admin_approve.user_id as approved
+FROM tbl_indxx_ticker c2, tbl_ca c1
+LEFT JOIN tbl_ca_admin_approve ON c1.action_id = tbl_ca_admin_approve.ca_action_id
+WHERE c1.identifier = c2.ticker
+AND c2.indxx_id in (".implode(",",$array).") and c1.eff_date>='".$date."'
+",true);
+else
+		$ca_array=	$this->db->getResult("SELECT c1.id, c1.action_id, c1.identifier, c1.mnemonic, c1.company_name, c1.ann_date, c1.eff_date, c1.flag, c1.status, tbl_ca_admin_approve.user_id as approved
+FROM tbl_indxx_ticker c2, tbl_ca c1
+LEFT JOIN tbl_ca_admin_approve ON c1.action_id = tbl_ca_admin_approve.ca_action_id
+WHERE c1.identifier = c2.ticker and c1.eff_date>='".$date."' 
+",true);
+
+		
+		
+		
+	/*	if(!empty($indxx))
 		{
 		foreach($indxx as $ind)
 		{
@@ -127,7 +155,7 @@ if(!empty($currentvalues) && !empty($uservalues))
 		
 		
 		
-		}
+		}*/
 		//exit;
 		//$this->pr($ca_array,true);	
 			
@@ -165,8 +193,36 @@ $date=date("Y-m-d",strtotime($this->_date)-(86400*3));
 	$indxx=	$this->db->getResult("select distinct(indxx_id) as indxx from tbl_assign_index_temp",	true);
 	//$this->pr($indxx,true);
 		$array=array();
-		
 		if(!empty($indxx))
+		{
+		foreach($indxx as $ind)
+		{
+		$array[]=$ind['indxx'];
+		}
+		}
+		
+		//print_r($array);
+		
+		
+		
+		if(!empty($array))
+		$ca_array=	$this->db->getResult("SELECT distinct(c1.id), c1.action_id, c1.identifier, c1.mnemonic, c1.company_name, c1.ann_date, c1.eff_date, c1.flag, c1.status, tbl_ca_admin_approve_temp.user_id as approved
+FROM tbl_indxx_ticker_temp c2, tbl_ca c1
+LEFT JOIN tbl_ca_admin_approve_temp  ON c1.action_id = tbl_ca_admin_approve_temp.ca_action_id
+WHERE c1.identifier = c2.ticker
+AND c2.indxx_id in (".implode(",",$array).") and c1.eff_date>='".$date."'
+",true);
+else
+		$ca_array=	$this->db->getResult("SELECT c1.id, c1.action_id, c1.identifier, c1.mnemonic, c1.company_name, c1.ann_date, c1.eff_date, c1.flag, c1.status, tbl_ca_admin_approve_temp.user_id as approved
+FROM tbl_indxx_ticker_temp c2, tbl_ca c1
+LEFT JOIN tbl_ca_admin_approve_temp ON c1.action_id = tbl_ca_admin_approve_temp.ca_action_id
+WHERE c1.identifier = c2.ticker and c1.eff_date>='".$date."' 
+",true);
+
+		
+		
+		
+		/*if(!empty($indxx))
 		{
 		foreach($indxx as $ind)
 		{
@@ -250,7 +306,7 @@ if(!empty($currentvalues) && !empty($uservalues))
 		
 		
 		
-		}}
+		}}*/
 		//exit;
 		//$this->pr($ca_array,true);	
 			
