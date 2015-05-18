@@ -1888,7 +1888,49 @@ if(empty($ca_values))
 	}
 	
 	
-	}	
+		function getAdjFactorforSpinAdd($id,$action_id,$indxxKey=0,$temp=0)
+	{
+	
+	if($temp){
+	$ca_value_query="Select field_name,field_value,field_id from tbl_ca_values_user_edited_temp where ca_id='".$id."'  and ca_action_id='".$action_id."'  ";
+		$ca_values=$this->db->getResult($ca_value_query,true);
+	}else{
+	$ca_value_query="Select field_name,field_value,field_id from tbl_ca_values_user_edited where ca_id='".$id."'  and ca_action_id='".$action_id."'  ";
+		$ca_values=$this->db->getResult($ca_value_query,true);
+	
+	}
+//echo $date;
+
+if(empty($ca_values))
+{	$ca_value_query="Select field_name,field_value,field_id from tbl_ca_values where ca_id='".$id."'  and ca_action_id='".$action_id."' ";
+		$ca_values=$this->db->getResult($ca_value_query,true);
+}//$this->pr($ca_values,true);
+	
+		$adj=0;
+	if(!empty($ca_values))
+	{
+	foreach ($ca_values as $ca_value)
+	{
+		if($ca_value['field_name']=='CP_RATIO')
+			{
+			$adj=$ca_value['field_value'];
+			}
+	}
+	}
+	if($adj==0)
+	{
+	//echo "Adjustement Ammount is Not Available ";
+	//exit;
+	return 0;
+	
+	}
+	else{
+	return $adj;
+	}
+	
+	
+	}	}	
+	
 	function getAdjFactorforSpin($id,$action_id,$indxxKey=0,$temp=0)
 	{
 	
