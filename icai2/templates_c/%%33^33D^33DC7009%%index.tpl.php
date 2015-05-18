@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-04-22 10:36:35
+<?php /* Smarty version 2.6.14, created on 2015-05-18 00:15:33
          compiled from cashindex/index.tpl */ ?>
 <!-- BEGIN Main Content -->
 <?php $_smarty_tpl_vars = $this->_tpl_vars;

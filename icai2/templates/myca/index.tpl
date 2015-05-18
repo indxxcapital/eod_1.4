@@ -277,7 +277,7 @@ $.ajax({
             <!--<td>{$point.ann_date}</td>-->
              <td >{if $point.status=='0'}<span class="label label-important">Inactive!</span>{else}<span class="badge badge-success">Active</span>{/if}</td>
              
-              <td>{if $point.approved=='1'}<span class="label label-success">Approved</span>{else}<span class="badge badge-important">Not Approved</span>{/if}</td>
+              <td>{if $point.approved}<span class="label label-success">Approved</span>{else}<span class="badge badge-important">Not Approved</span>{/if}</td>
            
              <!-- <td>{if $point.notifiedtoclient==0}<span class="label label-important">Pending!</span>{else}<span class="badge badge-success">Notified</span>{/if}</td>-->
             <td>

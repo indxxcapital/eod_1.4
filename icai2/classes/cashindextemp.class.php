@@ -276,7 +276,7 @@ $headers .= 'From: Indexing <indexing@indxx.com>' . "\r\n"."CC: indexing@indxx.c
 	protected function delete(){
 		 
 		
-			$strQuery = "delete from tbl_cash_index_temp where tbl_cash_index.id='".$_GET['id']."'";
+			$strQuery = "delete from tbl_cash_index_temp where id='".$_GET['id']."'";
 			$this->db->query($strQuery);
 			$this->Redirect("index.php?module=cashindex_temp","Record deleted successfully!!!","success");
 			

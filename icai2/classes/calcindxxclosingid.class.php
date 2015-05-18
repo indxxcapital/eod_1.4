@@ -60,6 +60,17 @@ else
 			$final_array[$row['id']]['index_value']=$indxx_value;
 			}
 			else{*/
+			if($row['recalc'])
+			{
+			$indxx_value=$this->db->getResult("select tbl_indxx_value.* from tbl_indxx_value where code='".$row['code']."' order by date desc ",false,1);	
+		//	$this->pr($indxx_value,true);
+			if(!empty($indxx_value))
+			{
+			$final_array[$row['id']]['index_value']=$indxx_value;
+			}	
+			}
+			else
+			{
 			$final_array[$row['id']]['index_value']['market_value']=$row['investmentammount'];
 			$final_array[$row['id']]['index_value']['divpvalue']=$row['divpvalue'];
 			$final_array[$row['id']]['index_value']['olddivisor']=$row['divisor'];
@@ -70,7 +81,7 @@ else
 			}
 			if($final_array[$row['id']]['index_value']['newdivisor']==0){
 			$final_array[$row['id']]['index_value']['newdivisor']=$row['investmentammount']/$row['indexvalue'];
-			}
+			}}
 
 
 			//}
@@ -81,7 +92,7 @@ else
 		
 	//	exit;
 	
-	$query = "SELECT  it.id, it.name, it.isin, it.ticker, it.curr, it.sedol, it.cusip, it.countryname, 
+	$query = "SELECT  it.id, it.name, it.isin, it.ticker, it.curr, it.sedol, it.cusip,it.weight, it.countryname, 
 							fp.localprice, fp.currencyfactor, fp.price as calcprice, sh.share as calcshare 
 							FROM `tbl_indxx_ticker_temp` it left join tbl_final_price_temp fp on fp.isin=it.isin 
 							left join tbl_share_temp sh on sh.isin=it.isin where it.indxx_id='" . $row['id'] . "' 
@@ -119,14 +130,19 @@ if($type=='close')
 
 			$entry1='Date'.",";
 			$entry1.=$datevalue.",\n";
-			$entry1.='INDEX VALUE'.",";
-			$entry3='EFFECTIVE DATE'.",";
-			$entry3.='TICKER'.",";
-			$entry3.='NAME'.",";
-			$entry3.='ISIN'.",";
-			$entry3.='INDEX SHARES'.",";
-			$entry3.='PRICE'.",";
-			$entry3.='CURRENCY FACTOR'.",";
+			$entry1.='Index value'.",";
+			$entry3='Effective Date'.",";
+			$entry3.='Ticker'.",";
+			$entry3.='Name'.",";
+			$entry3.='Isin'.",";
+			$entry3.='Sedol'.",";
+			$entry3.='Cusip'.",";
+			$entry3.='Country'.",";
+			$entry3.='Index shares'.",";
+			$entry3.='Weight'.",";
+			$entry3.='Price'.",";
+			$entry3.='Currency'.",";
+			$entry3.='Currency factor'.",";
 			$entry4='';
 			
 			
@@ -141,10 +157,23 @@ if($type=='close')
 			foreach($closeIndxx['values'] as $closeprices)
 			{
 			//$this->pr($closeprices);
-		
+		if(!$closeprices['calcshare'] && !$closeprices['weight'])
+		{echo "Share and weight not available for ".$closeprices['ticker']."=>".$closeprices['name'];
+		exit;}
+		$shareValue=0;
+		$weightValue=0;
+		if($closeprices['calcshare'])
 			$shareValue=$closeprices['calcshare'];	
+		else
+			$shareValue=($closeIndxx['index_value']['market_value']*$closeprices['weight'])/$closeprices['calcprice'];	
+		
 			$securityPrice=$closeprices['calcprice'];
 			
+		
+		if($closeprices['weight'])
+		$weightValue=$closeprices['weight'];
+		else
+		$weightValue=(($closeprices['calcprice']*$shareValue)/$closeIndxx['index_value']['market_value'])*100;
 		
 			//echo $dividendPrice."<br>";
 			if(!$securityPrice){
@@ -166,8 +195,13 @@ if($type=='close')
             $entry4.=  $closeprices['ticker'].",";
             $entry4.= $closeprices['name'].",";
             $entry4.=$closeprices['isin'].",";
-            $entry4.=$closeprices['calcshare'].",";
+			 $entry4.=$closeprices['sedol'].",";;
+            $entry4.=$closeprices['cusip'].",";;
+            $entry4.=$closeprices['countryname'].",";
+            $entry4.=$shareValue.",";
+			$entry4.=$weightValue.",";
        		$entry4.=$closeprices['localprice'].",";
+	     	$entry4.=$closeprices['curr'].",";
 	     	$entry4.=$closeprices['currencyfactor'].",";
 			
 
@@ -186,6 +220,8 @@ $marketValue= number_format($marketValue,11,'.','');
 		$oldDivisor=$newDivisor;
 		 $newindexvalue=number_format(($marketValue/$newDivisor),4,'.','');
 		$entry2=$newindexvalue.",\n";
+			$entry2.="Divisor,".$newDivisor.",\n";
+		$entry2.="Market Value,".$marketValue.",\n\n";
 	//	exit;
 		if(!$newindexvalue)
 		{

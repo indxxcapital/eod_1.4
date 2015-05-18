@@ -220,7 +220,7 @@ $headers .= 'From: Indexing <indexing@indxx.com>' . "\r\n"."CC: indexing@indxx.c
 		if(isset($_POST['submit']))
 		{
 			
-		$this->db->query("insert into tbl_cash_index_temp set name='".mysql_real_escape_string($_POST['name'])."',code='".mysql_real_escape_string($_POST['code'])."',ticker='".mysql_real_escape_string($_POST['ticker'])."',isin='".mysql_real_escape_string($_POST['isin'])."',zone='".mysql_real_escape_string($_POST['zone'])."',client_id='".mysql_real_escape_string($_POST['client_id'])."',base_value='".mysql_real_escape_string($_POST['base_value'])."' ,dateStart='".mysql_real_escape_string($_POST['dateStart'])."'");
+		$this->db->query("insert into tbl_cash_index_temp set  status='1', name='".mysql_real_escape_string($_POST['name'])."',code='".mysql_real_escape_string($_POST['code'])."',ticker='".mysql_real_escape_string($_POST['ticker'])."',isin='".mysql_real_escape_string($_POST['isin'])."',zone='".mysql_real_escape_string($_POST['zone'])."',client_id='".mysql_real_escape_string($_POST['client_id'])."',base_value='".mysql_real_escape_string($_POST['base_value'])."' ,dateStart='".mysql_real_escape_string($_POST['dateStart'])."'");
 		
 	$insert_id=mysql_insert_id();	
 		

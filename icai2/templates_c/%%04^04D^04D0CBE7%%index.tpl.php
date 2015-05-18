@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-05-15 02:39:44
+<?php /* Smarty version 2.6.14, created on 2015-05-15 06:43:25
          compiled from myca/index.tpl */ ?>
 <!-- BEGIN Main Content -->
 <?php $_smarty_tpl_vars = $this->_tpl_vars;
@@ -303,7 +303,7 @@ _<?php echo $this->_tpl_vars['point']['action_id']; ?>
 </td>-->
              <td ><?php if ($this->_tpl_vars['point']['status'] == '0'): ?><span class="label label-important">Inactive!</span><?php else: ?><span class="badge badge-success">Active</span><?php endif; ?></td>
              
-              <td><?php if ($this->_tpl_vars['point']['approved'] == '1'): ?><span class="label label-success">Approved</span><?php else: ?><span class="badge badge-important">Not Approved</span><?php endif; ?></td>
+              <td><?php if ($this->_tpl_vars['point']['approved']): ?><span class="label label-success">Approved</span><?php else: ?><span class="badge badge-important">Not Approved</span><?php endif; ?></td>
            
              <!-- <td><?php if ($this->_tpl_vars['point']['notifiedtoclient'] == 0): ?><span class="label label-important">Pending!</span><?php else: ?><span class="badge badge-success">Notified</span><?php endif; ?></td>-->
             <td>
