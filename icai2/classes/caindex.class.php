@@ -560,7 +560,7 @@ $body.='Your Indxx '.$indxx['name'].'('.$indxx['code'].') has been deleted by ad
 	 $this->validData[]=array(	"feild_label"=>"Currency",
 	 							"feild_code" =>"curr",
 								 "feild_type" =>"text",
-								 "is_required" =>"",
+								 "is_required" =>"1",
 								
 								 );
 								 	 

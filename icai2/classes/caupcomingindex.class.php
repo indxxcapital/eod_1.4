@@ -390,7 +390,12 @@ function uploadSharesforRunning(){
 			$this->_bodyTemplate="caupcomingindex/uploadsharesforrunning";
 			
 			if(isset($_POST['submit'])){
-		
+			if($_FILES['inputfile']['type']!='application/csv')
+			{$check=false;
+				$errormsg='Invalid input file, Please upload correct csv file';
+			//break;
+			$this->Redirect("index.php?module=caupcomingindex&event=uploadSharesforRunning","Error in input :".$errormsg,"error");	
+			}
 		//$this->pr($_FILES);
 			if($this->validatPost()){	
 			$fields=array("1",'2','3','4');		

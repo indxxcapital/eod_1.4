@@ -97,7 +97,7 @@ $.ajax({
                                            
                                             <th>Currency</th>
                                             <th>Type</th>
-                                            <th>Start Date</th> <th>Calc Date</th>
+                                            <th>Start Date</th> 
                                            
                                         
                                         </tr>
@@ -114,7 +114,7 @@ $.ajax({
                 <td>{$point.curr}</td>
                     <td>{$point.indexname}</td>
                      <td>{$point.dateStart}</td>
-              <td>{$point.calcdate}</td>
+             
             
         </tr>
         {/foreach}
@@ -235,7 +235,7 @@ $.ajax({
                                     
 {if $viewindexdata.0.submitted==0} <a href="index.php?module=caindex&event=rejectbydbuser&id={$viewindexdata.0.id}"><button class="btn btn-warning">Reject</button></a>   {/if}               
  
- {if $viewindexdata.0.dbusersignoff==0}<a href="index.php?module=caindex&event=subrequesttemp&id={$viewindexdata.0.id}">   <button class="btn btn-primary">Request File Status</button></a>{/if}
+ {if $viewindexdata.0.dbusersignoff==0}<a href="index.php?module=caindex&event=subrequesttemp&id={$viewindexdata.0.id}">   <button class="btn btn-primary">Approve Index</button></a>{/if}
                                    
                                     <a href="index.php?module=caupcomingindex"><button class="btn btn-inverse">Back</button></a>
                                     <!--  <button class="btn btn-warning">Warning</button>

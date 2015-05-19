@@ -299,11 +299,11 @@ unset($_SESSION['NewIndxxsecurities']);
 			
 			if(isset($_POST['submit'])){
 		
-		//$this->pr($_FILES);
+		//$this->pr($_POST,true);
 			if($this->validatPost()){	
 			$fields=array("1",'2','3','4','5','6','7','8');		
 				$data = csv::import($fields,$_FILES['inputfile']['tmp_name']);	
-$this->pr($data,true);
+//$this->pr($data,true);
 	$added=0;
 		$errormsg='';
 		$check=true;
@@ -385,11 +385,18 @@ $this->Redirect("index.php?module=casecurities&event=uploadSecuritiesforRunning"
 	//	$this->pr($_SESSION,true);
 		$this->_baseTemplate="inner-template";
 			$this->_bodyTemplate="casecurities/uploadforrunning";
+			$check=true;
+				$errormsg='';
+	
+			if(isset($_POST['submit']) ){
 			
-			
-			if(isset($_POST['submit'])){
-		
-		//$this->pr($_FILES);
+				if($_FILES['inputfile']['type']!='application/csv')
+			{$check=false;
+				$errormsg='Invalid input file, Please upload correct csv file';
+			//break;
+			$this->Redirect("index.php?module=casecurities&event=uploadSecuritiesforRunning","Error in input :".$errormsg,"error");	
+			}
+			//$this->pr($_FILES,true);
 			if($this->validatPost()){	
 			$fields=array("1",'2','3','4','5','6','7','8');		
 				$data = csv::import($fields,$_FILES['inputfile']['tmp_name']);	
@@ -397,8 +404,8 @@ $this->Redirect("index.php?module=casecurities&event=uploadSecuritiesforRunning"
 	
 	//	$this->pr($data,true);
 	$added=0;
-		$errormsg='';
-		$check=true;
+	
+		
 				if(!empty($data))
 				{
 					
@@ -443,7 +450,7 @@ $this->Redirect("index.php?module=casecurities&event=uploadSecuritiesforRunning"
 						$indxx_id=$_SESSION['NewIndxxId'];
 						}elseif($_SESSION['tempindexid'])
 						{
-						$indxx_id=$_SESSION['NewIndxxId'];
+						$indxx_id=$_SESSION['tempindexid'];
 						}else{
 						
 						 $check=false;
@@ -468,19 +475,20 @@ $this->Redirect("index.php?module=casecurities&event=uploadSecuritiesforRunning"
 						//echo $query.implode(",",$queryArray).";";
 						//exit;
 						
-						echo $query.implode(",",$queryArray).";";
+					//	echo $query.implode(",",$queryArray).";";
 						$this->db->query($query.implode(",",$queryArray).";");
 					//echo "in Query";
 					}
 					else{
-					//echo "not in Query";
+					echo "not in Query";
 					}
 					//exit;
 				}
+
 if(!$check)
 {
 
-$this->Redirect("index.php?module=casecurities&event=uploadSecuritiesforRunning","Error in imput :".$errormsg,"error");	
+$this->Redirect("index.php?module=casecurities&event=uploadSecuritiesforRunning","Error in input :".$errormsg,"error");	
 }
 	elseif($added>=1)
 		{

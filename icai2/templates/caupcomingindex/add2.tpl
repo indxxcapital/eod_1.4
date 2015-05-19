@@ -7,8 +7,9 @@
                             <div class="box-title">
                                 <h3><i class="icon-reorder"></i>Add New Security for index {$sessData.NewIndxxName}</h3>
                                 <div class="box-tool">
-                                    <a href="#" data-action="collapse"><i class="icon-chevron-up"></i></a>
-                                    <a href="#" data-action="close"><i class="icon-remove"></i></a>
+                                    <a href="{$BASE_URL}index.php?module=casecurities&event=uploadSecuritiesforRunning">Upload Securities</a>
+                                <!--    <a href="#" data-action="collapse"><i class="icon-chevron-up"></i></a>
+                                    <a href="#" data-action="close"><i class="icon-remove"></i></a>-->
                                 </div>
                             </div>
                             <form class="form-wizard" method="post"> 
