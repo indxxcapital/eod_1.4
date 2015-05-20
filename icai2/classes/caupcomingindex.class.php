@@ -390,8 +390,21 @@ function uploadSharesforRunning(){
 			$this->_bodyTemplate="caupcomingindex/uploadsharesforrunning";
 			
 			if(isset($_POST['submit'])){
-			if($_FILES['inputfile']['type']!='application/csv')
-			{$check=false;
+				$csv_mimetypes = array(
+    'text/csv',
+    'text/plain',
+    'application/csv',
+    'text/comma-separated-values',
+    'application/excel',
+    'application/vnd.ms-excel',
+    'application/vnd.msexcel',
+    'text/anytext',
+    'application/octet-stream',
+    'application/txt',
+);
+
+if (in_array($_FILES['upload']['type'], $csv_mimetypes)) {
+	$check=false;
 				$errormsg='Invalid input file, Please upload correct csv file';
 			//break;
 			$this->Redirect("index.php?module=caupcomingindex&event=uploadSharesforRunning","Error in input :".$errormsg,"error");	
