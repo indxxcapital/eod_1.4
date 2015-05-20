@@ -403,7 +403,7 @@ $this->Redirect("index.php?module=casecurities&event=uploadSecuritiesforRunning"
     'application/txt',
 );
 
-if (in_array($_FILES['upload']['type'], $csv_mimetypes)) {
+if (!in_array($_FILES['upload']['type'], $csv_mimetypes)) {
 		$check=false;
 				$errormsg='Invalid input file, Please upload correct csv file';
 			//break;
