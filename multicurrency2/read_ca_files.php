@@ -1,7 +1,7 @@
 <?php include("function.php");
 
-error_reporting(E_ALL);
-set_error_handler("error_handler", E_ALL);
+error_reporting(2);
+set_error_handler("error_handler",2);
 
 //$start_time = get_time();
 
@@ -16,8 +16,10 @@ prepare_logfile();
 if ($_GET['date'])
 	define("file_date", $_GET['date']);
 else
-	define("file_date", date("Y-m-d"));
-	
+{
+	define("file_date", date("Y-m-d",strtotime(date("Y-m-d")))-86400);
+	//define("file_date", "2015-05-21");
+}	
 	
 if ("Fri" == date("D", strtotime(file_date)))
 	define("date", date("Y-m-d", strtotime("+3 day", strtotime(file_date))));
@@ -32,8 +34,8 @@ define("ca_file", get_input_file("CA", file_date));
 delete_old_ca();
 
 read_ca_file();
-
-
+echo "done";
+webopen("../icai2/checkcurrency.php?log_file=".basename(log_file)."&date=".date);
 //echo date;
 
 ?>

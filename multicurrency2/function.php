@@ -157,7 +157,7 @@ mysql_query($query);
 
 function webopen($url)
 {
-
+echo $url;
 	$link="<script type='text/javascript'>
 window.open('".$url."');  
 </script>";
@@ -524,7 +524,7 @@ $query = "INSERT INTO tbl_ca_values (ca_id, ca_action_id, field_name, field_valu
 	}	
 		
 	log_info("Processing CA file done");
-webopen("../icai2/checkcurrency.php?log_file=".basename(log_file)."&date=".date);
+
 	}
 
 

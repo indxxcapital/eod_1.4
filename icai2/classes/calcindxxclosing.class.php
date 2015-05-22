@@ -165,7 +165,7 @@ class Calcindxxclosing extends Application{
 		$backup_folder = "../files/output/backup/";
 		if (!file_exists($backup_folder))
 		//	mkdir($backup_folder, 0777, true);
-		$this->pr($final_array,true);
+		//$this->pr($final_array,true);
 		if($type=='close')
 {	
 		//  file_put_contents('../files/backup/preclosedata'.date("Y-m-d-H-i-s").time().'.json', json_encode($final_array));
@@ -289,7 +289,7 @@ else
             $entry4.=$closeprices['cusip'].",";;
             $entry4.=$closeprices['countryname'].",";
             $entry4.=$closeprices['calcshare'].",";
-       		$weight=(($closeprices['calcshare']*$closeprices['calcprice'])/$marketValue)*100;
+       		$weight=(($closeprices['calcshare']*$closeprices['calcprice'])/$marketValue);
 			$entry4.=$weight.",";
 			$entry4.=number_format($localprice,2,'.','').",";
 			if($closeIndxx['display_currency'])

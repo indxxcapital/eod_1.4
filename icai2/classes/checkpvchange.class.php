@@ -140,7 +140,7 @@ $headers .= 'From: Indexing <indexing@indxx.com>' . "\r\n"."CC: indexing@indxx.c
 		}
 		
 		$this->saveProcess(2);
-		//$this->Redirect2("../multicurrency2/db_backup.php?date=" .date. "&log_file=" . basename(log_file),"","");	
+		$this->Redirect2("../multicurrency2/db_backup.php?date=" .date. "&log_file=" . basename(log_file),"","");	
 	}
 
 }?>

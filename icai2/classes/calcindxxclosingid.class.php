@@ -93,13 +93,30 @@ else
 	//	exit;
 	
 	$query = "SELECT  it.id, it.name, it.isin, it.ticker, it.curr, it.sedol, it.cusip,it.weight, it.countryname, 
-							fp.localprice, fp.currencyfactor, fp.price as calcprice, sh.share as calcshare 
+							fp.localprice, fp.currencyfactor, fp.price as calcprice
 							FROM `tbl_indxx_ticker_temp` it left join tbl_final_price_temp fp on fp.isin=it.isin 
-							left join tbl_share_temp sh on sh.isin=it.isin where it.indxx_id='" . $row['id'] . "' 
-							and fp.indxx_id='" . $row['id'] . "' and sh.indxx_id='" . $row['id'] . "' and fp.date='" . $datevalue . "'";			
+							 where it.indxx_id='" . $row['id'] . "' 
+							and fp.indxx_id='" . $row['id'] . "'  and fp.date='" . $datevalue . "'";			
 		
 		
 			$indxxprices=	$this->db->getResult($query,true);	
+		
+		if(!empty($indxxprices))
+		{
+		foreach($indxxprices as $key=>$ticker)
+		{
+			//echo "select share from tbl_share_temp where indxx_id='".$row['id']."' and isin='".$ticker['isin']."' limit 0,1";
+		$share=$this->db->getResult("select share from tbl_share_temp where indxx_id='".$row['id']."' and isin='".$ticker['isin']."' limit 0,1",false);
+		
+		if(!empty($share))
+		{
+		$indxxprices[$key]['calcshare']=$share['share'];
+		}else{
+		$indxxprices[$key]['calcshare']=0;
+		}
+		}
+		}
+		
 		
 		//$this->pr($indxxprices,true);
 		
@@ -153,10 +170,10 @@ if($type=='close')
 			$newDivisor=$oldDivisor;
 			$marketValue=0;
 			$sumofDividendes=0;
-			
+			$shareinsertArray=array();
 			foreach($closeIndxx['values'] as $closeprices)
 			{
-			//$this->pr($closeprices);
+			//$this->pr($closeprices,true);
 		if(!$closeprices['calcshare'] && !$closeprices['weight'])
 		{echo "Share and weight not available for ".$closeprices['ticker']."=>".$closeprices['name'];
 		exit;}
@@ -165,8 +182,11 @@ if($type=='close')
 		if($closeprices['calcshare'])
 			$shareValue=$closeprices['calcshare'];	
 		else
-			$shareValue=($closeIndxx['index_value']['market_value']*$closeprices['weight'])/$closeprices['calcprice'];	
-		
+		{	$shareValue=($closeIndxx['index_value']['market_value']*$closeprices['weight'])/$closeprices['calcprice'];	
+		$shareinsertArray[]='("'.$closeprices['isin'].'","'.$closeIndxx['id'].'","'.$shareValue.'")';
+		//echo $shareValue;
+		$closeprices['calcshare']=$shareValue;
+		}
 			$securityPrice=$closeprices['calcprice'];
 			
 		
@@ -175,7 +195,9 @@ if($type=='close')
 		else
 		$weightValue=(($closeprices['calcprice']*$shareValue)/$closeIndxx['index_value']['market_value'])*100;
 		
-			//echo $dividendPrice."<br>";
+			// $weightValue."<br>";
+			//echo $shareValue."<br>";
+			//exit;
 			if(!$securityPrice){
 			echo "Price Not Found For ".$closeprices['ticker']."=>".$closeprices['name'];
 			exit;
@@ -216,9 +238,12 @@ $marketValue= number_format($marketValue,11,'.','');
 		{
 		$marketValue+=$closeIndxx['index_value']['divpvalue'];
 		}
+	//	echo $marketValue;
+		//echo "<br>";
 		$newDivisor=$marketValue/$oldindexvalue;
+	//	echo "<br>";
 		$oldDivisor=$newDivisor;
-		 $newindexvalue=number_format(($marketValue/$newDivisor),4,'.','');
+	 	 $newindexvalue=number_format(($marketValue/$newDivisor),4,'.','');
 		$entry2=$newindexvalue.",\n";
 			$entry2.="Divisor,".$newDivisor.",\n";
 		$entry2.="Market Value,".$marketValue.",\n\n";
@@ -230,6 +255,16 @@ $marketValue= number_format($marketValue,11,'.','');
 		}
 		
 		//exit;
+		
+		if(!empty($shareinsertArray)){
+		//	print_r($shareinsertArray);
+			//echo implode(",".$shareinsertArray);
+		//	echo "insert into tbl_share_temp (isin,indxx_id,share) values ".implode(",",$shareinsertArray).";";
+		//	exit;
+		$this->db->query("insert into tbl_share_temp (isin,indxx_id,share) values ".implode(",",$shareinsertArray).";");
+		}
+
+		
 	$insertQuery='INSERT into tbl_indxx_value_temp (indxx_id,code,market_value,indxx_value,date,olddivisor,newdivisor) values ("'.$closeIndxx['id'].'","'.$closeIndxx['code'].'","'.$marketValue.'","'.$newindexvalue.'","'.$datevalue.'","'.$oldDivisor.'","'.$newDivisor.'")';
 		$this->db->query($insertQuery);	
 		$insertQuery='INSERT into tbl_indxx_value_open_temp (indxx_id,code,market_value,indxx_value,date,olddivisor,newdivisor) values ("'.$closeIndxx['id'].'","'.$closeIndxx['code'].'","'.$marketValue.'","'.$newindexvalue.'","'.$datevalue.'","'.$oldDivisor.'","'.$newDivisor.'")';

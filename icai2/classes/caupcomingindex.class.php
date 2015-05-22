@@ -403,7 +403,7 @@ function uploadSharesforRunning(){
     'application/txt',
 );
 
-if (!in_array($_FILES['upload']['type'], $csv_mimetypes)) {
+if (in_array($_FILES['upload']['type'], $csv_mimetypes)) {
 	$check=false;
 				$errormsg='Invalid input file, Please upload correct csv file';
 			//break;
@@ -513,7 +513,7 @@ if(count($data)!=count($tickerdata))
 						break;
 					}
 					else{
-					$weightQuery[]="update tbl_indxx_ticker_temp set weight='".mysql_real_escape_string(str_replace("%","",$security[4]))."' where indxx_id='".$_SESSION['tempindexid']."' and isin='".mysql_real_escape_string($security['2'])."'";
+					$weightQuery[]="update tbl_indxx_ticker_temp set weight='".(mysql_real_escape_string(str_replace("%","",$security[4]))/100)."' where indxx_id='".$_SESSION['tempindexid']."' and isin='".mysql_real_escape_string($security['2'])."'";
 					}
 				
 				
@@ -521,9 +521,10 @@ if(count($data)!=count($tickerdata))
 						{
 							$queryArray[]="('".mysql_real_escape_string($security['2'])."','".$this->_date."','".mysql_real_escape_string($security['3'])."','".mysql_real_escape_string($_SESSION['tempindexid'])."')";
 						
-							$added++;
+						
 		
 						}
+							$added++;
 					
 					}
 					

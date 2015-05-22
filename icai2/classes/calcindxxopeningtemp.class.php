@@ -563,7 +563,7 @@ $entry4.= "\n".date("Ymd",strtotime($datevalue2)).",";
             $entry4.=$security['cusip'].",";;
             $entry4.=$security['countryname'].",";
 		    $entry4.=$security['newcalcshare'].",";
-$weight=(($security['newcalcshare']*$security['newcalcprice'])/$newMarketValue)*100;
+$weight=(($security['newcalcshare']*$security['newcalcprice'])/$newMarketValue);
 			$entry4.=$weight.",";
        		$entry4.=number_format($security['newlocalprice'],2,'.','').",";
 			if($closeIndxx['display_currency'])

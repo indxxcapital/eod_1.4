@@ -297,7 +297,7 @@ else
             $entry4.=$closeprices['cusip'].",";;
             $entry4.=$closeprices['countryname'].",";
             $entry4.=$closeprices['calcshare'].",";
-       		$weight=(($closeprices['calcshare']*$closeprices['calcprice'])/$marketValue)*100;
+       		$weight=(($closeprices['calcshare']*$closeprices['calcprice'])/$marketValue);
 			$entry4.=$weight.",";
 			$entry4.=number_format($localprice,2,'.','').",";
 			if($closeIndxx['display_currency'])
