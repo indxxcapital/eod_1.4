@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2014-09-11 12:26:16
+<?php /* Smarty version 2.6.14, created on 2015-05-27 06:26:45
          compiled from sidebar.tpl */ ?>
 <div id="sidebar" class="nav-collapse">
                 <!-- BEGIN Navlist -->
@@ -309,6 +309,19 @@
                        
                      
                     </li>-->
+					<li <?php if ($this->_tpl_vars['currentClass'] == 'useraction'): ?> class="active"<?php endif; ?>>
+                        <a href="index.php?module=useraction">
+                            <i class="icon-th"></i>
+                            <span>User Actions</span>
+                           
+                        </a>
+					<li <?php if ($this->_tpl_vars['currentClass'] == 'restoredb'): ?> class="active"<?php endif; ?>>
+                        <a href="index.php?module=restoredb">
+                            <i class="icon-th"></i>
+                            <span>Restore DB</span>
+                           
+                        </a>
+					
                      <!-- Rebalance -->
                     
                     

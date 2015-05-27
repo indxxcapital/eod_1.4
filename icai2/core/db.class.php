@@ -86,10 +86,12 @@ class Db {
 		
 			if($array==true)
 			{
+				 mysql_free_result($query);
 				return array($this->stripslashes_deep($result));
 			}
 			else
 			{
+				 mysql_free_result($query);
 				return $this->stripslashes_deep($result);
 			}
 			
@@ -102,7 +104,7 @@ class Db {
 			
 				array_push($array,$this->stripslashes_deep($result));
 			}
-			 
+			  mysql_free_result($query);
 			return $array;
 		}
 	}	

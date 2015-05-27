@@ -21,7 +21,7 @@ else
 define("date","Y-m-d");
 log_info("In CalcReplace for Upcomming  ");
 		
-	 $datevalue2=$this->_date;	
+	 $datevalue2=date;	
 	//exit;
 	/*if($_SESSION['currentPriorityIndex']==0)
 		

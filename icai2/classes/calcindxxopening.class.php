@@ -16,13 +16,18 @@ class Calcindxxopening extends Application{
 		
 		$type="open";
 		
+		if($_GET['date'])
+			define("date", $_GET['date']);
+			else
+			define("date", date("Y-m-d"));
+		
 		prepare_logfile();
 		define("log_file", $this->get_opening_logs_file());
 		//echo log_file;
 		//exit;
 		 $this->log_info(log_file, "Opening file generation process started for live indexes");
 		 
-		 $datevalue2=$this->_date;
+		 $datevalue2=date;
 		//$datevalue2="2014-08-06";
 		//exit;
 		if($_GET['id'])
@@ -41,7 +46,7 @@ class Calcindxxopening extends Application{
 		//exit;
 		// and priority='".$_SESSION['currentPriority']['priority']."'
 		
-		$indxxs=mysql_query("select tbl_indxx.* from tbl_indxx  where status='1' and usersignoff='1' and dbusersignoff='1' and submitted='1' and id='3' ");
+		$indxxs=mysql_query("select tbl_indxx.* from tbl_indxx  where status='1' and usersignoff='1' and dbusersignoff='1' and submitted='1'  ");
 		
 		
 		//exit;

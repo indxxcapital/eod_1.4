@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-04-22 10:36:20
+<?php /* Smarty version 2.6.14, created on 2015-05-19 02:33:39
          compiled from caindex/viewupcoming.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('modifier', 'count', 'caindex/viewupcoming.tpl', 153, false),)), $this); ?>
@@ -102,7 +102,7 @@ $.ajax({
                                            
                                             <th>Currency</th>
                                             <th>Type</th>
-                                            <th>Start Date</th> <th>Calc Date</th>
+                                            <th>Start Date</th> 
                                            
                                         
                                         </tr>
@@ -127,8 +127,7 @@ $.ajax({
 </td>
                      <td><?php echo $this->_tpl_vars['point']['dateStart']; ?>
 </td>
-              <td><?php echo $this->_tpl_vars['point']['calcdate']; ?>
-</td>
+             
             
         </tr>
         <?php endforeach; endif; unset($_from); ?>

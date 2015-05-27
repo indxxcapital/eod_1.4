@@ -23,7 +23,7 @@ log_info("In Rebalance of index ");
 		
 	//	$type="close";
 		
-		 $datevalue2=$this->_date;
+		 $datevalue2=date;
 //echo date("D",strtotime($datevalue));
 //exit;
 

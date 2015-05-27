@@ -28,7 +28,7 @@ class Calcindxxclosingtemp extends Application{
 			define("date", date("Y-m-d"));
 
 		
-		$datevalue=$this->_date;
+		$datevalue=date;
 		
 		//$datevalue=date("Y-m-d",strtotime($datevalue)-86400);
 		if($_GET['log_file'])
@@ -176,10 +176,10 @@ class Calcindxxclosingtemp extends Application{
 		{
 			
 			if(!$closeIndxx['client'])
-			{$file="../files/ca-output/Closing-".$closeIndxx['code']."-".$datevalue.".txt";
+			{$file="../files/ca-output_upcomming/Closing-".$closeIndxx['code']."-".$datevalue.".txt";
 			}else
-			{$file="../files/ca-output/".$closeIndxx['client']."/Closing-".$closeIndxx['code']."-".$datevalue.".txt";
-			$client_folder = "../files/ca-output/".$closeIndxx['client']."/";
+			{$file="../files/ca-output_upcomming/".$closeIndxx['client']."/Closing-".$closeIndxx['code']."-".$datevalue.".txt";
+			$client_folder = "../files/ca-output_upcomming/".$closeIndxx['client']."/";
 			if (!file_exists($client_folder))
 			mkdir($client_folder, 0777, true);
 

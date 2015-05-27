@@ -1,5 +1,5 @@
 <pre><?php
- date_default_timezone_set("Asia/Kolkata"); 
+// date_default_timezone_set("Asia/Kolkata"); 
 ini_set('max_execution_time',60*60);
 $time = microtime();
 $time = explode(' ', $time);
@@ -24,7 +24,7 @@ $adminmsg='';
 $finaSignOffpending='';
 $assignedusermsg='';
 $website='http://192.169.255.12/icai2/index.php';
-$dayesagodate=date('Y-m-d', strtotime(date("Y-m-d").'+2 days'));
+$dayesagodate=date('Y-m-d', strtotime(date.'+2 days'));
 
 
 
@@ -87,7 +87,7 @@ if(mysql_num_rows($result3)>0)
 
 
 
-$query4='Select * from tbl_ca where eff_date = "'.date("Y-m-d").'" and status="0" ';
+$query4='Select * from tbl_ca where eff_date = "'.date.'" and status="0" ';
 $result4=mysql_query($query4);
 if(mysql_num_rows($result4)>0)
 {	

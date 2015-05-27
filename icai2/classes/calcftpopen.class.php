@@ -10,12 +10,16 @@ class Calcftpopen extends Application{
 	
 	function index()
 	{
+		if($_GET['date'])
+			define("date", $_GET['date']);
+			else
+			define("date", date("Y-m-d"));
 	
 	define("log_file", $_GET['log_file']);
 			$this->log_info(log_file, "In Calc FTP Open  ");
 //	$this->pr($_SESSION,true);
 	
-	 $datevalue2=$this->_date;
+	 $datevalue2=date;
 /*	
 
 // set up basic connection

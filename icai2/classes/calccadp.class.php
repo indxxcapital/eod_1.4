@@ -19,7 +19,7 @@ else
 define("date","Y-m-d");
 log_info("In Calc Dividend Place holder ");
 		
-		$date=$this->_date;
+		$date=date;
 		//$date="2014-10-15";
 		$data=	$this->db->getResult("Select ssa.ca_action_id,ssa.id,ssa.indxx_id,tbl_ca.id as ca_id,tbl_ca.identifier,tbl_ca.company_name,tbl_ca.mnemonic,tbl_ca.eff_date from tbl_dividend_ph_req ssa 
 	left join tbl_ca on ssa.ca_action_id=tbl_ca.action_id 

@@ -22,7 +22,7 @@ define("date","Y-m-d");
 log_info("In Replace Cash ");
 		
 
-	 $datevalue=$this->_date;
+	 $datevalue=date;
 	 $indexdata=$this->db->getResult("select tbl_cash_index_temp.* from tbl_cash_index_temp where 1=1 and status='1' and db_approve='1'  and dateStart='".$this->_date."' ",true);
 	//$backupIndex= 
 	 	

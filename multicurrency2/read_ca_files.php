@@ -17,7 +17,7 @@ if ($_GET['date'])
 	define("file_date", $_GET['date']);
 else
 {
-	define("file_date", date("Y-m-d",strtotime(date("Y-m-d")))-86400);
+	define("file_date", date("Y-m-d",strtotime(date("Y-m-d"))-86400));
 	//define("file_date", "2015-05-21");
 }	
 	
@@ -31,6 +31,7 @@ define("log_file", get_logs_folder() . "ca_process_logs_" . date('Y-m-d_H-i-s', 
 //date="2014-04-27";
 define("ca_file", get_input_file("CA", file_date));
 //echo ca_file;
+//exit;
 delete_old_ca();
 
 read_ca_file();

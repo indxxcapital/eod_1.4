@@ -25,7 +25,7 @@ class Calccash extends Application{
 			define("log_file", $_GET['log_file']);
 				$this->log_info(log_file, "In CalcCash File  generattion  for live index");
 	
-		 $datevalue2=$this->_date;
+		 $datevalue2=date;
 		 $final_array=array();
 		 if(!empty($indxxs))
 		 {

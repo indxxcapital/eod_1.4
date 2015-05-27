@@ -11,7 +11,7 @@ class Calcdelisttemp extends Application{
 	
 	function index()
 	{
-	 $datevalue2=$this->_date;	
+	
 	
 	
 	if($_GET['log_file'])
@@ -21,7 +21,7 @@ define("date",$_GET['date']);
 else
 define("date","Y-m-d");
 log_info("In Calc Delsit For Upcomimg  ");
-
+ $datevalue2=date;	
 	//exit;
 	/*if($_SESSION['currentPriorityIndex']==0)
 		

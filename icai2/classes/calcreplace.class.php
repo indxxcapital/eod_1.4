@@ -12,7 +12,7 @@ class Calcreplace extends Application{
 	function index()
 	{
 		
-		 $datevalue2=$this->_date;	
+		
 	
 			if($_GET['log_file'])
 define("log_file",get_logs_folder().$_GET['log_file']);
@@ -23,7 +23,7 @@ define("date","Y-m-d");
 log_info("In CalcReplace for Live  ");
 		
 	
-	
+	 $datevalue2=date;	
 	/*if($_SESSION['currentPriorityIndex']==0)
 		
 	{	
@@ -215,7 +215,7 @@ $insertPrice='Insert into tbl_final_price set date="'.$indxx_array['index_value'
 	
 		
 	//}
-		//$this->Redirect("index.php?module=calccapub&log_file=".basename(log_file)."&date=".date,"","");
+		$this->Redirect("index.php?module=calccapub&log_file=".basename(log_file)."&date=".date,"","");
 	
 	}
 }?>

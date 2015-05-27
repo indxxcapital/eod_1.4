@@ -1,5 +1,5 @@
 <?php 
- date_default_timezone_set("Asia/Kolkata"); 
+
 include("core/function.php");
 require_once 'PHPExcel/Classes/PHPExcel.php';
 require_once 'PHPExcel/Classes//PHPExcel/Cell/AdvancedValueBinder.php';
@@ -14,9 +14,9 @@ if($_GET['log_file'])
 
 			
 $query="Select distinct (client_id) from tbl_indxx_cs where status='1' ";
-$date=date("Y-m-d",time()-86400);
+$date=date;
 //$date=date('Y-m-d');
-$dateForExcel=date("Y-m-d H:i:s",strtotime(date("Y-m-d H:i:s"))-86400);
+$dateForExcel=date("Y-m-d H:i:s",strtotime(date));
 
 
 $array=array();

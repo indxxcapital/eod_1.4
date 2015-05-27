@@ -1,7 +1,7 @@
-<?php /* Smarty version 2.6.14, created on 2015-05-14 04:58:30
+<?php /* Smarty version 2.6.14, created on 2015-05-19 02:30:35
          compiled from caupcomingindex/add2.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
-smarty_core_load_plugins(array('plugins' => array(array('block', 'field', 'caupcomingindex/add2.tpl', 20, false),)), $this); ?>
+smarty_core_load_plugins(array('plugins' => array(array('block', 'field', 'caupcomingindex/add2.tpl', 21, false),)), $this); ?>
 <?php $_smarty_tpl_vars = $this->_tpl_vars;
 $this->_smarty_include(array('smarty_include_tpl_file' => "notice.tpl", 'smarty_include_vars' => array()));
 $this->_tpl_vars = $_smarty_tpl_vars;
@@ -16,8 +16,10 @@ unset($_smarty_tpl_vars);
                                 <h3><i class="icon-reorder"></i>Add New Security for index <?php echo $this->_tpl_vars['sessData']['NewIndxxName']; ?>
 </h3>
                                 <div class="box-tool">
-                                    <a href="#" data-action="collapse"><i class="icon-chevron-up"></i></a>
-                                    <a href="#" data-action="close"><i class="icon-remove"></i></a>
+                                    <a href="<?php echo $this->_tpl_vars['BASE_URL']; ?>
+index.php?module=casecurities&event=uploadSecuritiesforRunning">Upload Securities</a>
+                                <!--    <a href="#" data-action="collapse"><i class="icon-chevron-up"></i></a>
+                                    <a href="#" data-action="close"><i class="icon-remove"></i></a>-->
                                 </div>
                             </div>
                             <form class="form-wizard" method="post"> 

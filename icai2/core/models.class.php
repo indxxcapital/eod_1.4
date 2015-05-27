@@ -1171,13 +1171,15 @@ $returnArray['ca_value_local_price']=$localprice;
 	}
 	else{
 		$cfactor_local=$this->getPriceforCurrency($index_currency,$localcurrency,$date,$id,$action_id);
-		if(strcmp(strtoupper($index_currency.$localcurrency),$index_currency.$localcurrency)==0)
+		if($cfactor_local)
+	{	if(strcmp(strtoupper($index_currency.$localcurrency),$index_currency.$localcurrency)==0)
 			$localcurrencyprice=$localprice/$cfactor_local;
 			elseif($ca_currency=="KWd")
 			$localcurrencyprice= $localprice/($cfactor_local*1000);
 			else
 				$localcurrencyprice=$localprice/($cfactor_local*100);
-			$returnArray['ca_value_local_price']=$localprice;
+	}	
+	$returnArray['ca_value_local_price']=$localprice;
 			$returnArray['ca_value_local_currency']=$localcurrency;
 			$returnArray['CP_DVD_TYP']=$dvdtype;
 		$returnArray['CP_ADJ']=$adjfactor;
@@ -1205,12 +1207,15 @@ $returnArray['ca_value_local_price']=$localprice;
 		}else
 		{	
 				$cfactor_local=$this->getPriceforCurrency($ca_currency,$localcurrency,$date,$id,$action_id);
-				if(strcmp(strtoupper($localcurrency.$ca_currency),$localcurrency.$ca_currency)==0)
+		
+		if($cfactor_local)
+		{		if(strcmp(strtoupper($localcurrency.$ca_currency),$localcurrency.$ca_currency)==0)
 			$localcurrencyprice=$localprice/$cfactor_local;
 			elseif($ca_currency=="KWd")
 			$localcurrencyprice= $localprice/($cfactor_local*1000);
 			else
 				$localcurrencyprice=$localprice/($cfactor_local*100);
+		}
 			$returnArray['ca_value_local_price']=$localprice;
 			$returnArray['ca_value_local_currency']=$localcurrency;
 			$returnArray['CP_DVD_TYP']=$dvdtype;
@@ -1541,13 +1546,13 @@ return 1/$row['price'];
 else
 {
 echo "Price Not Available for Currency Ticker ".$ticker2.$ticker1." of date.".$date."<br>".$id."=>".$action_id ;
-exit;
+return 0;
 }
 }
 else
 {
 echo "Price Not Available for Currency Ticker ".$ticker2.$ticker1." of date.".$date."<br>".$id."=>".$action_id ;
-exit;
+return 0;
 }
 
 

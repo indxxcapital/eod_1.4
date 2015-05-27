@@ -15,8 +15,8 @@ if($_GET['log_file'])
 //$date=date("Y-m-d",time()-86400);
 //$dateForExcel=date("Y-m-d H:i:s",strtotime(date("Y-m-d H:i:s"))-86400);
 
-$date=date("Y-m-d");
-$dateForExcel=date("Y-m-d H:i:s");
+$date=date;
+$dateForExcel=date("Y-m-d H:i:s",strtotime(date));
 
 $array=array();
 $indexvalueArrayRes=mysql_query("SELECT indxx_value  FROM `tbl_indxx_value` WHERE `code` LIKE 'LCINDX' and date='".$date."' order by dateAdded desc limit 0,1");

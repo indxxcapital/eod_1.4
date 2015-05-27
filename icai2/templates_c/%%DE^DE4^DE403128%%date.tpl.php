@@ -1,7 +1,7 @@
-<?php /* Smarty version 2.6.14, created on 2015-04-29 09:30:02
+<?php /* Smarty version 2.6.14, created on 2015-05-19 01:37:03
          compiled from C:/xampp/htdocs/eod/icai2/templates//formfields/date.tpl */ ?>
-<script type="text/javascript" src="http://97.74.65.118/icai/assets/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-    <link rel="stylesheet" type="text/css" href="http://97.74.65.118/icai/assets/assets/bootstrap-datepicker/css/datepicker.css" /> <div class="control-group">
+<script type="text/javascript" src="assets/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="assets/assets/bootstrap-datepicker/css/datepicker.css" /> <div class="control-group">
 <label class="control-label"><?php echo $this->_tpl_vars['formParams']['feild_label'];  if ($this->_tpl_vars['formParams']['is_required'] == '1'): ?> <sup class="redalert">*</sup><?php endif; ?>:</label>
 <div class="controls"><input type="text" placeholder="YYYY-MM-DD"  name="<?php echo $this->_tpl_vars['formParams']['feild_code']; ?>
 " id="<?php echo $this->_tpl_vars['formParams']['feild_code']; ?>

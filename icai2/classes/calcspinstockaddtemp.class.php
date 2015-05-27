@@ -18,7 +18,7 @@ define("date",$_GET['date']);
 else
 define("date","Y-m-d");
 log_info("In Calc Spinoff Stock add  for upcomming ");
-		$date=$this->_date;
+		$date=date;
 		$data=	$this->db->getResult("Select ssa.dbApprove,ssa.action_id,ssa.id,tbl_ca.id as ca_id,tbl_ca.identifier,tbl_ca.company_name,tbl_ca.mnemonic,tbl_ca.eff_date from tbl_spin_stock_add ssa 
 	left join tbl_ca on ssa.action_id=tbl_ca.action_id 
 	where tbl_ca.eff_date='".$date."' and ssa.dbApprove='1'

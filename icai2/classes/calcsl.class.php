@@ -23,7 +23,7 @@ class Calcsl extends Application{
 		$indxxs=$this->db->getResult("select * from tbl_indxx_sl  where status='1' ",true);	
 		//$this->pr($indxxs);
 		 //$datevalue2=date('Y-m-d',strtotime($this->_date)-86400);
-		 $datevalue2=$this->_date;
+		 $datevalue2=date;
 		 
 		 
 		//  $datevalue2='2015-04-24';

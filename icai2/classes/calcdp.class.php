@@ -22,7 +22,7 @@ log_info("In Rebalance of index ");
 		//echo "select * from tbl_indxx_cs  where status='1' ";
 		$indxxs=$this->db->getResult("select tbl_indxx.id from tbl_indxx  where status='1' and usersignoff='1' and dbusersignoff='1' and submitted='1' and ireturn='2'" ,true);	
 		//$this->pr($indxxs);
-		 $datevalue2=date('Y-m-d',strtotime($this->_date));
+		 $datevalue2=date;
 		 
 		 
 		 $final_array=array();

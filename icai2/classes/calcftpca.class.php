@@ -19,7 +19,7 @@ else
 define("date","Y-m-d");
 
 log_info("In Replace Cash Index (Go-live) of index ");
-	 $datevalue2=date('Y-m-d',strtotime($this->_date));
+	 $datevalue2=date;
 	
 /*
 // set up basic connection

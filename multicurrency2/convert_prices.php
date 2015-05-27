@@ -92,10 +92,35 @@ function send_index_deactivation_mail($keyindex, $valueindex, $index_type)
 	}		
 }
 
+function check_for_zero(){
+
+$errortext='';
+$securities = mysql_query("SELECT id,isin,ticker from tbl_prices_local_curr  WHERE price='N.A.' ");
+
+	if ($err_code = mysql_errno())
+		mail_exit(__FILE__, __LINE__);	
+		while ($security = mysql_fetch_assoc($securities))
+	{
+	$errortext.="Price is N.A. of ".$security['ticker']."-".$security['isin'];
+	$res=mysql_query("Select * from tbl_prices_local_curr where ticker='".$security['ticker']."' order by date desc limit 0,1");
+	if(mysql_num_rows($res)>0)
+	{
+	$row=mysql_fetch_assoc($res);
+	mysql_query("update tbl_prices_local_curr set price='".$row['price']."', curr='".$row['curr']."',isin='".$row['isin']."' where id='".$security['id']."' ");
+	}
+	}
+		
+	if($errortext)
+	{
+	mail_info($errortext);
+	}	
+}
+
+
 function convert_prices()
 {
 	//$start = get_time();
-
+check_for_zero();
 	/* Check if the security price has fluctuated more than 5%, if so send email. */
 	check_security_price_fluctuations();
 	

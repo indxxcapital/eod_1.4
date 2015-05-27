@@ -24,7 +24,11 @@ class Calcindxxopeningtemp extends Application{
 		$this->_title=$this->siteconfig->site_title;
 		$this->_meta_description=$this->siteconfig->default_meta_description;
 		$this->_meta_keywords=$this->siteconfig->default_meta_keyword;
-		
+			
+		if($_GET['date'])
+			define("date", $_GET['date']);
+			else
+			define("date", date("Y-m-d"));
 		define("log_file", $_GET['log_file']);
 		
 		$this->log_info(log_file, "Opening file generation process started for upcoming indexes.");
@@ -48,7 +52,7 @@ class Calcindxxopeningtemp extends Application{
 		//$this->pr($indxxs,true);
 		$type="open";
 		
-		 $datevalue2=$this->_date;
+		 $datevalue2=date;
 //	exit;
 	
 	//	 $datevalue='';

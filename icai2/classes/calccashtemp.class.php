@@ -21,7 +21,7 @@ class Calccashtemp extends Application{
 		//$this->pr($indxxs);
 		 //$datevalue2=date('Y-m-d',strtotime($this->_date)-86400);
 	//	 $datevalue2='2014-08-22';
-		 $datevalue2=$this->_date;
+		 $datevalue2=date;
 		 if($_GET['log_file'])
 			define("log_file", $_GET['log_file']);
 				$this->log_info(log_file, "In CalcCash File  generation  for upcoming index");

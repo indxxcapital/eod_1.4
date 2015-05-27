@@ -22,7 +22,7 @@ log_info("In CalcDelist for Live  ");
 	/*	if($_SESSION['currentPriorityIndex']==0)
 		
 	{	*/
-	 $datevalue2=$this->_date;	
+	 $datevalue2=date;	
 	//exit;
 	
 	

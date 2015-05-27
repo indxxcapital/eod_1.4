@@ -21,7 +21,7 @@ class Calcindxxclosing extends Application{
 		
 		$type="close";
 		
-		$datevalue=$this->_date;
+		//$datevalue=$this->_date;
 		
 		//$datevalue=date("Y-m-d",strtotime($datevalue)-86400);
 		if($_GET['log_file'])
@@ -31,6 +31,8 @@ class Calcindxxclosing extends Application{
 			else
 			define("date", date("Y-m-d"));
 
+		$datevalue=date;
+		
 				$this->log_info(log_file, "Closing file generation process started for live indexes.");
 		if($_GET['id'])
 		{
@@ -160,11 +162,11 @@ class Calcindxxclosing extends Application{
 		//}
 			
 
-		
+	//	$this->pr($final_array,true);	
 			mysql_free_result($indxxs);
 		$backup_folder = "../files/output/backup/";
 		if (!file_exists($backup_folder))
-		//	mkdir($backup_folder, 0777, true);
+			mkdir($backup_folder, 0777, true);
 		//$this->pr($final_array,true);
 		if($type=='close')
 {	
@@ -174,6 +176,7 @@ class Calcindxxclosing extends Application{
 		foreach($final_array as $indxxKey=> $closeIndxx)
 		{
 			
+			//$this->pr($closeIndxx,true);
 			if(!$closeIndxx['client'])
 			{$file="../files/ca-output/Closing-".$closeIndxx['code']."-".$datevalue.".txt";
 			}else
@@ -313,7 +316,8 @@ else
 		$entry2.="Market Value,".$marketValue.",\n\n";
 		//echo $entry1.$entry2.$entry3.$entry4;
 		//exit;
-	$insertQuery='INSERT into tbl_indxx_value (indxx_id,code,market_value,indxx_value,date,olddivisor,newdivisor) values ("'.$closeIndxx['id'].'","'.$closeIndxx['code'].'","'.$marketValue.'","'.$newindexvalue.'","'.$datevalue.'","'.$oldDivisor.'","'.$newDivisor.'")';
+	 $insertQuery='INSERT into tbl_indxx_value (indxx_id,code,market_value,indxx_value,date,olddivisor,newdivisor) values ("'.$closeIndxx['id'].'","'.$closeIndxx['code'].'","'.$marketValue.'","'.$newindexvalue.'","'.$datevalue.'","'.$oldDivisor.'","'.$newDivisor.'")';
+		//exit;
 		$this->db->query($insertQuery);	
 		
 		if($open){   

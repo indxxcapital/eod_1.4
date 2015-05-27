@@ -119,7 +119,7 @@ $entry1.="\n";
 		{
 		foreach($clients as $clientname=> $caclients)
 		{
-			$file2="../files/ca-output/".$clientname."/composit-ca-".$this->_date.".txt";
+			$file2="../files/ca-output/".$clientname."/composit-ca-".date.".txt";
 			
 		$open2=fopen($file2,"w+");
 	if($open2){   

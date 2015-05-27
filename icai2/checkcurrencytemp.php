@@ -1,5 +1,5 @@
 <pre><?php
- date_default_timezone_set("Asia/Kolkata"); 
+// date_default_timezone_set("Asia/Kolkata"); 
 ini_set('max_execution_time',60*60);
 $time = microtime();
 $time = explode(' ', $time);

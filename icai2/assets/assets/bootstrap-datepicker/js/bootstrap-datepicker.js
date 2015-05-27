@@ -23,6 +23,7 @@
 	
 	var Datepicker = function(element, options){
 		this.element = $(element);
+
 		this.format = DPGlobal.parseFormat(options.format||this.element.data('date-format')||'yyyy-mm-dd');
 		this.picker = $(DPGlobal.template)
 							.appendTo('body')
@@ -81,6 +82,8 @@
 		this.fillMonths();
 		this.update();
 		this.showMode();
+		this.setStartDate=new Date();
+		
 	};
 	
 	Datepicker.prototype = {

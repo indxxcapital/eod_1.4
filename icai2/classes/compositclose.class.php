@@ -26,7 +26,7 @@ class Compositclose extends Application{
 	//$this->pr($clientData,true);
 	
 	///$date=date('Y-m-d',strtotime($this->_date)-86400);
-	$date=$this->_date;
+	$date=date;
 	
 	//$date="2014-03-28";
 	if(!empty($clientData))
