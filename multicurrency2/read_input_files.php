@@ -21,7 +21,8 @@ else
 		define("date", date("Y-m-d"));
 		//define("date","2015-05-25");
 	}
-	
+	save_process("Closing",date,"0");
+
 	//echo date;
 //date="2014-05-20";
 define("currencyfactor_file", get_input_file("CURRENCY_FACTOR", date));

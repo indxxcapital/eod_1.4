@@ -2881,6 +2881,15 @@ function getCaStr3($indxxticker,$date,$indxxname=''){
 return $entry;
 }
 
+
+function save_process($task,$date,$status){
+$this->db->query("INSERT INTO `tbl_system_task_complete` (`id`, `sysdate`, `name`, `status`, `date`) VALUES (NULL, CURRENT_TIMESTAMP, '".$task."', '".$status."', '".$date."');");
+}
+function update_process($task,$date,$status){
+$this->db->query("update `tbl_system_task_complete`set `status`='".$status."' where name='".$task."' and `date` ='".$date."'");
+}
+
+
 function saveProcess($type=0)
 {
 //print_r($_SERVER);

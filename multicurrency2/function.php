@@ -144,7 +144,9 @@ exit;
 }
 
 
-
+function save_process($task,$date,$status){
+mysql_query("INSERT INTO `tbl_system_task_complete` (`id`, `sysdate`, `name`, `status`, `date`) VALUES (NULL, CURRENT_TIMESTAMP, '".$task."', '".$status."', '".$date."');");
+}
 
 function saveProcess($type=0)
 {

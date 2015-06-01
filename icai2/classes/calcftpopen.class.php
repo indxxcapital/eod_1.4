@@ -18,7 +18,7 @@ class Calcftpopen extends Application{
 	define("log_file", $_GET['log_file']);
 			$this->log_info(log_file, "In Calc FTP Open  ");
 //	$this->pr($_SESSION,true);
-	
+	$this->update_process("Opening",date,"1");	
 	 $datevalue2=date;
 /*	
 
@@ -56,6 +56,7 @@ ftp_close($conn_id);
 */
 	
 				$this->log_info(log_file, "Opening Process Finished .");
+				$this->Redirect2("../multicurrency2/db_backup_open.php?date=" .date. "&log_file=" . basename(log_file),"","");	
 	}
 }
 ?>

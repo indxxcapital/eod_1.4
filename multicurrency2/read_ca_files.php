@@ -11,6 +11,7 @@ ini_set("memory_limit", "1024M");
 
 /* Prepare logging mechanism */
 prepare_logfile();
+
 //date("Y-m-d")
 /* Define date for fetching input files and manipulations */
 if ($_GET['date'])
@@ -25,6 +26,8 @@ if ("Fri" == date("D", strtotime(file_date)))
 	define("date", date("Y-m-d", strtotime("+3 day", strtotime(file_date))));
 else
 	define("date", date("Y-m-d", strtotime("+1 day", strtotime(file_date))));	
+save_process("CA",date,"0");
+
 
 define("log_file", get_logs_folder() . "ca_process_logs_" . date('Y-m-d_H-i-s', $_SERVER ['REQUEST_TIME']) . ".txt");
 	
