@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2014-05-28 12:10:48
+<?php /* Smarty version 2.6.14, created on 2015-06-17 02:54:29
          compiled from benchmarkindex/index.tpl */ ?>
 <!-- BEGIN Main Content -->
 <?php $_smarty_tpl_vars = $this->_tpl_vars;

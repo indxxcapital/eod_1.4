@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2014-07-01 16:11:26
+<?php /* Smarty version 2.6.14, created on 2015-06-17 05:32:06
          compiled from delistrunning/add2.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('modifier', 'count', 'delistrunning/add2.tpl', 12, false),)), $this); ?>

@@ -171,7 +171,7 @@ if($type=='close')
 			$marketValue=0;
 			$sumofDividendes=0;
 			$shareinsertArray=array();
-			foreach($closeIndxx['values'] as $closeprices)
+			foreach($closeIndxx['values'] as $TickerKey=> $closeprices)
 			{
 			//$this->pr($closeprices,true);
 		if(!$closeprices['calcshare'] && !$closeprices['weight'])
@@ -187,13 +187,15 @@ if($type=='close')
 		//echo $shareValue;
 		$closeprices['calcshare']=$shareValue;
 		}
+		$final_array[$indxxKey]['values'][$TickerKey]['calcshare']=$shareValue;
+		
 			$securityPrice=$closeprices['calcprice'];
 			
 		
 		if($closeprices['weight'])
 		$weightValue=$closeprices['weight'];
 		else
-		$weightValue=(($closeprices['calcprice']*$shareValue)/$closeIndxx['index_value']['market_value'])*100;
+		$weightValue=(($closeprices['calcprice']*$shareValue)/$closeIndxx['index_value']['market_value']);
 		
 			// $weightValue."<br>";
 			//echo $shareValue."<br>";
@@ -213,18 +215,6 @@ if($type=='close')
 		//	$sumofDividendes+=$shareValue*$dividendPrice;	
 		//	echo "<br>";
 			
-			$entry4.= "\n".$datevalue.",";
-            $entry4.=  $closeprices['ticker'].",";
-            $entry4.= $closeprices['name'].",";
-            $entry4.=$closeprices['isin'].",";
-			 $entry4.=$closeprices['sedol'].",";;
-            $entry4.=$closeprices['cusip'].",";;
-            $entry4.=$closeprices['countryname'].",";
-            $entry4.=$shareValue.",";
-			$entry4.=$weightValue.",";
-       		$entry4.=$closeprices['localprice'].",";
-	     	$entry4.=$closeprices['curr'].",";
-	     	$entry4.=$closeprices['currencyfactor'].",";
 			
 
 			}
@@ -240,6 +230,33 @@ $marketValue= number_format($marketValue,11,'.','');
 		}
 	//	echo $marketValue;
 		//echo "<br>";
+		
+		
+		
+		
+		
+		foreach($closeIndxx['values'] as $closeprices)
+		{
+			$weightValue=(($closeprices['calcprice']*$closeprices['calcshare'])/$marketValue);
+			
+		$entry4.= "\n".$datevalue.",";
+            $entry4.=  $closeprices['ticker'].",";
+            $entry4.= $closeprices['name'].",";
+            $entry4.=$closeprices['isin'].",";
+			 $entry4.=$closeprices['sedol'].",";;
+            $entry4.=$closeprices['cusip'].",";;
+            $entry4.=$closeprices['countryname'].",";
+            $entry4.=$closeprices['calcshare'].",";
+			$entry4.=$weightValue.",";
+       		$entry4.=$closeprices['localprice'].",";
+	     	$entry4.=$closeprices['curr'].",";
+	     	$entry4.=$closeprices['currencyfactor'].",";
+			
+		}
+		
+		
+		
+		
 		$newDivisor=$marketValue/$oldindexvalue;
 	//	echo "<br>";
 		$oldDivisor=$newDivisor;
@@ -265,7 +282,7 @@ $marketValue= number_format($marketValue,11,'.','');
 		}
 
 		
-	$insertQuery='INSERT into tbl_indxx_value_temp (indxx_id,code,market_value,indxx_value,date,olddivisor,newdivisor) values ("'.$closeIndxx['id'].'","'.$closeIndxx['code'].'","'.$marketValue.'","'.$newindexvalue.'","'.$datevalue.'","'.$oldDivisor.'","'.$newDivisor.'")';
+	 $insertQuery='INSERT into tbl_indxx_value_temp (indxx_id,code,market_value,indxx_value,date,olddivisor,newdivisor) values ("'.$closeIndxx['id'].'","'.$closeIndxx['code'].'","'.$marketValue.'","'.$newindexvalue.'","'.$datevalue.'","'.$oldDivisor.'","'.$newDivisor.'")';
 		$this->db->query($insertQuery);	
 		$insertQuery='INSERT into tbl_indxx_value_open_temp (indxx_id,code,market_value,indxx_value,date,olddivisor,newdivisor) values ("'.$closeIndxx['id'].'","'.$closeIndxx['code'].'","'.$marketValue.'","'.$newindexvalue.'","'.$datevalue.'","'.$oldDivisor.'","'.$newDivisor.'")';
 		$this->db->query($insertQuery);	
@@ -277,7 +294,7 @@ $marketValue= number_format($marketValue,11,'.','');
 	
 	        fclose($open);
 
-$filetext= "file Written for ".$closeIndxx['code']."<br>";
+ $filetext= "file Written for ".$closeIndxx['code']."<br>";
 
 }
 }  

@@ -347,6 +347,22 @@ $this->db->query("update tbl_ca set status='1' where id='".$_GET['id']."' ");
 		//echo "select tbl_ca_values_user.* from tbl_ca_values_user where ca_action_id = '".$cadata[0]['ca_action_id']."' ";
 		$indexdata3=$this->db->getResult("select tbl_ca_values_user.* from tbl_ca_values_user where ca_action_id = '".$cadata[0]['action_id']."' ",true);
 		
+		
+		
+		
+		$viewdata2=$this->db->getResult("select tbl_ca_values.field_name,tbl_ca_values.field_value,tbl_ca_values.id as fieldid from  tbl_ca_values  where tbl_ca_values.ca_id='".$_GET['id']."'",true);
+				
+				$valuesArray=array();
+				foreach($viewdata2 as $key=>$value)
+				{
+				//	echo "select * from  tbl_ca_action_fields_values  where tbl_ca_action_fields_values.field_name='".$value['field_name']."' and data='".$value['field_value']."'";
+					
+					
+					if(($value['field_value']!='1001' && $value['field_name']=='CP_DVD_TYP') && $viewdata[0]['mnemonic']=="DVD_CASH" && $viewdata[0]['eff_date']==$this->_date)
+						$scflag=1;
+				}
+		
+		
 		if(!empty($indexdata2) && !empty($indexdata3))
 	{
 		$res=	$this->array_diff_assoc_recursive($indexdata2,$indexdata3);
@@ -441,12 +457,60 @@ $this->smarty->assign("approveTemp",1);
 	
 		
 //$this->pr($clientdata,true);
+		$this->smarty->assign("scflag",$scflag);
 $this->smarty->assign("indxxd",$indxxd);
 $this->smarty->assign("indxxt",$indxxt);
 
 	//$this->pr($indxxd,true);
 	
 		//$this->pr($_SESSION);
+		
+		
+		
+		
+	if(!empty($_POST))
+	{
+//	$this->pr($_POST,true);
+	$newStatus='';
+
+if($_POST['submit'])
+{	if($_POST['status']==1)
+	{
+		$this->db->query("UPDATE tbl_ca set status='0' where action_id='".$_POST['id']."'");
+		
+	}
+	else{
+		$this->db->query("UPDATE tbl_ca set status='1' where action_id='".$_POST['id']."'");
+		
+	}
+
+}
+
+if($_POST['scflagbtn'])
+{
+	if($_POST['spcash'])
+	{
+		
+	//	echo "UPDATE tbl_ca_values set field_value='1001' where ca_action_id='".$_POST['id']."' and field_name='CP_DVD_TYP'";
+$this->db->query("UPDATE tbl_ca_values set field_value='1001' where ca_action_id='".$_POST['id']."' and field_name='CP_DVD_TYP'");
+//	exit;
+	
+	
+	}
+}
+	
+	
+	if($_POST['iactive'])
+{
+		$this->Redirect("index.php?module=viewca&event=addinactiveRequest&id=".$_POST['caid']."&action_id=".$_POST['id'],'','');	
+	
+	}
+	
+	//if($_POST[''])
+	$this->Redirect("index.php?module=viewca&event=view&id=".$_POST['caid'],"Record updated successfully!!!","success");	
+	
+	}
+		
 		 $this->show();
 		}
 		

@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-04-05 08:27:57
+<?php /* Smarty version 2.6.14, created on 2015-06-17 02:12:50
          compiled from blocks/indxxstatics.tpl */ ?>
 <div class="span5">
                         <div class="box">
@@ -13,7 +13,17 @@
                                 <ul class="weekly-stats">
                                     <li>
                                      
-                                        Total Running Index: <span class="value"><?php echo $this->_tpl_vars['totalActiveindxx']; ?>
+                                        Total Live Index: <span class="value"><?php echo $this->_tpl_vars['totalActiveindxx']; ?>
+</span>
+                                    </li>
+                                     <li>
+                                     
+                                        Total New Index: <span class="value"><?php echo $this->_tpl_vars['totalNewindxx']; ?>
+</span>
+                                    </li>
+                                     <li>
+                                     
+                                        Total Rebalance Index: <span class="value"><?php echo $this->_tpl_vars['totalRebalanceindxx']; ?>
 </span>
                                     </li>
                                     <li>
@@ -21,11 +31,16 @@
                                         Total Securities: <span class="value"><?php echo $this->_tpl_vars['totalTicker']; ?>
 </span>
                                     </li>
-                                    <li>
+                                     <li>
+                                       
+                                        Unique Securities: <span class="value"><?php echo $this->_tpl_vars['uniqueTicker']; ?>
+</span>
+                                    </li>
+                                 <!--   <li>
                                         
                                         Total Upcoming Corporate Actions: <span class="value"><?php echo $this->_tpl_vars['totalca']; ?>
 </span>
-                                    </li>
+                                    </li>-->
                                       <li>
                                         
                                         Total Active Members: <span class="value"><?php echo $this->_tpl_vars['totalauser']; ?>

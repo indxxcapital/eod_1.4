@@ -1,4 +1,4 @@
-<?php
+h<?php
 
 class Checkcavalue extends Application{
 
@@ -264,7 +264,7 @@ if($text!='' && $text)
 			{
 			foreach($cas3 as $allca){
 				
-			$text2.=$allca['company_name']."(".$allca['identifier'].")=>".$_SESSION['variable'][$allca['mnemonic']]."<br>";
+			$text3.=$allca['company_name']."(".$allca['identifier'].")=>".$_SESSION['variable'][$allca['mnemonic']]."<br>";
 			
 				}
 			}

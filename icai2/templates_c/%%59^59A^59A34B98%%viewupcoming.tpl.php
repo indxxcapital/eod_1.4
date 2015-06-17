@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-05-19 02:33:39
+<?php /* Smarty version 2.6.14, created on 2015-06-17 02:08:55
          compiled from caindex/viewupcoming.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('modifier', 'count', 'caindex/viewupcoming.tpl', 153, false),)), $this); ?>
@@ -270,7 +270,7 @@ $.ajax({
 "><button class="btn btn-warning">Reject</button></a>   <?php endif; ?>               
  
  <?php if ($this->_tpl_vars['viewindexdata']['0']['dbusersignoff'] == 0): ?><a href="index.php?module=caindex&event=subrequesttemp&id=<?php echo $this->_tpl_vars['viewindexdata']['0']['id']; ?>
-">   <button class="btn btn-primary">Request File Status</button></a><?php endif; ?>
+">   <button class="btn btn-primary">Approve Index</button></a><?php endif; ?>
                                    
                                     <a href="index.php?module=caupcomingindex"><button class="btn btn-inverse">Back</button></a>
                                     <!--  <button class="btn btn-warning">Warning</button>

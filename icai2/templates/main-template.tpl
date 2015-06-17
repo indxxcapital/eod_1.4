@@ -54,12 +54,11 @@
                 </div>
 
                 <div class="row-fluid">
-                     {block file="thingstodo" class="block_thingstodo"}{/block}
-                      {block file="weeklychanges" class="block_weeklychanges"}{/block}
+                     
                     
                 </div>
 
-                <div class="row-fluid">
+                <!--<div class="row-fluid">
                     
                     <div class="span7">
                         <div class="box box-red">
@@ -130,7 +129,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>-->
 
                 
                 <!-- END Main Content -->

@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2014-07-01 15:58:20
+<?php /* Smarty version 2.6.14, created on 2015-06-17 05:31:44
          compiled from delistrunning/index.tpl */ ?>
 <!-- BEGIN Main Content -->
 

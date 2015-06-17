@@ -39,10 +39,13 @@ if($_SESSION['User']['type']=='2' )
 	if(!empty($_SESSION['IndexTemp']))
 {$ids=$ids = join(',',$_SESSION['IndexTemp']); 
 //$this->pr($_SESSION,true);
-$indexdata=$this->db->getResult("select tbl_indxx_temp.*,tbl_index_types.name as indexname from tbl_indxx_temp left join tbl_index_types on tbl_index_types.id=tbl_indxx_temp.type where tbl_indxx_temp.id in (".$ids .")   ",true);
+$indexdata=$this->db->getResult("select tbl_indxx_temp.*,tbl_ca_client.name as clientname,( select count(id) from tbl_indxx_ticker_temp where indxx_id=tbl_indxx_temp.id) as total_ticker from tbl_indxx_temp left join tbl_ca_client on tbl_ca_client.id=tbl_indxx_temp.client_id where tbl_indxx_temp.id in (".$ids .")   ",true);
 }
 }
-else{		$indexdata=$this->db->getResult("select tbl_indxx_temp.*,tbl_index_types.name as indexname from tbl_indxx_temp left join tbl_index_types on tbl_index_types.id=tbl_indxx_temp.type where 1=1  ",true);
+else{	
+
+
+	$indexdata=$this->db->getResult("select tbl_indxx_temp.*,tbl_ca_client.name as clientname,( select count(id) from tbl_indxx_ticker_temp where indxx_id=tbl_indxx_temp.id) as total_ticker from tbl_indxx_temp left join tbl_ca_client on tbl_ca_client.id=tbl_indxx_temp.client_id  where 1=1  ",true);
 }
 		$this->smarty->assign("indexdata",$indexdata);
 
@@ -64,7 +67,7 @@ else{		$indexdata=$this->db->getResult("select tbl_indxx_temp.*,tbl_index_types.
 		 							"feild_code" =>"code",
 								 "feild_type" =>"text",
 								 "is_required" =>"1",
-								
+								"feildOptions"=>array("readonly"=>"readonly")
 								 );
 								 
 		 $this->validData[]=array("feild_label" =>"Investment Amount",
@@ -88,13 +91,13 @@ else{		$indexdata=$this->db->getResult("select tbl_indxx_temp.*,tbl_index_types.
 								 "is_required" =>"1",
 								
 								 );
-	 $this->validData[]=array("feild_label" =>"Type",
+	/* $this->validData[]=array("feild_label" =>"Type",
 	 							"feild_code" =>"type",
 								 "feild_type" =>"select",
 								 "is_required" =>"1",
 								 //"feild_tpl" =>"selectsearch",
 								  "model"=>$this->getTypes(),
-								 );
+								 );*/
 		 $this->validData[]=array("feild_label" =>"Return Type",
 	 							"feild_code" =>"ireturn",
 								 "feild_type" =>"select",
@@ -102,13 +105,13 @@ else{		$indexdata=$this->db->getResult("select tbl_indxx_temp.*,tbl_index_types.
 								 //"feild_tpl" =>"selectsearch",
 								  "model"=>$this->getReturnTypes(),
 								 );	
-	 $this->validData[]=array("feild_label" =>"Zone",
-	 							"feild_code" =>"zone",
+	  $this->validData[]=array("feild_label" =>"Ignore Corporate Actions",
+	 							"feild_code" =>"ica",
 								 "feild_type" =>"select",
-								 "is_required" =>"1",
+								 "is_required" =>"",
 								 //"feild_tpl" =>"selectsearch",
-								  "model"=>$this->getCalendarZone(),
-								 );
+								  "model"=>$this->GetYesNo(),
+								 );	
 		$this->validData[]=array("feild_label" =>"Cash Dividend Adjustment",
 	 							"feild_code" =>"cash_adjust",
 								 "feild_type" =>"select",
@@ -128,7 +131,7 @@ else{		$indexdata=$this->db->getResult("select tbl_indxx_temp.*,tbl_index_types.
 	$this->validData[]=array("feild_label" =>"Currency Hedged Index",
 	 							"feild_code" =>"currency_hedged",
 								 "feild_type" =>"select",
-								 "is_required" =>"",
+								 "is_required" =>"1",
 								 //"feild_tpl" =>"selectsearch",
 								  "model"=>array("0"=>"No","1"=>"Yes"),
 								 );								 
@@ -153,13 +156,13 @@ else{		$indexdata=$this->db->getResult("select tbl_indxx_temp.*,tbl_index_types.
 								 ); 
 								 
 								 
-	$this->validData[]=array("feild_label" =>"Display Currency",
+	/*$this->validData[]=array("feild_label" =>"Display Currency",
 	 							"feild_code" =>"display_currency",
 								 "feild_type" =>"select",
 								 "is_required" =>"1",
 								 //"feild_tpl" =>"selectsearch",
 								  "model"=>array("0"=>"No","1"=>"Yes"),
-								 );								 
+								 );	*/							 
 	/*$this->validData[]=array("feild_code" =>"product_file",
 									 "feild_type" =>"file",
 									 "is_required" =>"1",
@@ -203,6 +206,13 @@ else{		$indexdata=$this->db->getResult("select tbl_indxx_temp.*,tbl_index_types.
 		
 		$editdata=$this->db->getResult("select tbl_indxx_temp.* from tbl_indxx_temp  where tbl_indxx_temp.id='".$_GET['id']."'");
 		//$this->pr($editdata,true);
+		
+		$indxx_value=$this->db->getResult("select tbl_indxx_value.* from tbl_indxx_value where code='".$editdata['code']."' order by date desc ",false,1);	
+		if(!empty($indxx_value)){
+		$editdata['investmentammount']=$indxx_value['market_value'];
+		$editdata['indexvalue']=$indxx_value['indxx_value'];
+		}
+		
 		$this->smarty->assign("postData",$editdata);
 		
 		$this->addfield($editdata['ireturn']);
@@ -222,7 +232,7 @@ else{		$indexdata=$this->db->getResult("select tbl_indxx_temp.*,tbl_index_types.
 		$_SESSION['indxx_type']=$editdata['type'];
 			
 			
-			$checkdata=$this->db->getResult("select tbl_indxx_temp.* from tbl_indxx_temp  where tbl_indxx_temp.code='".$_POST['code']."' and tbl_indxx_temp.dateStart='".$_POST['dateStart']."'");
+			/*$checkdata=$this->db->getResult("select tbl_indxx_temp.* from tbl_indxx_temp  where tbl_indxx_temp.code='".$_POST['code']."' and tbl_indxx_temp.dateStart='".$_POST['dateStart']."'");*/
 			/*if(empty($checkdata))
 			{
 					$this->db->query("INSERT into tbl_indxx_temp set name='".mysql_real_escape_string($_POST['name'])."',code='".mysql_real_escape_string($_POST['code'])."',investmentammount='".mysql_real_escape_string($_POST['investmentammount'])."',indexvalue='".mysql_real_escape_string($_POST['indexvalue'])."',type='".mysql_real_escape_string($_POST['type'])."',zone='".mysql_real_escape_string($_POST['zone'])."',curr='".mysql_real_escape_string($_POST['curr'])."',lastupdated='".date("Y-m-d H:i:s")."',dateStart='".$_POST['dateStart']."',cash_adjust='".$_POST['cash_adjust']."'");
@@ -237,9 +247,10 @@ else{		$indexdata=$this->db->getResult("select tbl_indxx_temp.*,tbl_index_types.
 				//$this->pr($checkdata,true);	
 				
 				
-				$tempindexid=$checkdata['id'];
-				
-				$this->db->query("UPDATE tbl_indxx_temp set name='".mysql_real_escape_string($_POST['name'])."',code='".mysql_real_escape_string($_POST['code'])."',investmentammount='".mysql_real_escape_string($_POST['investmentammount'])."',divpvalue='".mysql_real_escape_string($_POST['divpvalue'])."',indexvalue='".mysql_real_escape_string($_POST['indexvalue'])."',type='".mysql_real_escape_string($_POST['type'])."',zone='".mysql_real_escape_string($_POST['zone'])."',curr='".mysql_real_escape_string($_POST['curr'])."',lastupdated='".date("Y-m-d H:i:s")."',dateStart='".$_POST['dateStart']."',cash_adjust='".$_POST['cash_adjust']."',display_currency='".$_POST['display_currency']."',client_id='".$_POST['client_id']."',div_type='".$_POST['div_type']."',currency_hedged='".$_POST['currency_hedged']."' where id='".$checkdata['id']."'");
+				//$tempindexid=$checkdata['id'];
+				//echo "UPDATE tbl_indxx_temp set name='".mysql_real_escape_string($_POST['name'])."',code='".mysql_real_escape_string($_POST['code'])."',investmentammount='".mysql_real_escape_string($_POST['investmentammount'])."',divpvalue='".mysql_real_escape_string($_POST['divpvalue'])."',indexvalue='".mysql_real_escape_string($_POST['indexvalue'])."',type='".mysql_real_escape_string($_POST['type'])."',zone='".mysql_real_escape_string($_POST['zone'])."',curr='".mysql_real_escape_string($_POST['curr'])."',lastupdated='".date("Y-m-d H:i:s")."',dateStart='".$_POST['dateStart']."',cash_adjust='".$_POST['cash_adjust']."',display_currency='1',client_id='".$_POST['client_id']."',ica='".$_POST['ica']."',div_type='".$_POST['div_type']."',currency_hedged='".$_POST['currency_hedged']."' where id='".$checkdata['id']."'";
+			//	exit;
+				$this->db->query("UPDATE tbl_indxx_temp set name='".mysql_real_escape_string($_POST['name'])."',code='".mysql_real_escape_string($_POST['code'])."',investmentammount='".mysql_real_escape_string($_POST['investmentammount'])."',divpvalue='".mysql_real_escape_string($_POST['divpvalue'])."',indexvalue='".mysql_real_escape_string($_POST['indexvalue'])."',type='".mysql_real_escape_string($_POST['type'])."',zone='".mysql_real_escape_string($_POST['zone'])."',curr='".mysql_real_escape_string($_POST['curr'])."',lastupdated='".date("Y-m-d H:i:s")."',dateStart='".$_POST['dateStart']."',cash_adjust='".$_POST['cash_adjust']."',display_currency='1',client_id='".$_POST['client_id']."',ica='".$_POST['ica']."',div_type='".$_POST['div_type']."',currency_hedged='".$_POST['currency_hedged']."' where id='".$_GET['id']."'");
 				
 				
 			//}
@@ -403,7 +414,7 @@ function uploadSharesforRunning(){
     'application/txt',
 );
 
-if (in_array($_FILES['upload']['type'], $csv_mimetypes)) {
+if (!in_array($_FILES['inputfile']['type'], $csv_mimetypes)) {
 	$check=false;
 				$errormsg='Invalid input file, Please upload correct csv file';
 			//break;
@@ -449,7 +460,7 @@ if(count($data)!=count($tickerdata))
 				if(!empty($data))
 				{
 					$weightQuery=array();
-					
+					$this->db->query("delete from tbl_share_temp where indxx_id='".$_SESSION['tempindexid']."'");
 					$query='INSERT into tbl_share_temp (isin,date,share,indxx_id) values ';
 					$queryArray=array();
 					
@@ -569,7 +580,8 @@ if(count($data)!=count($tickerdata))
 					echo "sum not passed=".floatval($sumofWeights);
 					}
 					exit;*/
-					if(!empty($weightQuery) &&  strval($sumofWeights)==100)
+					if($sumofWeights>0)
+					{if(!empty($weightQuery) &&  strval($sumofWeights)==100)
 					{
 					foreach($weightQuery as $weightupdateQuery)
 					{
@@ -580,7 +592,7 @@ if(count($data)!=count($tickerdata))
 					$check=false;
 						$errormsg="Sum of Weights is  ". $sumofWeights;
 						//break;
-					}
+					}}
 					
 				}
 
@@ -664,8 +676,8 @@ $this->Redirect("index.php?module=caupcomingindex&event=uploadSharesforRunning",
 		
 		for($i=0;$i<$totalfields;$i++)
 		{
-			$array['name['.($i+1).']']=$tickerdata[$i]['name'];
-			
+			$array['name['.($i+1).']']=htmlspecialchars($tickerdata[$i]['name']);
+						
 			$array['isin['.($i+1).']']=$tickerdata[$i]['isin'];
 			$array['ticker['.($i+1).']']=$tickerdata[$i]['ticker'];
 			$array['divcurr['.($i+1).']']=$tickerdata[$i]['divcurr'];
@@ -673,7 +685,7 @@ $this->Redirect("index.php?module=caupcomingindex&event=uploadSharesforRunning",
 			
 			//$array[]=	
 		}
-		
+		//$this->pr($array,true);
 		$this->smarty->assign('postData',$array);
 		$this->smarty->assign('totalfields',$totalfields);
 		
@@ -1165,10 +1177,10 @@ $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 // Additional headers
 $headers .= 'From: Indexing <indexing@indxx.com>' . "\r\n"."CC: indexing@indxx.com". "\r\n";
 $body='Hi <br>';
-$body.='Your Upcoming Indxx '.$indxx['name'].'('.$indxx['code'].') has been approved by '.$_SESSION['User']['name'].' , <br> Please  <a href="'.$this->siteconfig->base_url.'index.php?module=caupcomingindex">Click here </a> to do more.<br>Thanks ';
+$body.='Your Upcoming Indxx '.$approveindexdata['name'].'('.$approveindexdata['code'].') has been approved by '.$_SESSION['User']['name'].' , <br> Please  <a href="'.$this->siteconfig->base_url.'index.php?module=caupcomingindex">Click here </a> to do more.<br>Thanks ';
 
 
-		mail($to,"ICAI :Upcoming Indxx Deleted " ,$body,$headers);
+		mail($to,"ICAI :Upcoming Indxx Approved " ,$body,$headers);
 		
 	if($_SESSION['User']["type"]==3)
 	{

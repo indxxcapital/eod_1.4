@@ -1,10 +1,10 @@
-<?php /* Smarty version 2.6.14, created on 2015-05-27 06:26:45
+<?php /* Smarty version 2.6.14, created on 2015-06-17 04:13:03
          compiled from sidebar.tpl */ ?>
 <div id="sidebar" class="nav-collapse">
                 <!-- BEGIN Navlist -->
                 <ul class="nav nav-list">
                     <!-- BEGIN Search Form -->
-                    <li>
+                   <!-- <li>
                         <form target="#" method="GET" class="search-form">
                             <span class="search-pan">
                                 <button type="submit">
@@ -13,7 +13,7 @@
                                 <input type="text" name="search" placeholder="Search Security..." autocomplete="off" />
                             </span>
                         </form>
-                    </li>
+                    </li>-->
                     <!-- END Search Form -->
                     <?php if ($this->_tpl_vars['sessData']['User']['type'] == '1' || $this->_tpl_vars['sessData']['User']['type'] == '2' || $this->_tpl_vars['sessData']['User']['type'] == '3'): ?>
                     <li <?php if ($this->_tpl_vars['currentClass'] == 'home'): ?> class="active"<?php endif; ?>>
@@ -43,11 +43,11 @@
                         <li><a href="index.php?module=caindex">Running Index</a></li>
                            <?php if ($this->_tpl_vars['sessData']['User']['type'] != 3): ?><li><a href="index.php?module=caindex&event=addNewRunning">Add new Running Index</a></li><?php endif; ?>
                         <li><a href="index.php?module=caupcomingindex">Upcoming Index</a></li>
-                         <li><a href="index.php?module=benchmarkindex">USD Benchmark Index</a></li> 
-			<li><a href="index.php?module=adjbenchmarkindex">Local Benchmark Index</a></li>
+               <!--          <li><a href="index.php?module=benchmarkindex">USD Benchmark Index</a></li> 
+			<li><a href="index.php?module=adjbenchmarkindex">Local Benchmark Index</a></li>-->
                             <li><a href="index.php?module=casecurities">Securities</a></li>
-                            <li><a href="index.php?module=updatecusip">Update Cusip</a></li>
-                            <li><a href="index.php?module=updatesedol">Update Sedol</a></li>
+                          <!--  <li><a href="index.php?module=updatecusip">Update Cusip</a></li>
+                            <li><a href="index.php?module=updatesedol">Update Sedol</a></li>-->
                             <?php if ($this->_tpl_vars['sessData']['User']['type'] == 3): ?><li><a href="index.php?module=uniquesecurities">Active Unique Securities</a></li>
                             <li><a href="index.php?module=uniquecurrencies">Active Unique Currencies</a></li>
                             <?php endif; ?>
@@ -117,12 +117,12 @@
                      
                      <?php endif; ?>
 <?php if ($this->_tpl_vars['sessData']['User']['type'] == '1' || $this->_tpl_vars['sessData']['User']['type'] == '2'): ?>
-                    <li <?php if ($this->_tpl_vars['currentClass'] == 'cacalendar'): ?> class="active"<?php endif; ?>>
+                 <!--   <li <?php if ($this->_tpl_vars['currentClass'] == 'cacalendar'): ?> class="active"<?php endif; ?>>
                         <a href="index.php?module=cacalendar" class="dropdown-toggle">
                             <i class="icon-list"></i>
                             <span>CA Calendar</span>
                             
-                        </a>
+                        </a>-->
 
                         <!-- BEGIN Submenu -->
                         <!--<ul class="submenu">
@@ -131,7 +131,7 @@
                             <li><a href="table_dynamic.html">Dynamic</a></li>
                         </ul>-->
                         <!-- END Submenu -->
-                    </li>
+                   <!-- </li>-->
 <?php endif; ?>
                     
                     <!--<li>
@@ -217,21 +217,7 @@
                     <?php endif; ?>
                     
                     
-                        <?php if ($this->_tpl_vars['sessData']['User']['type'] == 1): ?>
-                    <li <?php if ($this->_tpl_vars['currentClass'] == 'holidays' || $this->_tpl_vars['currentClass'] == 'calendarzone'): ?> class="active"<?php endif; ?>>
-                        <a href="#"  class="dropdown-toggle">
-                            <i class="icon-file"></i>
-                            <span>Holidays</span>
-                            <b class="arrow icon-angle-right"></b>
-                        </a>
-                        
-                        <ul class="submenu">
-                        <li><a href="index.php?module=calendarzone">Calendar Zone</a></li>
-                        <li><a href="index.php?module=holidays">Holidays</a></li>   
-                                      </ul>
-                        
-                    </li>
-					<?php endif; ?>
+                    
                     
                     
                     <?php if ($this->_tpl_vars['sessData']['User']['type'] == 1 || $this->_tpl_vars['sessData']['User']['type'] == 2 || $this->_tpl_vars['sessData']['User']['type'] == 3): ?>

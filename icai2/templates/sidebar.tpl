@@ -2,7 +2,7 @@
                 <!-- BEGIN Navlist -->
                 <ul class="nav nav-list">
                     <!-- BEGIN Search Form -->
-                    <li>
+                   <!-- <li>
                         <form target="#" method="GET" class="search-form">
                             <span class="search-pan">
                                 <button type="submit">
@@ -11,7 +11,7 @@
                                 <input type="text" name="search" placeholder="Search Security..." autocomplete="off" />
                             </span>
                         </form>
-                    </li>
+                    </li>-->
                     <!-- END Search Form -->
                     {if $sessData.User.type=='1' || $sessData.User.type=='2' || $sessData.User.type=='3'}
                     <li {if $currentClass=="home"} class="active"{/if}>
@@ -41,11 +41,11 @@
                         <li><a href="index.php?module=caindex">Running Index</a></li>
                            {if $sessData.User.type!=3}<li><a href="index.php?module=caindex&event=addNewRunning">Add new Running Index</a></li>{/if}
                         <li><a href="index.php?module=caupcomingindex">Upcoming Index</a></li>
-                         <li><a href="index.php?module=benchmarkindex">USD Benchmark Index</a></li> 
-			<li><a href="index.php?module=adjbenchmarkindex">Local Benchmark Index</a></li>
+               <!--          <li><a href="index.php?module=benchmarkindex">USD Benchmark Index</a></li> 
+			<li><a href="index.php?module=adjbenchmarkindex">Local Benchmark Index</a></li>-->
                             <li><a href="index.php?module=casecurities">Securities</a></li>
-                            <li><a href="index.php?module=updatecusip">Update Cusip</a></li>
-                            <li><a href="index.php?module=updatesedol">Update Sedol</a></li>
+                          <!--  <li><a href="index.php?module=updatecusip">Update Cusip</a></li>
+                            <li><a href="index.php?module=updatesedol">Update Sedol</a></li>-->
                             {if $sessData.User.type==3}<li><a href="index.php?module=uniquesecurities">Active Unique Securities</a></li>
                             <li><a href="index.php?module=uniquecurrencies">Active Unique Currencies</a></li>
                             {/if}
@@ -115,12 +115,12 @@
                      
                      {/if}
 {if $sessData.User.type=='1' || $sessData.User.type=='2'}
-                    <li {if $currentClass=="cacalendar"} class="active"{/if}>
+                 <!--   <li {if $currentClass=="cacalendar"} class="active"{/if}>
                         <a href="index.php?module=cacalendar" class="dropdown-toggle">
                             <i class="icon-list"></i>
                             <span>CA Calendar</span>
                             
-                        </a>
+                        </a>-->
 
                         <!-- BEGIN Submenu -->
                         <!--<ul class="submenu">
@@ -129,7 +129,7 @@
                             <li><a href="table_dynamic.html">Dynamic</a></li>
                         </ul>-->
                         <!-- END Submenu -->
-                    </li>
+                   <!-- </li>-->
 {/if}
                     
                     <!--<li>
@@ -215,21 +215,7 @@
                     {/if}
                     
                     
-                        {if $sessData.User.type==1}
-                    <li {if $currentClass=="holidays" || $currentClass=="calendarzone"} class="active"{/if}>
-                        <a href="#"  class="dropdown-toggle">
-                            <i class="icon-file"></i>
-                            <span>Holidays</span>
-                            <b class="arrow icon-angle-right"></b>
-                        </a>
-                        
-                        <ul class="submenu">
-                        <li><a href="index.php?module=calendarzone">Calendar Zone</a></li>
-                        <li><a href="index.php?module=holidays">Holidays</a></li>   
-                                      </ul>
-                        
-                    </li>
-					{/if}
+                    
                     
                     
                     {if $sessData.User.type==1 ||  $sessData.User.type==2 ||  $sessData.User.type==3}

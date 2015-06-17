@@ -1,7 +1,7 @@
-<?php /* Smarty version 2.6.14, created on 2015-04-24 04:45:28
+<?php /* Smarty version 2.6.14, created on 2015-06-17 02:50:16
          compiled from caindex/view.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
-smarty_core_load_plugins(array('plugins' => array(array('modifier', 'count', 'caindex/view.tpl', 153, false),)), $this); ?>
+smarty_core_load_plugins(array('plugins' => array(array('modifier', 'count', 'caindex/view.tpl', 127, false),)), $this); ?>
 <!-- BEGIN Main Content -->
  <?php echo '
  <script type=\'text/javascript\'>
@@ -138,7 +138,42 @@ $.ajax({
                                     </tbody>
                                 </table>
                             
-                            
+                            <?php if (count($this->_tpl_vars['lastCloseData']) > 0): ?>
+                             <div class="clearfix"></div>
+                                 <div class="box">
+                                 <div class="box-title">
+                                <h3><i class="icon-table"></i>Last Close Index Data</h3>
+                            </div>
+                              </div>  
+                                
+                                <div class="clearfix"></div>
+                           <table class="table table-striped table-hover fill-head">
+                                    <thead>
+                                        <tr>
+                                            <th>Code</th>
+                                            <th>Market Value</th>
+                                            <th>Index Value</th>
+                                            <th>Divisor</th>
+                                            <th>Date</th>
+                                            
+                                            
+                                          
+                                        </tr>
+                                    </thead>
+                                    <tbody><tr>
+                                      <td><?php echo $this->_tpl_vars['lastCloseData']['code']; ?>
+</td>
+                                            <td><?php echo $this->_tpl_vars['lastCloseData']['market_value']; ?>
+</td>
+                                            <td><?php echo $this->_tpl_vars['lastCloseData']['indxx_value']; ?>
+</td>
+                                            <td><?php echo $this->_tpl_vars['lastCloseData']['newdivisor']; ?>
+</td>
+                                            <td><?php echo $this->_tpl_vars['lastCloseData']['date']; ?>
+</td>
+                                    </tr></tbody>
+                                    </table>
+                            <?php endif; ?>
                                 
                                 <div class="clearfix"></div>
                                  <div class="box">
@@ -155,9 +190,12 @@ $.ajax({
            <th>#</th>
              <th>Name</th>
               <th>Ticker</th>
-              <th>ISIN</th>       
+              <th>ISIN</th>   
+                    <th>Sedol</th>  
+                          <th>Cusip</th>  
+                                <th>Country</th>      
                <th>Weight</th>
-              <th>Currency</th>  <th>Div Currency</th><th style="width:100px">Submit adjustment factor</th>
+              <th>Currency</th>  <th>Div Currency</th><!--<th style="width:100px">Submit adjustment factor</th>-->
               
             <!--<th>Effective Date</th>
             <th>Announce Date</th>-->
@@ -178,13 +216,19 @@ $.ajax({
 </td>
             <td><?php echo $this->_tpl_vars['point']['isin']; ?>
 </td>
+              <td><?php echo $this->_tpl_vars['point']['sedol']; ?>
+</td>
+                <td><?php echo $this->_tpl_vars['point']['cusip']; ?>
+</td>
+                  <td><?php echo $this->_tpl_vars['point']['countryname']; ?>
+</td>
             <td><?php echo $this->_tpl_vars['point']['weight']; ?>
 </td>
             <td><?php echo $this->_tpl_vars['point']['curr']; ?>
 </td>
              <td><?php echo $this->_tpl_vars['point']['divcurr']; ?>
 </td>
-             <td>
+            <!-- <td>
              <div class="btn-group">
                     
                     <a class="btn btn-small show-tooltip" title="Adj Factor" href="index.php?module=caindex&event=subadjfactor&id=<?php echo $this->_tpl_vars['point']['id']; ?>
@@ -193,7 +237,7 @@ $.ajax({
                     
                   
                 </div></td>
-
+-->
         </tr>
         <?php endforeach; endif; unset($_from); ?>
         <?php else: ?>
@@ -206,35 +250,15 @@ $.ajax({
 </table>
 
  <table class="table table-advance">   <tr><td>
- 
- 
- <?php if ($this->_tpl_vars['sessData']['User']['type'] == 1): ?>
-
- 
-                                    <a href="index.php?module=caindex"><button class="btn btn-inverse">Back</button></a>
-                                   
+                                  
+  <a href="index.php?module=caindex&event=exportlive&id=<?php echo $this->_tpl_vars['viewindexdata']['0']['id']; ?>
+"><button class="btn btn-warning">Export Index</button></a>
+        <a href="index.php?module=caindex"><button class="btn btn-inverse">Back</button></a>
                                     
-                                    </td></tr>
-                                    <?php endif; ?>
+                                     
+                            </td>
+                                     </tr>
                                     
-                                    
-                                 <?php if ($this->_tpl_vars['sessData']['User']['type'] == 2): ?>
- 
-
-                                    
-                                    <a href="index.php?module=caindex"><button class="btn btn-inverse">Back</button></a>
-                                 
-                                    </td></tr>
-                                    <?php endif; ?>
-                                    
-                                    
-                                    <?php if ($this->_tpl_vars['sessData']['User']['type'] == 3): ?>
-
-                                   
-                                    <a href="index.php?module=caindex"><button class="btn btn-inverse">Back</button></a>
-                                   
-                                    </td></tr>
-                                    <?php endif; ?>
                                     
                                     </table>
 

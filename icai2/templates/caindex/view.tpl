@@ -124,7 +124,37 @@ $.ajax({
                                     </tbody>
                                 </table>
                             
-                            
+                            {if $lastCloseData|@count>0}
+                             <div class="clearfix"></div>
+                                 <div class="box">
+                                 <div class="box-title">
+                                <h3><i class="icon-table"></i>Last Close Index Data</h3>
+                            </div>
+                              </div>  
+                                
+                                <div class="clearfix"></div>
+                           <table class="table table-striped table-hover fill-head">
+                                    <thead>
+                                        <tr>
+                                            <th>Code</th>
+                                            <th>Market Value</th>
+                                            <th>Index Value</th>
+                                            <th>Divisor</th>
+                                            <th>Date</th>
+                                            
+                                            
+                                          
+                                        </tr>
+                                    </thead>
+                                    <tbody><tr>
+                                      <td>{$lastCloseData.code}</td>
+                                            <td>{$lastCloseData.market_value}</td>
+                                            <td>{$lastCloseData.indxx_value}</td>
+                                            <td>{$lastCloseData.newdivisor}</td>
+                                            <td>{$lastCloseData.date}</td>
+                                    </tr></tbody>
+                                    </table>
+                            {/if}
                                 
                                 <div class="clearfix"></div>
                                  <div class="box">
@@ -140,9 +170,12 @@ $.ajax({
            <th>#</th>
              <th>Name</th>
               <th>Ticker</th>
-              <th>ISIN</th>       
+              <th>ISIN</th>   
+                    <th>Sedol</th>  
+                          <th>Cusip</th>  
+                                <th>Country</th>      
                <th>Weight</th>
-              <th>Currency</th>  <th>Div Currency</th><th style="width:100px">Submit adjustment factor</th>
+              <th>Currency</th>  <th>Div Currency</th><!--<th style="width:100px">Submit adjustment factor</th>-->
               
             <!--<th>Effective Date</th>
             <th>Announce Date</th>-->
@@ -157,17 +190,20 @@ $.ajax({
             <td>{$point.name}</td>
             <td>{$point.ticker}</td>
             <td>{$point.isin}</td>
+              <td>{$point.sedol}</td>
+                <td>{$point.cusip}</td>
+                  <td>{$point.countryname}</td>
             <td>{$point.weight}</td>
             <td>{$point.curr}</td>
              <td>{$point.divcurr}</td>
-             <td>
+            <!-- <td>
              <div class="btn-group">
                     
                     <a class="btn btn-small show-tooltip" title="Adj Factor" href="index.php?module=caindex&event=subadjfactor&id={$point.id}&indxx_id={$smarty.get.id}"><i class="icon-edit"></i></a>
                     
                   
                 </div></td>
-
+-->
         </tr>
         {/foreach}
         {else}
@@ -180,35 +216,14 @@ $.ajax({
 </table>
 
  <table class="table table-advance">   <tr><td>
- 
- 
- {if $sessData.User.type==1}
-
- 
-                                    <a href="index.php?module=caindex"><button class="btn btn-inverse">Back</button></a>
-                                   
+                                  
+  <a href="index.php?module=caindex&event=exportlive&id={$viewindexdata.0.id}"><button class="btn btn-warning">Export Index</button></a>
+        <a href="index.php?module=caindex"><button class="btn btn-inverse">Back</button></a>
                                     
-                                    </td></tr>
-                                    {/if}
+                                     
+                            </td>
+                                     </tr>
                                     
-                                    
-                                 {if $sessData.User.type==2}
- 
-
-                                    
-                                    <a href="index.php?module=caindex"><button class="btn btn-inverse">Back</button></a>
-                                 
-                                    </td></tr>
-                                    {/if}
-                                    
-                                    
-                                    {if $sessData.User.type==3}
-
-                                   
-                                    <a href="index.php?module=caindex"><button class="btn btn-inverse">Back</button></a>
-                                   
-                                    </td></tr>
-                                    {/if}
                                     
                                     </table>
 

@@ -11,16 +11,28 @@
                                 <ul class="weekly-stats">
                                     <li>
                                      
-                                        Total Running Index: <span class="value">{$totalActiveindxx}</span>
+                                        Total Live Index: <span class="value">{$totalActiveindxx}</span>
+                                    </li>
+                                     <li>
+                                     
+                                        Total New Index: <span class="value">{$totalNewindxx}</span>
+                                    </li>
+                                     <li>
+                                     
+                                        Total Rebalance Index: <span class="value">{$totalRebalanceindxx}</span>
                                     </li>
                                     <li>
                                        
                                         Total Securities: <span class="value">{$totalTicker}</span>
                                     </li>
-                                    <li>
+                                     <li>
+                                       
+                                        Unique Securities: <span class="value">{$uniqueTicker}</span>
+                                    </li>
+                                 <!--   <li>
                                         
                                         Total Upcoming Corporate Actions: <span class="value">{$totalca}</span>
-                                    </li>
+                                    </li>-->
                                       <li>
                                         
                                         Total Active Members: <span class="value">{$totalauser}</span>

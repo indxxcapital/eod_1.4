@@ -25,9 +25,9 @@ log_info("In Replace Index (Go-live) of index ");
 	 $datevalue=date;
 //exit;
 
-	$indexdata=$this->db->getResult("select tbl_indxx_temp.* from tbl_indxx_temp where 1=1 and status='1' and usersignoff='1' and dbusersignoff='1' and submitted='1' and finalsignoff='1'  and dateStart='".$this->_date."' ",true);
+	$indexdata=$this->db->getResult("select tbl_indxx_temp.* from tbl_indxx_temp where 1=1 and status='1' and usersignoff='1' and dbusersignoff='1' and submitted='1' and finalsignoff='1'  and dateStart='".$datevalue."' ",true);
 		
-	//	$this->pr($indexdata,true);
+		$this->pr($indexdata,true);
 		
 			$finalArray=array();
 		

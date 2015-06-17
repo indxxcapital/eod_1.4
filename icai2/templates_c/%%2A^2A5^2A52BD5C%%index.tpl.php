@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-04-05 08:28:32
+<?php /* Smarty version 2.6.14, created on 2015-06-17 03:07:16
          compiled from caindex/index.tpl */ ?>
 <!-- BEGIN Main Content -->
  <?php echo '
@@ -8,7 +8,7 @@
  function confirmdelete(id)
  {
 
- var temp=confirm("Are you sure you want to delete this record ")
+ var temp=decision();
   if(temp)
    {	
 	
@@ -26,7 +26,7 @@
 $(document).ready(function(){
  $("#deleteSelected").click(function(){
 	 
-	 var temp=confirm("Are you sure you want to delete this record ")
+	 var temp=decision();
   if(temp)
    {	
 	 
@@ -49,7 +49,9 @@ $.ajax({
     data : parameters,
     success: function(data, textStatus, jqXHR)
     {
-        //data - response from server
+       
+	   window.location.href=\'index.php?module=caindex\';
+	    //data - response from server
     },
     error: function (jqXHR, textStatus, errorThrown)
     {
@@ -70,7 +72,29 @@ $.ajax({
 	 
  
 }); 
- 
+ function decision(){
+if(confirm("Are you sure to delete?")) {
+	var text=makeid();
+	var replytext= prompt("Please fill text : "+text,"")
+	if(replytext!= null && replytext==text)
+	{
+	return true;
+	}else{
+	alert("Input Text Not Match, Please Try Again.")
+return	decision();
+	}
+	
+}}
+function makeid()
+{
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < 5; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
 </script>
  
  '; ?>
@@ -87,7 +111,10 @@ $.ajax({
                                     <div class="btn-group">
                                         <!-- <a class="btn btn-circle show-tooltip" title="Add new record" href="index.php?module=caindex&event=addNew" ><i class="icon-plus"></i></a>
                                        <a class="btn btn-circle show-tooltip" title="Edit selected" href="#"><i class="icon-edit"></i></a>-->
-                                        <a class="btn btn-circle show-tooltip" title="Delete selected" id="deleteSelected" href="#"><i class="icon-trash"></i></a>
+                                        <?php if ($this->_tpl_vars['sessData']['User']['type'] == 1): ?>
+      <a class="btn btn-circle show-tooltip" title="Delete selected" id="deleteSelected" href="#">Delete Selected</a>
+                                    
+                                    <?php endif; ?>
                                     </div>
                                     <!--<div class="btn-group">
                                         <a class="btn btn-circle show-tooltip" title="Print" href="#"><i class="icon-print"></i></a>
@@ -104,13 +131,15 @@ $.ajax({
         <tr>
             <th style="width:18px"><input type="checkbox" /></th>
             <th>Name</th>
-            <th>Ticker</th>
-            <th>Type</th>
-            
-            <th>Currency</th>
-            <th>Start Date</th>
-            <th>Approved</th>
-            <th>Request File Status</th>
+            <th>Code</th>
+             <th>Client</th>
+               <th>Total Tickers</th>
+             <th>Currency</th>
+            <th>Live Date</th>
+  	        <th>Dividend Adj.</th>
+<th>Index Type</th>
+            <th>Submitted</th>
+            <th>DB Status</th>
               <th>User Status </th>
             
             
@@ -128,27 +157,30 @@ $.ajax({
 </td>
             <td><?php echo $this->_tpl_vars['point']['code']; ?>
 </td>
-            <td><?php echo $this->_tpl_vars['point']['indexname']; ?>
+            <td><?php echo $this->_tpl_vars['point']['clientname']; ?>
+</td>
+          <td><?php echo $this->_tpl_vars['point']['total_ticker']; ?>
 </td>
             <td><?php echo $this->_tpl_vars['point']['curr']; ?>
 </td>
             <td><?php echo $this->_tpl_vars['point']['dateStart']; ?>
 </td>
-            
-            <td><?php if ($this->_tpl_vars['point']['status'] == 0): ?><span class="label label-important">Not approved!</span><?php else: ?><span class="badge badge-success">Approved</span><?php endif; ?></td>
-             <td><?php if ($this->_tpl_vars['point']['dbusersignoff'] == 0): ?><span class="label label-important">Not Prepared!</span><?php else: ?><span class="badge badge-success">Prepared</span><?php endif; ?></td>
-              <td><?php if ($this->_tpl_vars['point']['usersignoff'] == 0): ?><span class="label label-important">Not Signed Off!</span><?php else: ?><span class="badge badge-success">Signed Off</span><?php endif; ?></td>
+                  <td><?php if ($this->_tpl_vars['point']['cash_adjust'] == '1'): ?>Stock<?php else: ?>Divisor<?php endif; ?></td>
+                    <td><?php if ($this->_tpl_vars['point']['ireturn'] == '1'): ?>PR<?php elseif ($this->_tpl_vars['point']['ireturn'] == '2'): ?>Dividend Placeholder<?php else: ?>TR<?php endif; ?></td>
+            <td><?php if ($this->_tpl_vars['point']['status'] == 0): ?><span class="label label-important">No!</span><?php else: ?><span class="badge badge-success">Yes</span><?php endif; ?></td>
+             <td><?php if ($this->_tpl_vars['point']['dbusersignoff'] == 0): ?><span class="label label-important">No!</span><?php else: ?><span class="badge badge-success">Yes</span><?php endif; ?></td>
+              <td><?php if ($this->_tpl_vars['point']['usersignoff'] == 0): ?><span class="label label-important">No!</span><?php else: ?><span class="badge badge-success">Yes</span><?php endif; ?></td>
             <td>
                 <div class="btn-group">
                     <a class="btn btn-small show-tooltip" title="View" href="index.php?module=caindex&event=view&id=<?php echo $this->_tpl_vars['point']['id']; ?>
-"><i class="icon-zoom-in"></i></a>
+">View</a>&nbsp;|&nbsp;
                     <a class="btn btn-small show-tooltip" title="Edit" href="index.php?module=caindex&event=editfornext&id=<?php echo $this->_tpl_vars['point']['id']; ?>
-"><i class="icon-edit"></i></a>
-                    
+">Edit</a>
+                    &nbsp;|&nbsp;
                    <!-- index.php?module=caindex&event=delete&id=<?php echo $this->_tpl_vars['point']['id']; ?>
 -->
                     <a class="btn btn-small btn-danger show-tooltip " title="Delete" href="#" id="a1" onclick="confirmdelete(<?php echo $this->_tpl_vars['point']['id']; ?>
-)"><i class="icon-trash"></i></a>
+)">Delete</a>
                 </div>
             </td>
         </tr>

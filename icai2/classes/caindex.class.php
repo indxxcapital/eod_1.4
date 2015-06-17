@@ -39,9 +39,9 @@ $ids=$ids = implode(',',$_SESSION['Index']);
 //$ids=substr($ids, 0, -1); echo $ids;
 //exit;
 if(!empty($ids))
-$indexdata=$this->db->getResult("select tbl_indxx.*,tbl_index_types.name as indexname from tbl_indxx left join tbl_index_types on tbl_index_types.id=tbl_indxx.type where tbl_indxx.id in (".$ids .") ",true);
+$indexdata=$this->db->getResult("select tbl_indxx.*,tbl_ca_client.name as clientname,( select count(id) from tbl_indxx_ticker where indxx_id=tbl_indxx.id) as total_ticker from tbl_indxx left join tbl_ca_client on tbl_ca_client.id=tbl_indxx.client_id  where tbl_indxx.id in (".$ids .") ",true);
 }
-else{		$indexdata=$this->db->getResult("select tbl_indxx.*,tbl_index_types.name as indexname from tbl_indxx left join tbl_index_types on tbl_index_types.id=tbl_indxx.type where 1=1  ",true);
+else{		$indexdata=$this->db->getResult("select tbl_indxx.*,tbl_ca_client.name as clientname,(select count(id) from tbl_indxx_ticker where indxx_id=tbl_indxx.id) as total_ticker from tbl_indxx left join tbl_ca_client on tbl_ca_client.id=tbl_indxx.client_id  where 1=1  ",true);
 }
 		$this->smarty->assign("indexdata",$indexdata);
 
@@ -264,7 +264,7 @@ $body.='Your Indxx '.$indxx['name'].'('.$indxx['code'].') has been deleted by ad
 		 							"feild_code" =>"code",
 								 "feild_type" =>"text",
 								 "is_required" =>"1",
-								
+								"feildOptions"=>array("readonly"=>"readonly")
 								 );
 								 
 		/* $this->validData[]=array("feild_label" =>"Investment Amount",
@@ -290,13 +290,13 @@ $body.='Your Indxx '.$indxx['name'].'('.$indxx['code'].') has been deleted by ad
 								  "model"=>$this->getReturnTypes(),
 								 );		
 								 
-	 $this->validData[]=array("feild_label" =>"Type",
+	/* $this->validData[]=array("feild_label" =>"Type",
 	 							"feild_code" =>"type",
 								 "feild_type" =>"select",
 								 "is_required" =>"1",
 								 //"feild_tpl" =>"selectsearch",
 								  "model"=>$this->getTypes(),
-								 );
+								 );*/
 								 
 															 
 	$this->validData[]=array("feild_label" =>"Dividend Amount",
@@ -318,7 +318,7 @@ $body.='Your Indxx '.$indxx['name'].'('.$indxx['code'].') has been deleted by ad
 		$this->validData[]=array("feild_label" =>"Currency Hedged Index",
 	 							"feild_code" =>"currency_hedged",
 								 "feild_type" =>"select",
-								 "is_required" =>"",
+								 "is_required" =>"1",
 								 //"feild_tpl" =>"selectsearch",
 								  "model"=>array("0"=>"No","1"=>"Yes"),
 								 );									
@@ -352,14 +352,14 @@ $body.='Your Indxx '.$indxx['name'].'('.$indxx['code'].') has been deleted by ad
 									 );*/
 								 
 								 
-	 	 $this->validData[]=array("feild_label" =>"Display Currency ",
+	 	/* $this->validData[]=array("feild_label" =>"Display Currency ",
 	 							"feild_code" =>"display_currency",
 								 "feild_type" =>"select",
 								 "is_required" =>"",
 								 //"feild_tpl" =>"selectsearch",
 								  "model"=>$this->GetYesNo(),
 								 );
-								 
+								 */
 	/*	$this->validData[]=array("feild_label" =>"Priority",
 	 							"feild_code" =>"priority",
 								 "feild_type" =>"select",
@@ -407,8 +407,10 @@ $body.='Your Indxx '.$indxx['name'].'('.$indxx['code'].') has been deleted by ad
 			
 			//$_SESSION['InsertedData']=$_POST;
 			
-			
-		$this->db->query("INSERT into tbl_indxx_temp set addtype='1', status='0',name='".mysql_real_escape_string($_POST['name'])."',code='".mysql_real_escape_string($_POST['code'])."',investmentammount='0',divisor='0',type='".mysql_real_escape_string($_POST['type'])."',zone='".mysql_real_escape_string($_POST['zone'])."',curr='".mysql_real_escape_string($_POST['curr'])."',lastupdated='".date("Y-m-d h:i:s")."',dateStart='".$_POST['dateStart']."',cash_adjust='".$_POST['cash_adjust']."',client_id='".$_POST['client_id']."',display_currency='".$_POST['display_currency']."',ireturn='".$_POST['ireturn']."',div_type='".$_POST['div_type']."',currency_hedged='".$_POST['currency_hedged']."'");
+					$old_index_data=$this->db->getResult("select tbl_indxx_temp.* from tbl_indxx_temp where code='".mysql_real_escape_string($_POST['code'])."'");
+					if(empty($old_index_data))
+					{
+		$this->db->query("INSERT into tbl_indxx_temp set addtype='1', status='0',name='".mysql_real_escape_string($_POST['name'])."',code='".mysql_real_escape_string($_POST['code'])."',investmentammount='0',divisor='0',type='".mysql_real_escape_string($_POST['type'])."',zone='".mysql_real_escape_string($_POST['zone'])."',curr='".mysql_real_escape_string($_POST['curr'])."',lastupdated='".date("Y-m-d h:i:s")."',dateStart='".$_POST['dateStart']."',cash_adjust='".$_POST['cash_adjust']."',client_id='".$_POST['client_id']."',ica='".$_POST['ica']."',display_currency='1',ireturn='".$_POST['ireturn']."',div_type='".$_POST['div_type']."',currency_hedged='".$_POST['currency_hedged']."'");
 		//
 		$indexid=mysql_insert_id();
 		
@@ -475,6 +477,10 @@ $body.='Your Indxx '.$indxx['name'].'('.$indxx['code'].') has been deleted by ad
 			}*/
 			
 			$this->Redirect("index.php?module=casecurities&event=addNewforRunning","Index added successfully!!!","success");	
+			}else{
+			$this->Redirect("index.php?module=caindex&event=addNewRunning","Indxx Code Allready in Database , Please Check!","error");	
+			
+			}
 		}
 		
 	
@@ -512,13 +518,13 @@ $body.='Your Indxx '.$indxx['name'].'('.$indxx['code'].') has been deleted by ad
 								 "is_required" =>"1",
 								
 								 );*/
-	 $this->validData[]=array("feild_label" =>"Type",
+/*	 $this->validData[]=array("feild_label" =>"Type",
 	 							"feild_code" =>"type",
 								 "feild_type" =>"select",
 								 "is_required" =>"1",
 								 //"feild_tpl" =>"selectsearch",
 								  "model"=>$this->getTypes(),
-								 );
+								 );*/
 	 $this->validData[]=array("feild_label" =>"Return Type",
 	 							"feild_code" =>"ireturn",
 								 "feild_type" =>"select",
@@ -539,7 +545,16 @@ $body.='Your Indxx '.$indxx['name'].'('.$indxx['code'].') has been deleted by ad
 								 "is_required" =>"",
 								 //"feild_tpl" =>"selectsearch",
 								  "model"=>array("0"=>"Divisor","1"=>"Stock"),
-								 );							 
+								 );		
+								 
+								 
+								  $this->validData[]=array("feild_label" =>"Ignore Corporate Actions",
+	 							"feild_code" =>"ica",
+								 "feild_type" =>"select",
+								 "is_required" =>"",
+								 //"feild_tpl" =>"selectsearch",
+								  "model"=>$this->GetYesNo(),
+								 );					 
 	$this->validData[]=array("feild_label" =>"Dividend Amount",
 	 							"feild_code" =>"div_type",
 								 "feild_type" =>"select",
@@ -552,7 +567,7 @@ $body.='Your Indxx '.$indxx['name'].'('.$indxx['code'].') has been deleted by ad
 		$this->validData[]=array("feild_label" =>"Currency Hedged Index",
 	 							"feild_code" =>"currency_hedged",
 								 "feild_type" =>"select",
-								 "is_required" =>"",
+								 "is_required" =>"1",
 								 //"feild_tpl" =>"selectsearch",
 								  "model"=>array("0"=>"No","1"=>"Yes"),
 								 );								 
@@ -580,13 +595,13 @@ $body.='Your Indxx '.$indxx['name'].'('.$indxx['code'].') has been deleted by ad
 								 ); 
 								 
 								 
-	$this->validData[]=array("feild_label" =>"Display Currency",
+	/*$this->validData[]=array("feild_label" =>"Display Currency",
 	 							"feild_code" =>"display_currency",
 								 "feild_type" =>"select",
 								 "is_required" =>"1",
 								 //"feild_tpl" =>"selectsearch",
 								  "model"=>array("0"=>"No","1"=>"Yes"),
-								 );
+								 );*/
 /*	$this->validData[]=array("feild_label" =>"Priority",
 	 							"feild_code" =>"priority",
 								 "feild_type" =>"select",
@@ -624,10 +639,11 @@ $body.='Your Indxx '.$indxx['name'].'('.$indxx['code'].') has been deleted by ad
 		//$this->pr($viewdata,true);
 		$this->smarty->assign("viewindexdata",$viewdata);
 		
-		
+		$lastCloseData=$this->db->getResult('SELECT * FROM tbl_indxx_value where indxx_id="'.$_GET['id'].'" order by id desc',false,1);
 		$sequruityData=$this->db->getResult('SELECT * FROM tbl_indxx_ticker where indxx_id="'.$_GET['id'].'"',true);
 	//	$this->pr($sequruityData,true);
 		$this->smarty->assign("indexSecurity",$sequruityData);
+			$this->smarty->assign("lastCloseData",$lastCloseData);
 		$this->smarty->assign("totalindexSecurityrows",count($sequruityData));
 		
 		
@@ -898,7 +914,7 @@ $body.='Your Indxx '.$indxx['name'].'('.$indxx['code'].') has been deleted by ad
 					
 					
 					
-					$this->db->query("INSERT into tbl_indxx_temp set status='0',recalc='1',name='".mysql_real_escape_string($_POST['name'])."',code='".mysql_real_escape_string($_POST['code'])."',type='".mysql_real_escape_string($_POST['type'])."',curr='".mysql_real_escape_string($_POST['curr'])."',lastupdated='".date("Y-m-d H:i:s")."',dateStart='".$_POST['dateStart']."',client_id='".mysql_real_escape_string($_POST['client_id'])."',display_currency='".mysql_real_escape_string($_POST['display_currency'])."',ireturn='".mysql_real_escape_string($_POST['ireturn'])."',ica='".mysql_real_escape_string($_POST['ica'])."',currency_hedged='".mysql_real_escape_string($_POST['currency_hedged'])."'");
+					$this->db->query("INSERT into tbl_indxx_temp set status='0',recalc='1',name='".mysql_real_escape_string($_POST['name'])."',code='".mysql_real_escape_string($_POST['code'])."',type='".mysql_real_escape_string($_POST['type'])."',curr='".mysql_real_escape_string($_POST['curr'])."',lastupdated='".date("Y-m-d H:i:s")."',dateStart='".$_POST['dateStart']."',client_id='".mysql_real_escape_string($_POST['client_id'])."',display_currency='1',ireturn='".mysql_real_escape_string($_POST['ireturn'])."',ica='".mysql_real_escape_string($_POST['ica'])."',currency_hedged='".mysql_real_escape_string($_POST['currency_hedged'])."'");
 					
 					$tempindexid=mysql_insert_id();
 					
@@ -920,7 +936,7 @@ $body.='Your Indxx '.$indxx['name'].'('.$indxx['code'].') has been deleted by ad
 				
 				$tempindexid=$checkdata['id'];
 				
-				$this->db->query("UPDATE tbl_indxx_temp set status='0',recalc='1',name='".mysql_real_escape_string($_POST['name'])."',code='".mysql_real_escape_string($_POST['code'])."',type='".mysql_real_escape_string($_POST['type'])."',curr='".mysql_real_escape_string($_POST['curr'])."',lastupdated='".date("Y-m-d H:i:s")."',dateStart='".$_POST['dateStart']."',client_id='".mysql_real_escape_string($_POST['client_id'])."',display_currency='".mysql_real_escape_string($_POST['display_currency'])."',ireturn='".mysql_real_escape_string($_POST['ireturn'])."',ica='".mysql_real_escape_string($_POST['ica'])."',currency_hedged='".mysql_real_escape_string($_POST['currency_hedged'])."' where id='".$checkdata['id']."'");
+				$this->db->query("UPDATE tbl_indxx_temp set status='0',recalc='1',name='".mysql_real_escape_string($_POST['name'])."',code='".mysql_real_escape_string($_POST['code'])."',type='".mysql_real_escape_string($_POST['type'])."',curr='".mysql_real_escape_string($_POST['curr'])."',lastupdated='".date("Y-m-d H:i:s")."',dateStart='".$_POST['dateStart']."',client_id='".mysql_real_escape_string($_POST['client_id'])."',display_currency='1',ireturn='".mysql_real_escape_string($_POST['ireturn'])."',ica='".mysql_real_escape_string($_POST['ica'])."',currency_hedged='".mysql_real_escape_string($_POST['currency_hedged'])."' where id='".$checkdata['id']."'");
 				
 				
 			}
@@ -2340,6 +2356,56 @@ $body.='You have new upcoming indxx for aupload and Approval , <br> Please visit
 		
  $this->show();
 	
+	}
+	
+	function exportlive()
+	{
+	
+	$viewdata=$this->db->getResult("select tbl_indxx.*,tbl_index_types.name as indextype from tbl_indxx left join tbl_index_types on tbl_index_types.id=tbl_indxx.type where tbl_indxx.id='".$_GET['id']."'",true);
+	//$this->pr($viewdata,true);
+	$sequruityData=$this->db->getResult('SELECT * FROM tbl_indxx_ticker where indxx_id="'.$_GET['id'].'"',true);
+	$shareData=$this->db->getResult('SELECT * FROM tbl_share where indxx_id="'.$_GET['id'].'"',true);
+	
+	$shares=array();
+	if(!empty($shareData))
+	{
+	foreach($shareData as $share)
+	{
+	$shares[$share['isin']]=$share['share'];
+	}
+	}
+	
+	require 'php-excel.class.php';
+	
+	$data = array(
+        1 => array ('Name', 'Code', 'Currency'),
+        2 => array ($viewdata[0]['name'],$viewdata[0]['code'], $viewdata[0]['curr']),
+        3 => array ('Security Name', 'Ticker', 'ISIN','Cusip','Sedol','Country', 'Weight','Share', 'Currency'),
+	  
+	    );
+	
+
+
+
+//$rowdata[]=array($share[$exceldata['isin']]['ticker'],$exceldata['isin'],$exceldata['calcweight'],$share[$exceldata['isin']]['share'],number_format($exceldata['price'],10,'.',''));	
+		// generate file (constructor parameters are optional)
+
+		$xls = new Excel_XML('UTF-8', false, 'indxx-data-'.$viewdata[0]['code']."-".$this->_date);
+		$xls->addArray($data);
+		$moredata=array();
+	$k=4;
+foreach($sequruityData as $data)
+		{
+			$moredata[$k++]=array($data['name'],$data['ticker'],$data['isin'],$data['cusip'],$data['sedol'],$data['countryname'],$data['weight'],$shares[$data['isin']],$data['curr']);
+			
+		
+		}
+		$xls->addArray(	$moredata);
+		
+		
+		
+		
+$xls->generateXML('indxx-data-'.$viewdata[0]['code']."-".$this->_date);		
 	}
 	
 	function exportupcomming()

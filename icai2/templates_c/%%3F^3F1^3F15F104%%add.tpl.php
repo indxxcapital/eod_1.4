@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2014-07-01 16:11:02
+<?php /* Smarty version 2.6.14, created on 2015-06-17 05:31:56
          compiled from delistrunning/add.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('block', 'field', 'delistrunning/add.tpl', 14, false),)), $this); ?>

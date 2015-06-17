@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-04-05 08:27:57
+<?php /* Smarty version 2.6.14, created on 2015-06-17 02:02:18
          compiled from blocks/ic7daysvalues_new.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('modifier', 'number_format', 'blocks/ic7daysvalues_new.tpl', 16, false),array('function', 'math', 'blocks/ic7daysvalues_new.tpl', 18, false),)), $this); ?>
@@ -16,7 +16,8 @@ smarty_core_load_plugins(array('plugins' => array(array('modifier', 'number_form
                                     <li>
                                     
                                         <div class="todo-desc">
-                                            <p><a href="#"><?php echo $this->_tpl_vars['point']['0']['name']; ?>
+                                            <p><a href="index.php?module=caindex&event=view&id=<?php echo $this->_tpl_vars['point']['0']['id']; ?>
+"><?php echo $this->_tpl_vars['point']['0']['name']; ?>
 (<?php echo $this->_tpl_vars['point']['0']['code']; ?>
 )</a></p>
                                         </div>

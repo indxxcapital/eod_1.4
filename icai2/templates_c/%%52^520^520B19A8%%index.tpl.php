@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-05-06 02:20:42
+<?php /* Smarty version 2.6.14, created on 2015-06-17 03:19:26
          compiled from caupcomingindex/index.tpl */ ?>
 <!-- BEGIN Main Content -->
 
@@ -17,7 +17,7 @@ window.open('http://97.74.65.118/icai/index.php?module=calcindxxclosingid&id='+<
  function confirmdelete(id)
  {
 
- var temp=confirm("Are you sure you want to delete this record ")
+ var temp=decision();
   if(temp)
    {	
 	
@@ -141,6 +141,7 @@ if(confirm("Are you sure to delete?")) {
 	return true;
 	}else{
 	alert("Input Text Not Match, Please Try Again.")
+	return	decision();
 	}
 	
 }}
@@ -194,15 +195,17 @@ unset($_smarty_tpl_vars);
     <thead>
         <tr>
             <th style="width:18px"><input type="checkbox" /></th>
-            <th>Name</th>
-            <th>Ticker</th>
-            <th>Type</th>
-            
-            <th>Currency</th>
-            <th>Start Date</th>
-            <th>Approved</th>
+           <th>Name</th>
+            <th>Code</th>
+             <th>Client</th>
+               <th>Total Tickers</th>
+             <th>Currency</th>
+            <th>Live Date</th>
+  	        <th>Dividend Adj.</th>
+<th>Index Type</th>
+            <th>Submitted</th>
             <th>DB Status</th>
-              <th>SignOff </th>
+              <th>User Status </th>
               <th>Running </th>
             <th>Admin Signoff </th>
             
@@ -217,16 +220,20 @@ unset($_smarty_tpl_vars);
         <tr>
             <td><input type="checkbox" id="checkboxid"  name="checkboxid" value="<?php echo $this->_tpl_vars['point']['id']; ?>
 " /></td>
-            <td><?php echo $this->_tpl_vars['point']['name']; ?>
+               <td><?php echo $this->_tpl_vars['point']['name']; ?>
 </td>
             <td><?php echo $this->_tpl_vars['point']['code']; ?>
 </td>
-            <td><?php echo $this->_tpl_vars['point']['indexname']; ?>
+            <td><?php echo $this->_tpl_vars['point']['clientname']; ?>
+</td>
+          <td><?php echo $this->_tpl_vars['point']['total_ticker']; ?>
 </td>
             <td><?php echo $this->_tpl_vars['point']['curr']; ?>
 </td>
             <td><?php echo $this->_tpl_vars['point']['dateStart']; ?>
 </td>
+                  <td><?php if ($this->_tpl_vars['point']['cash_adjust'] == '1'): ?>Stock<?php else: ?>Divisor<?php endif; ?></td>
+                    <td><?php if ($this->_tpl_vars['point']['ireturn'] == '1'): ?>PR<?php elseif ($this->_tpl_vars['point']['ireturn'] == '2'): ?>Dividend Placeholder<?php else: ?>TR<?php endif; ?></td>
             
             <td><?php if ($this->_tpl_vars['point']['status'] == 0): ?><span class="label label-important">No</span><?php else: ?><span class="badge badge-success">Yes</span><?php endif; ?></td>
              <td><?php if ($this->_tpl_vars['point']['dbusersignoff'] == 0): ?><span class="label label-important">No</span><?php else: ?><span class="badge badge-success">Yes</span><?php endif; ?></td>
@@ -238,14 +245,14 @@ unset($_smarty_tpl_vars);
                 
                 
                     <a class="btn btn-small show-tooltip" title="View" href="index.php?module=caindex&event=viewupcoming&id=<?php echo $this->_tpl_vars['point']['id']; ?>
-"><i class="icon-zoom-in"></i></a>
+">View</a>
                     <a class="btn btn-small show-tooltip" title="Edit" href="index.php?module=caupcomingindex&event=editfornext&id=<?php echo $this->_tpl_vars['point']['id']; ?>
-"><i class="icon-edit"></i></a>
+">Edit</a>
                     
                    <!-- index.php?module=caindex&event=delete&id=<?php echo $this->_tpl_vars['point']['id']; ?>
 -->
                     <a class="btn btn-small btn-danger show-tooltip " title="Delete" href="#" id="a1" onclick="confirmdelete(<?php echo $this->_tpl_vars['point']['id']; ?>
-)"><i class="icon-trash"></i></a>
+)">Delete</a>
                 </div>
             </td>
         </tr>

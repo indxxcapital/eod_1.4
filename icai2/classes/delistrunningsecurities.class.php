@@ -671,11 +671,13 @@ function addedrunning()
 			$this->smarty->assign('pagetitle','Securities');
 		$this->smarty->assign('bredcrumssubtitle','Add/Submit Securities');
 		
-		$indexname=$this->db->getResult("select tbl_indxx.name as indexxname,tbl_delist_runnindex_req.* from tbl_indxx left join  tbl_delist_runnindex_req on tbl_delist_runnindex_req.indxx_id=tbl_indxx.id where tbl_delist_runnindex_req.id='".$_GET['reqid']."' ");
+		$indexname=$this->db->getResult("select tbl_indxx.name as indexxname,tbl_delist_runnindex_req.* from tbl_indxx left join  tbl_delist_runnindex_req on tbl_delist_runnindex_req.indxx_id=tbl_indxx.id where tbl_delist_runnindex_req.id='".$_GET['reqid']."' ",true);
 		
-		//$this->pr(count($indexname),true);		
+		$countid=$this->db->getResult("select count(id) as countid from tbl_delist_runnsecurity where req_id='".$_GET['reqid']."'");
+		
+	//	$this->pr($indexname,true);		
 		$this->smarty->assign('indexxname',$indexname['0']['indexxname']);
-		$this->smarty->assign('total',count($indexname));
+		$this->smarty->assign('total',$countid['countid']);
 		
 			
 		$this->show();

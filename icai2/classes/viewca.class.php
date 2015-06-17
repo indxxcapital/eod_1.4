@@ -4,6 +4,12 @@ class Viewca extends Application{
 
 	function __construct()
 	{
+		$this->addCss('assets/data-tables/DT_bootstrap.css');
+$this->addJs('assets/bootstrap/bootstrap.min.js');
+$this->addJs('assets/nicescroll/jquery.nicescroll.min.js');
+$this->addJs('assets/data-tables/jquery.dataTables.js');
+$this->addJs('assets/data-tables/DT_bootstrap.js');
+$this->addJs('js/flaty.js');
 		parent::__construct();
 	}
 	
@@ -21,22 +27,19 @@ class Viewca extends Application{
 		$this->smarty->assign('pagetitle','Corporate Actions');
 		$this->smarty->assign('bredcrumssubtitle','View Corporate Actions');
 
-$this->addCss('assets/data-tables/DT_bootstrap.css');
-$this->addJs('assets/bootstrap/bootstrap.min.js');
-$this->addJs('assets/nicescroll/jquery.nicescroll.min.js');
-$this->addJs('assets/data-tables/jquery.dataTables.js');
-$this->addJs('assets/data-tables/DT_bootstrap.js');
-$this->addJs('js/flaty.js');
 
-	$tickerdata=$this->db->getResult("select ticker from tbl_indxx_ticker where id = '".$_GET['ticker_id']."' ",false,1);
+
+	$tickerdata=$this->db->getResult("select tbl_indxx.name,tbl_indxx.code,tbl_indxx.id from tbl_indxx_ticker
+	left join tbl_indxx on tbl_indxx.id=tbl_indxx_ticker.indxx_id
+	 where tbl_indxx_ticker.ticker = '".$_GET['ticker_id']."'  and tbl_indxx.id!='NULL'",true);
 	//$this->pr($tickerdata,true);
+	$this->smarty->assign("indexdata",$tickerdata);
 	
-	
-		$indexdata=$this->db->getResult("select tbl_ca.* from tbl_ca where identifier = '".$tickerdata['ticker']."' ",true);
-		$this->smarty->assign("indexdata",$indexdata);
+		/*$indexdata=$this->db->getResult("select tbl_ca.* from tbl_ca where identifier = '".$_GET['ticker_id']."' ",true);
+		$this->smarty->assign("indexdata",$indexdata);*/
 		
 		//$indexdata2=$this->db->getResult("select tbl_ca_values.* from tbl_ca_values where ca_id = '".$_GET['ticker_id']."' ");
-		//$this->smarty->assign("indexdata2",$indexdata2);
+		$this->smarty->assign("ticker",$_GET['ticker_id']);
 
 	//$this->pr($indexdata2,true);
 	
@@ -130,12 +133,7 @@ $this->addJs('js/flaty.js');
 			$this->smarty->assign('pagetitle','Index');
 		$this->smarty->assign('bredcrumssubtitle','ViewIndex');
 		
-		$this->addCss('assets/data-tables/DT_bootstrap.css');
-$this->addJs('assets/bootstrap/bootstrap.min.js');
-$this->addJs('assets/nicescroll/jquery.nicescroll.min.js');
-$this->addJs('assets/data-tables/jquery.dataTables.js');
-$this->addJs('assets/data-tables/DT_bootstrap.js');
-$this->addJs('js/flaty.js');
+		
 		$scflag=0;
 	//	echo $this->_date;
 //exit;
@@ -293,12 +291,7 @@ $this->db->query("UPDATE tbl_ca_values set field_value='1001' where ca_action_id
 		$this->smarty->assign('pagetitle','Corporate Action');
 		$this->smarty->assign('bredcrumssubtitle','Corporate Action');
 
-$this->addCss('assets/data-tables/DT_bootstrap.css');
-$this->addJs('assets/bootstrap/bootstrap.min.js');
-$this->addJs('assets/nicescroll/jquery.nicescroll.min.js');
-$this->addJs('assets/data-tables/jquery.dataTables.js');
-$this->addJs('assets/data-tables/DT_bootstrap.js');
-$this->addJs('js/flaty.js');
+
 
  $dayesagodate=date('Y-m-d', strtotime($this->_date.'+7 days'));
 
@@ -325,12 +318,7 @@ $this->addJs('js/flaty.js');
 			$this->smarty->assign('pagetitle','Today');
 		$this->smarty->assign('bredcrumssubtitle','Corporate Actions');
 		
-		$this->addCss('assets/data-tables/DT_bootstrap.css');
-$this->addJs('assets/bootstrap/bootstrap.min.js');
-$this->addJs('assets/nicescroll/jquery.nicescroll.min.js');
-$this->addJs('assets/data-tables/jquery.dataTables.js');
-$this->addJs('assets/data-tables/DT_bootstrap.js');
-$this->addJs('js/flaty.js');
+	
 			
 			
 			if($_SESSION['User']['type']=='1')
@@ -365,12 +353,7 @@ $this->addJs('js/flaty.js');
 			$this->smarty->assign('pagetitle','Today');
 		$this->smarty->assign('bredcrumssubtitle','Corporate Actions');
 		
-		$this->addCss('assets/data-tables/DT_bootstrap.css');
-$this->addJs('assets/bootstrap/bootstrap.min.js');
-$this->addJs('assets/nicescroll/jquery.nicescroll.min.js');
-$this->addJs('assets/data-tables/jquery.dataTables.js');
-$this->addJs('assets/data-tables/DT_bootstrap.js');
-$this->addJs('js/flaty.js');
+
 		
 		
 		$date=date('Y-m-d', strtotime($this->_date.'+7 days'));

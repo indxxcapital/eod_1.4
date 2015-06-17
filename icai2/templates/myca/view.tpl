@@ -294,6 +294,23 @@ $.ajax({
                      
                      {/if}
                  
+                 
+                 <form method="post">
+
+<input type="hidden" name="caid" value="{$viewdata.0.id}" />
+<input type="hidden" name="id" value="{$viewdata.0.action_id}" />
+<input type="hidden" name="status" value="{$viewdata.0.status}" />
+<input type="hidden" name="spcash" value="{$scflag}" />
+ <label>&nbsp;</label>
+                 <div class="form-actions">
+                                       <button type="submit" class="btn btn-primary" name="submit" id="submit"  value="1"><i class="icon-ok"></i>{ if $viewdata.0.status==1}Inactivate for All{else} Activate for All{/if}</button>
+                                      {if $scflag &&  $sessData.User.type=='1'} <button type="submit" class="btn btn-primary" name="scflagbtn" value="1" id="submit"><i class="icon-ok"></i> Convert To Special Cash</button> {/if}
+                                     {if $sessData.User.type=='1' }   <button type="submit" class="btn btn-primary" name="iactive" value="1" id="submit"><i class="icon-ok"></i> Make Inactive for Index Wise</button>
+                                      {/if}
+                                    
+                                    </div>
+                 </form>
+                 
                  </td></tr>
                     </table>
 

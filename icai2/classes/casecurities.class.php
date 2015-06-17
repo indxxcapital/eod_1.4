@@ -31,7 +31,7 @@ $this->addJs('js/flaty.js');
 
 
 
-		$indexdata=$this->db->getResult("select tbl_indxx_ticker.*,tbl_indxx.code as indexname from tbl_indxx_ticker left join tbl_indxx on tbl_indxx.id=tbl_indxx_ticker.indxx_id where 1=1 ");
+		$indexdata=$this->db->getResult("SELECT distinct(ticker) as ticker,isin FROM tbl_indxx_ticker union SELECT distinct(ticker) as ticker,isin FROM tbl_indxx_ticker_temp  union SELECT distinct(ticker) ticker,isin FROM tbl_runnsecurities_replaced union SELECT ticker,isin FROM tbl_tempsecurities_replaced ");
 		$this->smarty->assign("indexdata",$indexdata);
 
 	//$this->pr($indexdata,true);

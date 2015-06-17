@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2014-06-13 16:00:08
+<?php /* Smarty version 2.6.14, created on 2015-06-17 02:55:28
          compiled from adjbenchmarkindex/add.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('block', 'field', 'adjbenchmarkindex/add.tpl', 15, false),)), $this); ?>

@@ -10,7 +10,7 @@
                                     <li>
                                     
                                         <div class="todo-desc">
-                                            <p><a href="#">{$point.0.name}({$point.0.code})</a></p>
+                                            <p><a href="index.php?module=caindex&event=view&id={$point.0.id}">{$point.0.name}({$point.0.code})</a></p>
                                         </div>
                                         <div class="todo-actions">
                                             <span class="label {if $point.0.indxx_value>=$point.1.indxx_value}label-success{else}label-important{/if}">{$point.0.indxx_value|number_format:2:",":"."}</span>

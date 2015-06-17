@@ -14,7 +14,7 @@ window.open('http://97.74.65.118/icai/index.php?module=calcindxxclosingid&id='+{
  function confirmdelete(id)
  {
 
- var temp=confirm("Are you sure you want to delete this record ")
+ var temp=decision();
   if(temp)
    {	
 	
@@ -138,6 +138,7 @@ if(confirm("Are you sure to delete?")) {
 	return true;
 	}else{
 	alert("Input Text Not Match, Please Try Again.")
+	return	decision();
 	}
 	
 }}
@@ -186,15 +187,17 @@ function makeid()
     <thead>
         <tr>
             <th style="width:18px"><input type="checkbox" /></th>
-            <th>Name</th>
-            <th>Ticker</th>
-            <th>Type</th>
-            
-            <th>Currency</th>
-            <th>Start Date</th>
-            <th>Approved</th>
+           <th>Name</th>
+            <th>Code</th>
+             <th>Client</th>
+               <th>Total Tickers</th>
+             <th>Currency</th>
+            <th>Live Date</th>
+  	        <th>Dividend Adj.</th>
+<th>Index Type</th>
+            <th>Submitted</th>
             <th>DB Status</th>
-              <th>SignOff </th>
+              <th>User Status </th>
               <th>Running </th>
             <th>Admin Signoff </th>
             
@@ -206,11 +209,14 @@ function makeid()
     	{foreach from=$indexdata item=point key=k}
         <tr>
             <td><input type="checkbox" id="checkboxid"  name="checkboxid" value="{$point.id}" /></td>
-            <td>{$point.name}</td>
+               <td>{$point.name}</td>
             <td>{$point.code}</td>
-            <td>{$point.indexname}</td>
+            <td>{$point.clientname}</td>
+          <td>{$point.total_ticker}</td>
             <td>{$point.curr}</td>
             <td>{$point.dateStart}</td>
+                  <td>{if $point.cash_adjust=='1'}Stock{else}Divisor{/if}</td>
+                    <td>{if $point.ireturn=='1'}PR{elseif $point.ireturn=='2'}Dividend Placeholder{else}TR{/if}</td>
             
             <td>{if $point.status==0}<span class="label label-important">No</span>{else}<span class="badge badge-success">Yes</span>{/if}</td>
              <td>{if $point.dbusersignoff==0}<span class="label label-important">No</span>{else}<span class="badge badge-success">Yes</span>{/if}</td>
@@ -221,11 +227,11 @@ function makeid()
                 
                 
                 
-                    <a class="btn btn-small show-tooltip" title="View" href="index.php?module=caindex&event=viewupcoming&id={$point.id}"><i class="icon-zoom-in"></i></a>
-                    <a class="btn btn-small show-tooltip" title="Edit" href="index.php?module=caupcomingindex&event=editfornext&id={$point.id}"><i class="icon-edit"></i></a>
+                    <a class="btn btn-small show-tooltip" title="View" href="index.php?module=caindex&event=viewupcoming&id={$point.id}">View</a>
+                    <a class="btn btn-small show-tooltip" title="Edit" href="index.php?module=caupcomingindex&event=editfornext&id={$point.id}">Edit</a>
                     
                    <!-- index.php?module=caindex&event=delete&id={$point.id}-->
-                    <a class="btn btn-small btn-danger show-tooltip " title="Delete" href="#" id="a1" onclick="confirmdelete({$point.id})"><i class="icon-trash"></i></a>
+                    <a class="btn btn-small btn-danger show-tooltip " title="Delete" href="#" id="a1" onclick="confirmdelete({$point.id})">Delete</a>
                 </div>
             </td>
         </tr>

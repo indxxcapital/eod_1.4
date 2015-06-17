@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2014-05-27 09:33:26
+<?php /* Smarty version 2.6.14, created on 2015-06-17 04:00:35
          compiled from viewca/index.tpl */ ?>
 <!-- BEGIN Main Content -->
  <?php echo '
@@ -79,12 +79,13 @@ $.ajax({
                     <div class="span12">
                         <div class="box">
                             <div class="box-title">
-                                <h3><i class="icon-table"></i>Corporate Actions</h3>
+                                <h3><i class="icon-table"></i><?php echo $this->_tpl_vars['ticker']; ?>
+</h3>
                             </div>
                             <div class="box-content">
                                 <div class="btn-toolbar pull-right clearfix">
                                     <div class="btn-group">
-                                    <a class="btn btn-circle show-tooltip" title="Delete selected" id="deleteSelected" href="#"><i class="icon-trash"></i></a>
+                                 
                                         <!--<a class="btn btn-circle show-tooltip" title="Add new record" href="index.php?module=casecurities&event=addNew" style="margin-right:25px !important;"><i class="icon-plus"></i></a>
                                         <a class="btn btn-circle show-tooltip" title="Edit selected" href="#"><i class="icon-edit"></i></a>
                                         <a class="btn btn-circle show-tooltip" title="Delete selected" href="#"><i class="icon-trash"></i></a>-->
@@ -102,12 +103,9 @@ $.ajax({
 <table class="table table-advance" id="table1">
     <thead>
         <tr>
-            <th style="width:18px"><input type="checkbox" /></th>
-            <th>Identifier</th>
-            <th>Type</th>
-            <th>Company Name</th>
-            <th>Effective Date</th>
-            <th>Announce Date</th>
+            <th style="width:18px"></th>
+            <th>Name</th>
+            <th>Code</th>
             <th style="width:100px">Action</th>
         </tr>
     </thead>
@@ -116,248 +114,29 @@ $.ajax({
     foreach ($_from as $this->_tpl_vars['k'] => $this->_tpl_vars['point']):
 ?>
         <tr>
-            <td><input type="checkbox" id="checkboxid"  name="checkboxid" value="<?php echo $this->_tpl_vars['point']['id']; ?>
-" /></td>
-            <td><?php echo $this->_tpl_vars['point']['identifier']; ?>
+            <td></td>
+            <td><?php echo $this->_tpl_vars['point']['name']; ?>
 </td>
 <!--            <td><a data-original-title="<?php echo $this->_tpl_vars['point']['mnemonic']; ?>
 " data-content="<?php echo $this->_tpl_vars['sessData']['variable'][$this->_tpl_vars['point']['mnemonic']]; ?>
 " data-placement="top" data-trigger="hover" class="show-popover" href="#"><?php echo $this->_tpl_vars['point']['mnemonic']; ?>
 </a></td>-->
 
-                        <td><?php echo $this->_tpl_vars['sessData']['variable'][$this->_tpl_vars['point']['mnemonic']]; ?>
+                 
+            <td><?php echo $this->_tpl_vars['point']['code']; ?>
 </td>
-            <td><?php echo $this->_tpl_vars['point']['company_name']; ?>
-</td>
-            <td><?php echo $this->_tpl_vars['point']['eff_date']; ?>
-</td>
-            <td><?php echo $this->_tpl_vars['point']['ann_date']; ?>
-</td>
+ 
             <td>
                 <div class="btn-group">
-                    <a class="btn btn-small show-tooltip" title="View Fields" href="index.php?module=viewca&event=view&id=<?php echo $this->_tpl_vars['point']['id']; ?>
+                    <a class="btn btn-small show-tooltip" title="View Fields" href="index.php?module=caindex&event=view&id=<?php echo $this->_tpl_vars['point']['id']; ?>
 "><i class="icon-zoom-in"></i></a>
                     
-                    <?php if ($this->_tpl_vars['sessData']['User']['type'] == 1): ?>
-                    
-                    <a class="btn btn-small show-tooltip" title="Edit" href="index.php?module=viewca&event=edit&id=<?php echo $this->_tpl_vars['point']['id']; ?>
-"><i class="icon-edit"></i></a>
-                    <a class="btn btn-small btn-danger show-tooltip " title="Delete" href="#" id="a1" onclick="confirmdelete(<?php echo $this->_tpl_vars['point']['id']; ?>
-)"><i class="icon-trash"></i></a><?php endif; ?>
+                 
                 </div>
             </td>
         </tr>
         <?php endforeach; endif; unset($_from); ?>
-       <!-- <tr>
-            <td><input type="checkbox" /></td>
-            <td>Trident</td>
-            <td><a href="#">AOL browser (AOL desktop)</a></td>
-            <td>Win XP</td>
-            <td class="text-center">6</td>
-            <td><span class="label label-success">A</span></td>
-            <td>
-                <div class="btn-group">
-                    <a class="btn btn-small show-tooltip" title="View" href="#"><i class="icon-zoom-in"></i></a>
-                    <a class="btn btn-small show-tooltip" title="Edit" href="#"><i class="icon-edit"></i></a>
-                    <a class="btn btn-small btn-danger show-tooltip" title="Delete" href="#"><i class="icon-trash"></i></a>
-                </div>
-            </td>
-        </tr>
-        <tr class="table-flag-orange">
-            <td><input type="checkbox" /></td>
-            <td>Gecko</td>
-            <td><span class="label label-success">Not Bad</span> Firefox 1.5</td>
-            <td>Win 98+ / OSX.2+</td>
-            <td class="text-center">1.8</td>
-            <td><span class="label label-success">A</span></td>
-            <td>
-                <div class="btn-group">
-                    <a class="btn btn-small show-tooltip" title="View" href="#"><i class="icon-zoom-in"></i></a>
-                    <a class="btn btn-small show-tooltip" title="Edit" href="#"><i class="icon-edit"></i></a>
-                    <a class="btn btn-small btn-danger show-tooltip" title="Delete" href="#"><i class="icon-trash"></i></a>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td><input type="checkbox" /></td>
-            <td>Gecko</td>
-            <td>Netscape Navigator 9</td>
-            <td>Win 98+ / OSX.2+</td>
-            <td class="text-center">1.8</td>
-            <td><span class="label label-success">A</span></td>
-            <td>
-                <div class="btn-group">
-                    <a class="btn btn-small show-tooltip" title="View" href="#"><i class="icon-zoom-in"></i></a>
-                    <a class="btn btn-small show-tooltip" title="Edit" href="#"><i class="icon-edit"></i></a>
-                    <a class="btn btn-small btn-danger show-tooltip" title="Delete" href="#"><i class="icon-trash"></i></a>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td><input type="checkbox" /></td>
-            <td>Gecko</td>
-            <td>Seamonkey 1.1</td>
-            <td>Win 98+ / OSX.2+</td>
-            <td class="text-center">1.8</td>
-            <td><span class="label label-warning">B</span></td>
-            <td>
-                <div class="btn-group">
-                    <a class="btn btn-small show-tooltip" title="View" href="#"><i class="icon-zoom-in"></i></a>
-                    <a class="btn btn-small show-tooltip" title="Edit" href="#"><i class="icon-edit"></i></a>
-                    <a class="btn btn-small btn-danger show-tooltip" title="Delete" href="#"><i class="icon-trash"></i></a>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td><input type="checkbox" /></td>
-            <td>Gecko</td>
-            <td>Mozilla 1.8</td>
-            <td>Win 98+ / OSX.1+</td>
-            <td class="text-center">1.8</td>
-            <td><span class="label label-success">A</span></td>
-            <td>
-                <div class="btn-group">
-                    <a class="btn btn-small show-tooltip" title="View" href="#"><i class="icon-zoom-in"></i></a>
-                    <a class="btn btn-small show-tooltip" title="Edit" href="#"><i class="icon-edit"></i></a>
-                    <a class="btn btn-small btn-danger show-tooltip" title="Delete" href="#"><i class="icon-trash"></i></a>
-                </div>
-            </td>
-        </tr>
-        <tr class="table-flag-blue">
-            <td><input type="checkbox" /></td>
-            <td>Trident</td>
-            <td><span class="label label-warning">So crazy!</span> <a href="#">Internet Explorer 6</a></td>
-            <td>Win 98+</td>
-            <td class="text-center">6</td>
-            <td><span class="label label-important">C</span></td>
-            <td>
-                <div class="btn-group">
-                    <a class="btn btn-small show-tooltip" title="View" href="#"><i class="icon-zoom-in"></i></a>
-                    <a class="btn btn-small show-tooltip" title="Edit" href="#"><i class="icon-edit"></i></a>
-                    <a class="btn btn-small btn-danger show-tooltip" title="Delete" href="#"><i class="icon-trash"></i></a>
-                </div>
-            </td>
-        </tr>
-        <tr class="table-flag-red">
-            <td><input type="checkbox" /></td>
-            <td>Presto</td>
-            <td>Opera 7.5</td>
-            <td>Win 95+ / OSX.2+</td>
-            <td class="text-center">-</td>
-            <td><span class="label label-success">A</span></td>
-            <td>
-                <div class="btn-group">
-                    <a class="btn btn-small show-tooltip" title="View" href="#"><i class="icon-zoom-in"></i></a>
-                    <a class="btn btn-small show-tooltip" title="Edit" href="#"><i class="icon-edit"></i></a>
-                    <a class="btn btn-small btn-danger show-tooltip" title="Delete" href="#"><i class="icon-trash"></i></a>
-                </div>
-            </td>
-        </tr>
-        <tr class="table-flag-red">
-            <td><input type="checkbox" /></td>
-            <td>Presto</td>
-            <td><span class="label label-info">It's Opera!</span> Opera 8.0</td>
-            <td>Win 95+ / OSX.2+</td>
-            <td class="text-center">-</td>
-            <td><span class="label label-success">A</span></td>
-            <td>
-                <div class="btn-group">
-                    <a class="btn btn-small show-tooltip" title="View" href="#"><i class="icon-zoom-in"></i></a>
-                    <a class="btn btn-small show-tooltip" title="Edit" href="#"><i class="icon-edit"></i></a>
-                    <a class="btn btn-small btn-danger show-tooltip" title="Delete" href="#"><i class="icon-trash"></i></a>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td><input type="checkbox" /></td>
-            <td>Gecko</td>
-            <td><a href="#">Mozilla 1.0</a></td>
-            <td>Win 95+ / OSX.1+</td>
-            <td class="text-center">1</td>
-            <td><span class="label label-warning">B</span></td>
-            <td>
-                <div class="btn-group">
-                    <a class="btn btn-small show-tooltip" title="View" href="#"><i class="icon-zoom-in"></i></a>
-                    <a class="btn btn-small show-tooltip" title="Edit" href="#"><i class="icon-edit"></i></a>
-                    <a class="btn btn-small btn-danger show-tooltip" title="Delete" href="#"><i class="icon-trash"></i></a>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td><input type="checkbox" /></td>
-            <td>Gecko</td>
-            <td>Mozilla 1.1</td>
-            <td>Win 95+ / OSX.1+</td>
-            <td class="text-center">1.1</td>
-            <td><span class="label label-success">A</span></td>
-            <td>
-                <div class="btn-group">
-                    <a class="btn btn-small show-tooltip" title="View" href="#"><i class="icon-zoom-in"></i></a>
-                    <a class="btn btn-small show-tooltip" title="Edit" href="#"><i class="icon-edit"></i></a>
-                    <a class="btn btn-small btn-danger show-tooltip" title="Delete" href="#"><i class="icon-trash"></i></a>
-                </div>
-            </td>
-        </tr>
-        <tr class="table-flag-blue">
-            <td><input type="checkbox" /></td>
-            <td>Misc</td>
-            <td>IE Mobile</td>
-            <td>Windows Mobile 6</td>
-            <td class="text-center">-</td>
-            <td><span class="label label-important">C</span></td>
-            <td>
-                <div class="btn-group">
-                    <a class="btn btn-small show-tooltip" title="View" href="#"><i class="icon-zoom-in"></i></a>
-                    <a class="btn btn-small show-tooltip" title="Edit" href="#"><i class="icon-edit"></i></a>
-                    <a class="btn btn-small btn-danger show-tooltip" title="Delete" href="#"><i class="icon-trash"></i></a>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td><input type="checkbox" /></td>
-            <td>Gecko</td>
-            <td><a href="#">Mozilla 1.2</a></td>
-            <td>Win 95+ / OSX.1+</td>
-            <td class="text-center">1</td>
-            <td><span class="label label-warning">B</span></td>
-            <td>
-                <div class="btn-group">
-                    <a class="btn btn-small show-tooltip" title="View" href="#"><i class="icon-zoom-in"></i></a>
-                    <a class="btn btn-small show-tooltip" title="Edit" href="#"><i class="icon-edit"></i></a>
-                    <a class="btn btn-small btn-danger show-tooltip" title="Delete" href="#"><i class="icon-trash"></i></a>
-                </div>
-            </td>
-        </tr>
-        <tr class="table-flag-red">
-            <td><input type="checkbox" /></td>
-            <td>Presto</td>
-            <td>Opera 7.7</td>
-            <td>Win 95+ / OSX.2+</td>
-            <td class="text-center">-</td>
-            <td><span class="label label-success">A</span></td>
-            <td>
-                <div class="btn-group">
-                    <a class="btn btn-small show-tooltip" title="View" href="#"><i class="icon-zoom-in"></i></a>
-                    <a class="btn btn-small show-tooltip" title="Edit" href="#"><i class="icon-edit"></i></a>
-                    <a class="btn btn-small btn-danger show-tooltip" title="Delete" href="#"><i class="icon-trash"></i></a>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td><input type="checkbox" /></td>
-            <td>Gecko</td>
-            <td>Mozilla 1.7</td>
-            <td>Win 98+ / OSX.1+</td>
-            <td class="text-center">1.8</td>
-            <td><span class="label label-success">A</span></td>
-            <td>
-                <div class="btn-group">
-                    <a class="btn btn-small show-tooltip" title="View" href="#"><i class="icon-zoom-in"></i></a>
-                    <a class="btn btn-small show-tooltip" title="Edit" href="#"><i class="icon-edit"></i></a>
-                    <a class="btn btn-small btn-danger show-tooltip" title="Delete" href="#"><i class="icon-trash"></i></a>
-                </div>
-            </td>
-        </tr>-->
+      
     </tbody>
 </table>
                             </div>
