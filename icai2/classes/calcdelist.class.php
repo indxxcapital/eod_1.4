@@ -17,7 +17,7 @@ define("log_file",get_logs_folder().$_GET['log_file']);
 if($_GET['date'])
 define("date",$_GET['date']);
 else
-define("date","Y-m-d");
+define("date",date("Y-m-d"));
 log_info("In CalcDelist for Live  ");
 	/*	if($_SESSION['currentPriorityIndex']==0)
 		

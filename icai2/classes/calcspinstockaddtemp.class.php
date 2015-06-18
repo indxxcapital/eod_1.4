@@ -16,7 +16,7 @@ define("log_file",get_logs_folder().$_GET['log_file']);
 if($_GET['date'])
 define("date",$_GET['date']);
 else
-define("date","Y-m-d");
+define("date",date("Y-m-d"));
 log_info("In Calc Spinoff Stock add  for upcomming ");
 		$date=date;
 		$data=	$this->db->getResult("Select ssa.dbApprove,ssa.action_id,ssa.id,tbl_ca.id as ca_id,tbl_ca.identifier,tbl_ca.company_name,tbl_ca.mnemonic,tbl_ca.eff_date from tbl_spin_stock_add ssa 
