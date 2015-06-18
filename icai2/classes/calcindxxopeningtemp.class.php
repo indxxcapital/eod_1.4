@@ -621,7 +621,7 @@ $this->log_info(log_file, "Calculated index  : ". $closeIndxx['code'].",file is 
 			
 			$this->saveProcess(1);
 			
-			$this->Redirect2("index.php?module=notifyforca&date=" .$datevalue2. "&log_file=" . log_file, "", "");	
+			$this->Redirect2("index.php?module=compositopen&date=" .$datevalue2. "&log_file=" . log_file, "", "");	
 	//$this->Redirect2("index.php?module=notifyforca","","");	
 
 }
