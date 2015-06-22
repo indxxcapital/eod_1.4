@@ -32,7 +32,9 @@ log_info("In Check CA Value ");
 		
 		
 		$checkArray=array();
-		$checkArray['DVD_CASH']=array('CP_NET_AMT','CP_GROSS_AMT','CP_DVD_CRNCY','CP_DVD_TYP');
+		
+		//'CP_NET_AMT','CP_GROSS_AMT'
+		$checkArray['DVD_CASH']=array('CP_DVD_CRNCY','CP_DVD_TYP');
 		$checkArray['CHG_NAME']=array('CP_OLD_NAME','CP_NEW_NAME');
 		$checkArray['CHG_ID']=array('CP_OLD_ISIN','CP_NEW_ISIN');
 		$checkArray['SPIN']=array('CP_ADJ');
@@ -48,31 +50,8 @@ log_info("In Check CA Value ");
 		 $missingvalue7daysText='';
 	$final_array=array();
 		
-		if(!empty($indxxs))
-		{
-			foreach($indxxs as $row)
-			{
-					if($this->checkHoliday($row['zone'], $datevalue2)){
-			$final_array[$row['id']]=$row;
-			
-
-			
 		
-			
-			
-			//echo $datevalue;
-		//	exit;
-			$query="SELECT  it.ticker  FROM `tbl_indxx_ticker` it where it.indxx_id='".$row['id']."'";			
-		
-		
-		
-			$indxxprices=	$this->db->getResult($query,true);
-			//$this->pr($indxxprices,true);	
-			if(!empty($indxxprices))
-			{
-			foreach($indxxprices as $key=> $indxxprice)
-			{
-		  $ca_query="select identifier,action_id,id,mnemonic,company_name,eff_date,currency from tbl_ca cat where  eff_date='".$datevalue2."' and identifier='".$indxxprice['ticker']."' ";
+		  $ca_query="select identifier,action_id,id,mnemonic,company_name,eff_date,currency from tbl_ca cat where  eff_date='".$datevalue2."'";
 			
 			//exit;
 			$cas=$this->db->getResult($ca_query,true);	
@@ -98,10 +77,22 @@ log_info("In Check CA Value ");
 			$ca_values=$this->db->getResult($ca_value_query);	
 			if( count($ca_values)<=0)
 			{
-			$text.=$ca['company_name']."(".$ca['identifier'].")=>".$_SESSION['variable'][$ca['mnemonic']]."=>".$_SESSION['variable'][$fieldname]."=>".$fieldname."<br>";
+			$text.="<tr><td>".$ca['company_name']."</td><td>".$ca['identifier']."</td><td>".$_SESSION['variable'][$ca['mnemonic']]."</td><td>".$fieldname."</td><td>".$ca['eff_date']."</td></tr>";
+			
 			}
 						
 		}
+		if($ca['mnemonic']=='DVD_CASH')
+		{
+			 $ca_value_query="Select id from tbl_ca_values where ca_id='".$ca['id']."'  and ca_action_id='".$ca['action_id']."'  and (field_name='CP_NET_AMT' or  field_name='CP_GROSS_AMT') ";
+			$ca_values=$this->db->getResult($ca_value_query);	
+			if( count($ca_values)<=0)
+			{
+			$text.="<tr><td>".$ca['company_name']."</td><td>".$ca['identifier']."</td><td>Cash Dividend</td><td>CP_NET_AMT AND CP_GROSS_AMT </td><td>".$ca['eff_date']."</td><tr>";
+			
+			}
+		}
+		
 		
 		}
 			
@@ -117,7 +108,7 @@ log_info("In Check CA Value ");
 			
 			
 			
-		  $ca_query_missing="select identifier,action_id,id,mnemonic,company_name,eff_date,currency from tbl_ca cat where  eff_date>='".$datevalue2."' and  eff_date<='".date("Y-m-d",strtotime($datevalue2)+7*86400)."' and identifier='".$indxxprice['ticker']."' ";
+		  $ca_query_missing="select identifier,action_id,id,mnemonic,company_name,eff_date,currency from tbl_ca cat where  eff_date>='".$datevalue2."' and  eff_date<='".date("Y-m-d",strtotime($datevalue2)+7*86400)."'  ";
 			
 			//exit;
 			$casmissing=$this->db->getResult($ca_query_missing,true);	
@@ -144,11 +135,21 @@ log_info("In Check CA Value ");
 			if( count($nca_values)<=0)
 			{
 				//echo "found";
-			$missingvalue7daysText.=$nca['company_name']."(".$nca['identifier'].")=>".$_SESSION['variable'][$nca['mnemonic']]."=>".$_SESSION['variable'][$nfieldname]."=>".$nfieldname."<br>";
+			$missingvalue7daysText.="<tr><td>".$nca['company_name']."</td><td>".$nca['identifier']."</td><td>".$_SESSION['variable'][$ca['mnemonic']]."</td><td>".$nfieldname."</td><td>".$nca['eff_date']."</td></tr>";
+			
 			}
 						
 		}
-		
+			if($nca['mnemonic']=='DVD_CASH')
+		{
+			 $nca_value_query2="Select id from tbl_ca_values where ca_id='".$nca['id']."'  and ca_action_id='".$nca['action_id']."'  and (field_name='CP_NET_AMT' or  field_name='CP_GROSS_AMT') ";
+			$nca_values2=$this->db->getResult($nca_value_query2);	
+			if( count($nca_values2)<=0)
+			{
+			 $missingvalue7daysText.="<tr><td>".$nca['company_name']."</td><td>".$nca['identifier']."</td><td>Cash Dividend</td><td>CP_NET_AMT AND CP_GROSS_AMT </td><td>".$nca['eff_date']."</td><tr>";
+			
+			}
+		}
 		}
 			
 			
@@ -156,23 +157,13 @@ log_info("In Check CA Value ");
 			
 			}
 			}
+			
 			
 			
 		//	$indxxprices[$key]['ca']=$cas;
 			
 			
-			}
-			}
 			
-		//	$final_array[$row['id']]['values']=$indxxprices;
-		
-		
-	//$this->pr($indxxprices);	
-			
-					}
-			}	
-		
-		}
 	//	}
 	//echo $text;
 //exit;
@@ -185,44 +176,94 @@ $to='';
 	}
 	
 	$to=implode(',',$emailids);
-	//$to="dbajpai@indxx.com";
-if($text!='' && $text)
-{
-	
+	//$to="ggrover@indxx.com";
+
 
 	
 	$from = "Indexing <indexing@indxx.com>"; 
-    $subject ="Corporate Actions Value Not Inserted"; 
-    $message = 'Hi <br>';
-	$message.='Values for following corporate actions has not been inserted :<br>' ;
-	$message.=$text;
-	$message.='Thanks.';
+    $subject ="Corporate Actions : Missing Values : Effective Today "; 
+    $message = "<table  border='1'><tr>
+			<th>Name</th>
+			<th>Ticker</th>
+			<th>Action Type</th>
+			<th>Missing Field</th>
+			<th>Effective Date</th>
+			</tr>";
+	$message.=$text."</table>";
+	$message.='<br><br>Please visit '.$this->siteconfig->base_url;
+	$message.='<br><br>Thanks.';
 	
     $headers = "From: $from" . "\r\n"."CC: indexing@indxx.com". "\r\n";
-	$headers  = 'MIME-Version: 1.0' . "\r\n";
+	$headers  .= 'MIME-Version: 1.0' . "\r\n";
 	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 	
-	//mail($to,$subject,$message,$headers);
+	mail($to,$subject,$message,$headers);
 	// $missingvalue7daysText
 	
 	
 	
 		$from = "Indexing <indexing@indxx.com>"; 
-    $subject ="7 Days values of Corporate Actions not available  "; 
-    $message = 'Hi <br>';
-	$message.='Values for following corporate actions is not available for next 7 days  :<br>' ;
-	$message.=$missingvalue7daysText;
-	$message.='Thanks.';
+    $subject ="Corporate Actions : Missing Values : Next 7 days  "; 
+    $message = '';
+	$message.="<table  border='1'><tr>
+			<th>Name</th>
+			<th>Ticker</th>
+			<th>Action Type</th>
+			<th>Missing Field</th>
+			<th>Effective Date</th>
+			</tr>";
+	$message.=$missingvalue7daysText."</table>";
+	$message.='<br><br>Please visit '.$this->siteconfig->base_url;
+	$message.='<br><br>Thanks.';
+	
+    $headers = "From: $from" . "\r\n"."CC: indexing@indxx.com". "\r\n";
+	$headers  .= 'MIME-Version: 1.0' . "\r\n";
+	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+	
+mail($to,$subject,$message,$headers);
+//exit;
+
+$intraDayText='';
+	if(date("D")=="Mon")
+	$intraDayDate=date("Y-m-d",strtotime(date)-3*86400);
+	else
+	$IntraDayDate=date("Y-m-d",strtotime(date)-86400);
+	
+$intraDayText='';
+$IntraDayCAQuery="select identifier,action_id,id,mnemonic,company_name,eff_date,currency from tbl_ca cat where  ann_date='".$datemodified."' and eff_date='".$datemodified."'   ";
+			
+			//exit;
+			$IntraDayCA=$this->db->getResult($IntraDayCAQuery,true);
+			if(!empty($IntraDayCA))
+			{$intraDayText.="<table border='1'><tr>
+			<th>Name</th>
+			<th>Ticker</th>
+			<th>Action Type</th>
+			<th>Effective Date</th>
+			</tr>";
+			foreach($IntraDayCA as $allca){
+				
+		$intraDayText.="<tr><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$_SESSION['variable'][$allca['mnemonic']]."</td><td>".$allca['eff_date']."</td></tr>";
+			
+				}
+					$intraDayText.="</table>";
+			}
+			
+
+$from = "Indexing <indexing@indxx.com>"; 
+    $subject ="Corporate Actions : Intra Day "; 
+		$message='';
+$message.=$intraDayText;
+	$message.='<br><br>Please visit '.$this->siteconfig->base_url;
+	$message.='<br><br>Thanks.';
 	
     $headers = "From: $from" . "\r\n"."CC: indexing@indxx.com". "\r\n";
 	$headers  = 'MIME-Version: 1.0' . "\r\n";
 	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 	
-mail($to,$subject,$message,$headers);
-//exit;
-}
-
-	
+	mail($to,$subject,$message,$headers);
+	//echo $to;
+	//exit;
 	$text2="";
 	
 	  $ca_query2="select identifier,action_id,id,mnemonic,company_name,eff_date,currency from tbl_ca cat where  eff_date='".$datevalue2."'   ";
@@ -230,26 +271,32 @@ mail($to,$subject,$message,$headers);
 			//exit;
 			$cas2=$this->db->getResult($ca_query2,true);
 			if(!empty($cas2))
-			{
+			{$text2.="<table  border='1'><tr>
+			<th>Name</th>
+			<th>Ticker</th>
+			<th>Action Type</th>
+			<th>Effective Date</th>
+			</tr>";
+				
 			foreach($cas2 as $allca){
 				
-			$text2.=$allca['company_name']."(".$allca['identifier'].")=>".$_SESSION['variable'][$allca['mnemonic']]."<br>";
+			$text2.="<tr><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$_SESSION['variable'][$allca['mnemonic']]."</td><td>".$allca['eff_date']."</td></tr>";
 			
 				}
+				$text2.="</table>";
 			}
 			
 		
 				
 				$from = "Indexing <indexing@indxx.com>"; 
-    $subject ="Todays Corporate Action"; 
-    $message = 'Hi <br>';
-	$message.='Todays Corporate Action that going to execute are as below :<br>' ;
+    $subject ="Corporate Actions : Effective Today "; 
+	$message='';
 	$message.=$text2;
-	$message.='Please visit '.$this->siteconfig->base_url;
-	$message.='Thanks.';
+	$message.='<br><br>Please visit '.$this->siteconfig->base_url;
+	$message.='<br><br>Thanks.';
 	
     $headers = "From: $from" . "\r\n"."CC: indexing@indxx.com". "\r\n";
-	$headers  = 'MIME-Version: 1.0' . "\r\n";
+	$headers .= 'MIME-Version: 1.0' . "\r\n";
 	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 	
 	mail($to,$subject,$message,$headers);
@@ -265,25 +312,32 @@ mail($to,$subject,$message,$headers);
 			$cas3=$this->db->getResult($ca_query3,true);
 			if(!empty($cas3))
 			{
+				$text3.="<table  border='1'><tr>
+			<th>Name</th>
+			<th>Ticker</th>
+			<th>Action Type</th>
+			<th>Effective Date</th>
+			</tr>";
 			foreach($cas3 as $allca){
 				
-			$text3.=$allca['company_name']."(".$allca['identifier'].")=>".$_SESSION['variable'][$allca['mnemonic']]."<br>";
+				$text3.="<tr><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$_SESSION['variable'][$allca['mnemonic']]."</td><td>".$allca['eff_date']."</td></tr>";
 			
 				}
+					$text3.="</table>";
 			}
 			
 		
 				
 				$from = "Indexing <indexing@indxx.com>"; 
-    $subject ="upcomming 7 Days Corporate Action"; 
-    $message = 'Hi <br>';
-	$message.='7 days Corporate Action that are available portal as below :<br>' ;
+    $subject ="Corporate Actions : Upcoming Next 7 Days"; 
+ 		$message='';
+
 	$message.=$text3;
-	$message.='Please visit '.$this->siteconfig->base_url;
-	$message.='Thanks.';
+	$message.='<br><br>Please visit '.$this->siteconfig->base_url;
+	$message.='<br><br>Thanks.';
 	
     $headers = "From: $from" . "\r\n"."CC: indexing@indxx.com". "\r\n";
-	$headers  = 'MIME-Version: 1.0' . "\r\n";
+	$headers  .= 'MIME-Version: 1.0' . "\r\n";
 	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 	
 mail($to,$subject,$message,$headers);
@@ -303,24 +357,31 @@ $lastDayModifiedCA="select identifier,action_id,id,mnemonic,company_name,eff_dat
 			$caslastDayModified=$this->db->getResult($lastDayModifiedCA,true);
 			if(!empty($caslastDayModified))
 			{
+						$lastDayModifiedText.="<table border='1'><tr>
+			<th>Name</th>
+			<th>Ticker</th>
+			<th>Action Type</th>
+			<th>Effective Date</th>
+			</tr>";
 			foreach($caslastDayModified as $allca){
 				
-			$lastDayModifiedText.=$allca['company_name']."(".$allca['identifier'].")=>".$_SESSION['variable'][$allca['mnemonic']]."=>".$allca['eff_date']."<br>";
+			
+				$lastDayModifiedText.="<tr><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$_SESSION['variable'][$allca['mnemonic']]."</td><td>".$allca['eff_date']."</td></tr>";
 			
 				}
+					$lastDayModifiedText.="</table>";
 			}
 			
 
 $from = "Indexing <indexing@indxx.com>"; 
-    $subject ="Last Day Modified Corporate Action"; 
-    $message = 'Hi <br>';
-	$message.='Last Day Updated Corporate Action that are available portal as below :<br>' ;
+    $subject ="Corporate Actions : Modified : Previous day"; 
+  	$message='';
 	$message.=$lastDayModifiedText;
-	$message.='Please visit '.$this->siteconfig->base_url;
-	$message.='Thanks.';
+	$message.='<br><br>Please visit '.$this->siteconfig->base_url;
+	$message.='<br><br>Thanks.';
 	
     $headers = "From: $from" . "\r\n"."CC: indexing@indxx.com". "\r\n";
-	$headers  = 'MIME-Version: 1.0' . "\r\n";
+	$headers  .= 'MIME-Version: 1.0' . "\r\n";
 	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 	
 	mail($to,$subject,$message,$headers);
@@ -328,40 +389,7 @@ $from = "Indexing <indexing@indxx.com>";
 
 	
 	
-	$intraDayText='';
-	if(date("D")=="Mon")
-	$intraDayDate=date("Y-m-d",strtotime(date)-3*86400);
-	else
-	$IntraDayDate=date("Y-m-d",strtotime(date)-86400);
 	
-$lastDayModifiedText='';
-$IntraDayCAQuery="select identifier,action_id,id,mnemonic,company_name,eff_date,currency from tbl_ca cat where  ann_date='".$datemodified."' and eff_date='".$datemodified."'   ";
-			
-			//exit;
-			$IntraDayCA=$this->db->getResult($IntraDayCAQuery,true);
-			if(!empty($IntraDayCA))
-			{
-			foreach($IntraDayCA as $allca){
-				
-			$intraDayText.=$allca['company_name']."(".$allca['identifier'].")=>".$_SESSION['variable'][$allca['mnemonic']]."=>".$allca['eff_date']."<br>";
-			
-				}
-			}
-			
-
-$from = "Indexing <indexing@indxx.com>"; 
-    $subject ="New Intra Day Corporate Action"; 
-    $message = 'Hi <br>';
-	$message.='New Intra Day Corporate Action that are available portal as below :<br>' ;
-	$message.=$intraDayText;
-	$message.='Please visit '.$this->siteconfig->base_url;
-	$message.='Thanks.';
-	
-    $headers = "From: $from" . "\r\n"."CC: indexing@indxx.com". "\r\n";
-	$headers  = 'MIME-Version: 1.0' . "\r\n";
-	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-	
-	mail($to,$subject,$message,$headers);
 			
 
 	$SpecialCAText='';
@@ -371,35 +399,39 @@ $SpecialCAQuery="select identifier,action_id,id,mnemonic,company_name,eff_date,c
 			$SpecialCA=$this->db->getResult($SpecialCAQuery,true);
 			if(!empty($SpecialCA))
 			{
+				$SpecialCAText.="<table border='1'><tr>
+			<th>Name</th>
+			<th>Ticker</th>
+			<th>Action Type</th>
+			<th>Effective Date</th>
+			</tr>";
 			foreach($SpecialCA as $allca){
 				if($allca['flag']=="N")
-			$SpecialCAText.="<span style='color:#008000'>".$allca['company_name']."(".$allca['identifier'].")=>".$_SESSION['variable'][$allca['mnemonic']]."=>".$allca['eff_date']."</span><br>";
+			$SpecialCAText.="<tr style='color:#008000'><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$_SESSION['variable'][$allca['mnemonic']]."</td><td>".$allca['eff_date']."</td></tr>";
 			else
-			$SpecialCAText.=$allca['company_name']."(".$allca['identifier'].")=>".$_SESSION['variable'][$allca['mnemonic']]."=>".$allca['eff_date']."<br>";
+			$SpecialCAText.="<tr><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$_SESSION['variable'][$allca['mnemonic']]."</td><td>".$allca['eff_date']."</td></tr>";
 			
 				}
+					$SpecialCAText.="</table>";
 			}
 			
-if($SpecialCAText)
-{
+
 $from = "Indexing <indexing@indxx.com>"; 
-    $subject ="Corporate Events : Icalc 1.4"; 
-    $message = 'Hi <br>';
-	$message.='Corporate Events that are available portal as below :<br>' ;
+    $subject ="Corporate Actions : Upcoming Events"; 
+  	$message='';
+ 
 	$message.=$SpecialCAText;
-	$message.='Please visit '.$this->siteconfig->base_url;
-	$message.='Thanks.';
+	$message.='<br><br>Please visit '.$this->siteconfig->base_url;
+	$message.='<br><br>Thanks.';
 	
     $headers = "From: $from" . "\r\n"."CC: indexing@indxx.com". "\r\n";
-	$headers  = 'MIME-Version: 1.0' . "\r\n";
+	$headers  .= 'MIME-Version: 1.0' . "\r\n";
 	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 	
 	mail($to,$subject,$message,$headers);
-			
-}
+
 	
-	
-$this->saveProcess();
+		$this->saveProcess();
 
 $this->Redirect("index.php?module=calcspinstockadd&log_file=".basename(log_file)."&date=".date,"","");	
 

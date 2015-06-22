@@ -115,12 +115,12 @@
                      
                      {/if}
 {if $sessData.User.type=='1' || $sessData.User.type=='2'}
-                 <!--   <li {if $currentClass=="cacalendar"} class="active"{/if}>
+                    <li {if $currentClass=="cacalendar"} class="active"{/if}>
                         <a href="index.php?module=cacalendar" class="dropdown-toggle">
                             <i class="icon-list"></i>
                             <span>CA Calendar</span>
                             
-                        </a>-->
+                        </a>
 
                         <!-- BEGIN Submenu -->
                         <!--<ul class="submenu">
@@ -129,7 +129,7 @@
                             <li><a href="table_dynamic.html">Dynamic</a></li>
                         </ul>-->
                         <!-- END Submenu -->
-                   <!-- </li>-->
+                   </li>
 {/if}
                     
                     <!--<li>
