@@ -194,7 +194,7 @@ function convert_headged_security_to_indxx_curr_upcomingindex()
 	//$finish = get_time();
 	//$total_time = round(($finish - $start), 4);
 	
-		webopen("../icai2/index.php?module=calcindxxclosing&date=" .date. "&log_file=" . basename(log_file));
+		webopen("../icai2/index.php?module=newcalcindxxclosing&date=" .date. "&log_file=" . basename(log_file));
 	//saveProcess(2);
 	//mysql_close();
 }

@@ -43,7 +43,7 @@ $this->addJs('js/flaty.js');
 		$url= '../multicurrency2/read_ca_files.php?date='.$_POST['date'];
 		
 	if($_POST['open'] && $_POST['date'])
-		$url='index.php?module=calcindxxopening&date='.$_POST['date'];
+		$url='index.php?module=openingtest&date='.$_POST['date'];
 		
 	if($_POST['close'] && $_POST['date'])
 		$url='../multicurrency2/read_input_files.php?date='.$_POST['date'];
