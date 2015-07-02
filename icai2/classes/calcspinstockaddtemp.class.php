@@ -67,7 +67,7 @@ $finalArray=array();
 	 
 	 
 	 
-	 $finalArray[$key]['factor']=$this->getAdjFactorforSpinAdd($newcTicker['ca_id'],$newcTicker['action_id']);
+	 $finalArray[$key]['factor']=$this->getnewAdjFactorforSpin($newcTicker['ca_id'],$newcTicker['action_id']);
 	 
 	 
 	 

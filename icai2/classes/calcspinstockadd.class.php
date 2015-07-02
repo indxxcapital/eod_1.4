@@ -67,7 +67,7 @@ $finalArray=array();
 	 
 	 
 	 
-	 $finalArray[$key]['factor']=$this->getAdjFactorforSpinAdd($newcTicker['ca_id'],$newcTicker['action_id']);
+	 $finalArray[$key]['factor']=$this->getnewAdjFactorforSpin($newcTicker['ca_id'],$newcTicker['action_id']);
 	 
 	 
 	 
@@ -95,7 +95,7 @@ $finalArray=array();
 	//$newMarketCap=$newPrice*$newTicker['old_ticker']['calcshare'];
 	// $currentShare=($oldMarketCap-$newMarketCap)/$newTicker['lastdayvalue'];
 	 //"<br>";
-	$currentShare= $newTicker['calcshare']['calcshare']*$ca['factor'];
+	$currentShare= $newTicker['old_ticker']['calcshare']*$ca['factor'];
 	 
 	// $updatePriceQuery="update tbl_final_price set price='".$newPrice."',localprice='".$newlocalPrice."' where indxx_id='".$newTicker['indxx_id']."' and date='".$newTicker['lastday']."' and isin='".$newTicker['old_ticker']['isin']."'";
 	 

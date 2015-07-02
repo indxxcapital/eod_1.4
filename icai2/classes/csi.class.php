@@ -465,7 +465,7 @@ $headers .= 'From: Indexing <indexing@indxx.com>' . "\r\n"."CC: indexing@indxx.c
 					$this->db->query($strQuery1);
 					
 									
-					$strQuery = "delete from tbl_csi_adj_factor where tbl_assign_index.cs_indxx_id='".$_GET['id']."'";
+					$strQuery = "delete from tbl_csi_adj_factor where tbl_csi_adj_factor.cs_indxx_id='".$_GET['id']."'";
 					$this->db->query($strQuery);
 			
 			$this->Redirect("index.php?module=csi","Record deleted successfully!!!","success");
@@ -490,7 +490,7 @@ $headers .= 'From: Indexing <indexing@indxx.com>' . "\r\n"."CC: indexing@indxx.c
 					$this->db->query($strQuery1);
 					
 									
-					$strQuery = "delete from tbl_csi_adj_factor where tbl_assign_index.cs_indxx_id='".$_GET['id']."'";
+					$strQuery = "delete from tbl_csi_adj_factor where tbl_csi_adj_factor.cs_indxx_id='".$_GET['id']."'";
 					$this->db->query($strQuery);
 			}
 			}
@@ -512,6 +512,7 @@ $headers .= 'From: Indexing <indexing@indxx.com>' . "\r\n"."CC: indexing@indxx.c
 
 	
 	$indxxfactordata=$this->db->getResult("select * from tbl_csi_adj_factor where cs_indxx_id = '".$_GET['id']."' ",true);
+	//$this->pr($indxxfactordata,true);
 if(!empty($indxxfactordata))
 {
 foreach($indxxfactordata as $key=> $data)
