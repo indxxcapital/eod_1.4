@@ -5,7 +5,7 @@
 header('Content-Type: text/html; charset=iso-8859-1');
 ini_set('display_errors', "off");
 //Report all error except notice//E_ALL ^ E_NOTICE
-ini_set('error_reporting',1 );
+ini_set('error_reporting',0 );
 ini_set('allow_call_time_pass_reference',true);
 // Do not allow php_sess_id to be passed in the querystring and it's use for google search
 ini_set('session.use_only_cookies', 1);
@@ -13,7 +13,7 @@ ini_set('session.use_only_cookies', 1);
 ini_set("memory_limit", "1024M");
 ini_set('max_execution_time', 60 * 60);
 setlocale(LC_ALL,'en_IN');
-putenv("TZ=Asia/Calcutta");
+	date_default_timezone_set("America/New_York");
 //date_default_timezone_set("Asia/Kolkata"); 
 //echo date("Y-m-d H:i:s");
 //exit;

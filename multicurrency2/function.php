@@ -119,8 +119,8 @@ function getCurrencyNew($date)
 }
 
 
-function getPriceforCurrency($ticker,$date){
-	$query="SELECT price  FROM `tbl_curr_prices` WHERE `currencyticker` LIKE '".strtoupper($ticker)."%' AND `date` = '$date'";
+function getPriceforCurrency($index_currency,$ticker_currency,$date){
+	$query="SELECT price  FROM `tbl_curr_prices` WHERE `currencyticker` LIKE '".strtoupper($index_currency.$ticker_currency)."%' AND `date` = '$date'";
 	$res=mysql_query($query);
 if(mysql_num_rows($res)>0)
 {
@@ -129,20 +129,111 @@ if($row['price'])
 return $row['price'];
 else
 {
-echo "Price Not Available for Currency Ticker ".$ticker." of date.".$date."<br>" ;
-exit;
+
+return getPriceforCurrency2($ticker_currency,$index_currency,$date);
+//echo "Price Not Available for Currency Ticker ".$ticker." of date.".$date."<br>" ;
+//exit;
 }
 }
 else
 {
-echo "Price Not Available for Currency Ticker ".$ticker." of date.".$date."<br>" ;
-exit;
+return	getPriceforCurrency2($ticker_currency,$index_currency,$date);
+	
+//echo "Price Not Available for Currency Ticker ".$ticker." of date.".$date."<br>" ;
+//exit;
 }
 
 
 
 }
 
+function getPriceforCurrency2($index_currency,$ticker_currency,$date){
+	 $query="SELECT price  FROM `tbl_curr_prices` WHERE `currencyticker` LIKE '".strtoupper($index_currency.$ticker_currency)."%' AND `date` = '$date'";
+	$res=mysql_query($query);
+if(mysql_num_rows($res)>0)
+{
+$row=mysql_fetch_assoc($res);
+if($row['price'])
+{
+	//echo 1/$row['price'];
+	return 1/$row['price'];
+}else
+{	mail("ical@indxx.com","Todays Currency factor not found for ".strtoupper($index_currency.$ticker_currency),"Todays Currency factor not found for ".strtoupper($index_currency.$ticker_currency));
+
+	
+	
+return	getPriceforCurrency3($index_currency,$ticker_currency,$date);
+	
+//echo "Price Not Available for Currency Ticker ".$ticker." of date.".$date."<br>" ;
+//exit;
+}
+}
+else
+{
+	mail("ical@indxx.com","Todays Currency factor not found for ".strtoupper($index_currency.$ticker_currency),"Todays Currency factor not found for ".strtoupper($index_currency.$ticker_currency));
+
+return	getPriceforCurrency3($index_currency,$ticker_currency,$date);
+}
+
+
+
+}
+
+function getPriceforCurrency3($index_currency,$ticker_currency,$date){
+	 $query="SELECT price  FROM `tbl_curr_prices` WHERE `currencyticker` LIKE '".strtoupper($index_currency.$ticker_currency)."%' order by date desc limit 0,1";
+	$res=mysql_query($query);
+if(mysql_num_rows($res)>0)
+{
+$row=mysql_fetch_assoc($res);
+if($row['price'])
+{
+	//echo 1/$row['price'];
+	return $row['price'];
+}else
+{
+return	getPriceforCurrency4($ticker_currency,$index_currency,$date);
+	
+//echo "Price Not Available for Currency Ticker ".$ticker." of date.".$date."<br>" ;
+//exit;
+}
+}
+else
+{
+return	getPriceforCurrency4($ticker_currency,$index_currency,$date);
+}
+
+
+
+}
+function getPriceforCurrency4($index_currency,$ticker_currency,$date){
+
+	 $query="SELECT price  FROM `tbl_curr_prices` WHERE `currencyticker` LIKE '".strtoupper($index_currency.$ticker_currency)."%' order by date desc limit 0,1";
+	$res=mysql_query($query);
+if(mysql_num_rows($res)>0)
+{
+$row=mysql_fetch_assoc($res);
+if($row['price'])
+{
+	//echo 1/$row['price'];
+	return 1/$row['price'];
+}else
+{
+mail("ical@indxx.com","Currency factor not found for ".strtoupper($index_currency.$ticker_currency),"Currency factor not found for ".strtoupper($index_currency.$ticker_currency));
+return 0;	
+
+//echo "Price Not Available for Currency Ticker ".$ticker." of date.".$date."<br>" ;
+//exit;
+}
+}
+else
+{
+mail("ical@indxx.com","Currency factor not found for ".strtoupper($index_currency.$ticker_currency),"Currency factor not found for ".strtoupper($index_currency.$ticker_currency));
+return 0;
+}
+
+
+
+}
 
 function save_process($task,$date,$status){
 mysql_query("INSERT INTO `tbl_system_task_complete` (`id`, `sysdate`, `name`, `status`, `date`) VALUES (NULL, CURRENT_TIMESTAMP, '".$task."', '".$status."', '".$date."');");
@@ -204,7 +295,13 @@ if (!file_exists(currencyfactor_file))
 
 }
 
+function sava_database_file($file){
+//print_r(explode("_",$file));
+$array=explode("_",$file);
+$query="insert into tbl_backup  values (NULL,'".$array[0]."','".$array[4]."')";
 
+mysql_query($query);
+}
 function read_libor_file(){
 //echo currencyfactor_file;
 if (!file_exists(liborrate_file))
@@ -529,6 +626,66 @@ $query = "INSERT INTO tbl_ca_values (ca_id, ca_action_id, field_name, field_valu
 
 	}
 
+
+function getPriceforCurrency5($index_currency,$ticker_currency,$date){
+	mail("ical@indxx.com","Currency factor not found for ".strtoupper($index_currency.$ticker_currency),"Currency factor not found for ".strtoupper($index_currency.$ticker_currency)." for date ".$date." using Old Price");
+	
+	$query="SELECT currencyticker,price,currency  FROM `tbl_curr_prices` WHERE `currencyticker` LIKE '".strtoupper($index_currency.$ticker_currency)."%' order by date desc limit 0,1";
+	
+	$res=mysql_query($query);
+if(mysql_num_rows($res)>0)
+{
+$row=mysql_fetch_assoc($res);
+if($row['price'])
+{
+	//echo 1/$row['price'];
+	return $row;
+}else
+{
+return	getPriceforCurrency6($ticker_currency,$index_currency,$date);
+	
+//echo "Price Not Available for Currency Ticker ".$ticker." of date.".$date."<br>" ;
+//exit;
+}
+}
+else
+{
+return	getPriceforCurrency6($ticker_currency,$index_currency,$date);
+}
+
+
+
+}
+function getPriceforCurrency6($index_currency,$ticker_currency,$date){
+
+	 $query="SELECT currencyticker,price,currency  FROM `tbl_curr_prices` WHERE `currencyticker` LIKE '".strtoupper($index_currency.$ticker_currency)."%' order by date desc limit 0,1";
+	$res=mysql_query($query);
+if(mysql_num_rows($res)>0)
+{
+$row=mysql_fetch_assoc($res);
+if($row['price'])
+{
+	//echo 1/$row['price'];
+ $row['price']= 1/$row['price'];
+ return $row;
+}else
+{
+mail("ical@indxx.com","Currency factor not found for ".strtoupper($index_currency.$ticker_currency),"Currency factor not found for ".strtoupper($index_currency.$ticker_currency));
+return NULL;	
+
+//echo "Price Not Available for Currency Ticker ".$ticker." of date.".$date."<br>" ;
+//exit;
+}
+}
+else
+{
+mail("ical@indxx.com","Currency factor not found for ".strtoupper($index_currency.$ticker_currency),"Currency factor not found for ".strtoupper($index_currency.$ticker_currency));
+return NULL;
+}
+
+
+
+}
 
 
 ?>

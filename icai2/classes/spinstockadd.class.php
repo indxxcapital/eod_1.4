@@ -32,7 +32,17 @@ $this->addJs('js/flaty.js');
 
 		
 		}
+		function delete(){
+		if($_GET['id'])
+		{
 		
+		$this->db->query("delete from tbl_spin_stock_add where action_id='".$_GET['id']."'");
+			$this->db->query("delete from tbl_spin_stock_add_securities where req_id='".$_GET['id']."'");
+				$this->db->query("delete from tbl_spin_stock_add_securities_temp where req_id='".$_GET['id']."'");
+				$this->Redirect("index.php?module=spinstockadd","Record Deleted Successfully","success");		
+		}
+		
+		}
 		function view(){
 		$data=	$this->db->getResult("Select ssa.dbApprove,ssa.action_id,ssa.id,tbl_ca.identifier,tbl_ca.company_name,tbl_ca.mnemonic,tbl_ca.eff_date from tbl_spin_stock_add ssa 
 	left join tbl_ca on ssa.action_id=tbl_ca.action_id 

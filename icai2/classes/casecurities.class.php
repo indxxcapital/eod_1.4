@@ -403,7 +403,7 @@ $this->Redirect("index.php?module=casecurities&event=uploadSecuritiesforRunning"
     'application/txt',
 );
 
-if (!in_array($_FILES['upload']['type'], $csv_mimetypes)) {
+if (!in_array($_FILES['inputfile']['type'], $csv_mimetypes)) {
 		$check=false;
 				$errormsg='Invalid input file, Please upload correct csv file';
 			//break;
@@ -448,7 +448,7 @@ if (!in_array($_FILES['upload']['type'], $csv_mimetypes)) {
 						$check=false;
 						$errormsg="Dividend Currency not valid for ".$security['3'];
 						break;
-						}elseif (preg_match('/[\'^£$%&()}{@#~?><>,|=_+¬-]/', $security['1']) || preg_match('/[\'^£$%&()}{@#~?><>,|=_+¬-]/', $security['2']) || preg_match('/[\'^£$%&()}{@#~?><>,|=_+¬-]/', $security['3']) || preg_match('/[\'^£$%&()}{@#~?><>,|=_+¬-]/', $security['4']) || preg_match('/[\'^£$%&()}{@#~?><>,|=_+¬-]/', $security['5']) || preg_match('/[\'^£$%&()}{@#~?><>,|=_+¬-]/', $security['6']) || preg_match('/[\'^£$%&()}{@#~?><>,|=_+¬-]/', $security['7']) || preg_match('/[\'^£$%&()}{@#~?><>,|=_+¬-]/', $security['8']) )
+						}elseif (preg_match('/,;/', $security['1']) || preg_match('/,;/', $security['2']) || preg_match('/,;/', $security['3']) || preg_match('/,;/', $security['4']) || preg_match('/,;/', $security['5']) || preg_match('/,;/', $security['6']) || preg_match('/,;/', $security['7']) || preg_match('/,;/', $security['8']) )
 {
    
    $check=false;
@@ -596,7 +596,7 @@ $this->Redirect("index.php?module=casecurities&event=uploadSecuritiesforRunning"
 		{
 			
 			
-			
+			//$this->pr($_POST,true);
 				$this->db->query("delete from tbl_indxx_ticker_temp where indxx_id='".$_SESSION['NewIndxxId']."'");
 			
 			$insertTickerQuery=" INSERT into tbl_indxx_ticker_temp (status,name,isin,ticker,weight,curr,divcurr,indxx_id,sedol,cusip,countryname) values ";
@@ -607,15 +607,15 @@ $this->Redirect("index.php?module=casecurities&event=uploadSecuritiesforRunning"
 				
 				if($_POST['name'][$i] && $_POST['isin'][$i] && $_POST['ticker'][$i] && $_POST['divcurr'][$i] && $_POST['curr'][$i])
 				{
-					if(array_key_exists($_POST['isin'][$i],$remainingfieldsarray))
-					{
+					/* if(array_key_exists($_POST['isin'][$i],$remainingfieldsarray))
+					{ */
 						$insertTickerQueryArray[]="('0','".mysql_real_escape_string($_POST['name'][$i])."','".mysql_real_escape_string($_POST['isin'][$i])."','".mysql_real_escape_string($_POST['ticker'][$i])."','".mysql_real_escape_string($_POST['weight'][$i])."','".mysql_real_escape_string($_POST['curr'][$i])."','".mysql_real_escape_string($_POST['divcurr'][$i])."','".mysql_real_escape_string($_SESSION['tempindexid'])."','".$remainingfieldsarray[$_POST['isin'][$i]]['sedol']."','".$remainingfieldsarray[$_POST['isin'][$i]]['cusip']."','".$remainingfieldsarray[$_POST['isin'][$i]]['countryname']."')";	
-					}
+					/* }
 					else
 					{
 						$insertTickerQueryArray[]="(status='0',name='".mysql_real_escape_string($_POST['name'][$i])."',isin='".mysql_real_escape_string($_POST['isin'][$i])."',ticker='".mysql_real_escape_string($_POST['ticker'][$i])."',weight='".mysql_real_escape_string($_POST['weight'][$i])."',curr='".mysql_real_escape_string($_POST['curr'][$i])."',divcurr='".mysql_real_escape_string($_POST['divcurr'][$i])."',indxx_id='".mysql_real_escape_string($_SESSION['tempindexid'])."',sedol='',cusip='',countryname='')";
 							
-					}					
+					}	 */				
 						
 					//$this->db->query("INSERT into tbl_indxx_ticker_temp set status='0',name='".mysql_real_escape_string($_POST['name'][$i])."',isin='".mysql_real_escape_string($_POST['isin'][$i])."',ticker='".mysql_real_escape_string($_POST['ticker'][$i])."',weight='".mysql_real_escape_string($_POST['weight'][$i])."',curr='".mysql_real_escape_string($_POST['curr'][$i])."',divcurr='".mysql_real_escape_string($_POST['divcurr'][$i])."',indxx_id='".mysql_real_escape_string($_SESSION['tempindexid'])."',sedol='".$remainingfieldsarray['sedol[$i]']."',cusip='".$remainingfieldsarray['cusip[$i]']."',countryname='".$remainingfieldsarray['countryname[$i]']."'");
 					

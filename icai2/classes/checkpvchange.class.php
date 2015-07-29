@@ -91,7 +91,7 @@ class Checkpvchange extends Application{
 	//	exit;
 		if($str)
 		{
-			
+		/* 	
 			$emailQueries='select email from tbl_ca_user where status="1" and type!="1" ';
 		$email_res=mysql_query($emailQueries);
 		if(mysql_num_rows($email_res)>0)
@@ -101,13 +101,11 @@ class Checkpvchange extends Application{
 			{
 			$emailsids[]=$email['email'];
 			}
-		}
+		} */
 			
-			if(!empty($emailsids))	
-		{
-			 $emailsids	=implode(',',$emailsids);
+		
 			 
-			//$emailsids.=',dbajpai@indxx.com';
+			$emailsids='ical@indxx.com';
 			
 			$msg='Hi <br>
 			Local Price Change Notification <br/>
@@ -136,7 +134,7 @@ $headers .= 'From: Indexing <indexing@indxx.com>' . "\r\n"."CC: indexing@indxx.c
 					
 			
 			
-		}
+		//}
 		}
 		
 		$this->saveProcess(2);

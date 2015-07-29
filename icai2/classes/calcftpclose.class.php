@@ -96,7 +96,7 @@ if (ftp_put($conn_id2, $remote_file5, $file5, FTP_BINARY)) {
 ftp_close($conn_id2);
 */
 	$this->saveProcess(2);
-		$this->Redirect2("index.php?module=checkivchange&date=" .date. "&log_file=" . basename(log_file),"","");	
+		$this->Redirect2("../multicurrency2/db_backup.php?date=" .date. "&log_file=" . basename(log_file),"","");
 	}
 }
 ?>

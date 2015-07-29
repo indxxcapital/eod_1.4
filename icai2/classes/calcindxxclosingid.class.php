@@ -26,14 +26,18 @@ class Calcindxxclosingid extends Application{
 		
 		$type="close";
 		
-		 $datevalue=$this->_date;
+//		 $datevalue=$this->_date;
 //echo date("D",strtotime($datevalue));
 //exit;
- if(date("D",strtotime($datevalue))=="Mon")
+
+if($_GET['date'])
+$datevalue=$_GET['date'];
+else{ if(date("D",strtotime($datevalue))=="Mon")
  $datevalue=date("Y-m-d",strtotime($datevalue)-86400*3);
 else
  $datevalue=date("Y-m-d",strtotime($datevalue)-86400);
-
+}
+//$datevalue='2015-06-30';
 //$datevalue="2014-02-25";
 //echo $datevalue;
 //exit;
@@ -187,7 +191,7 @@ if($type=='close')
 		//echo $shareValue;
 		$closeprices['calcshare']=$shareValue;
 		}
-		$final_array[$indxxKey]['values'][$TickerKey]['calcshare']=$shareValue;
+		$closeIndxx['values'][$TickerKey]['calcshare']=$shareValue;
 		
 			$securityPrice=$closeprices['calcprice'];
 			
@@ -233,7 +237,7 @@ $marketValue= number_format($marketValue,11,'.','');
 		
 		
 		
-		
+		//$this->pr($closeIndxx['values'],true);
 		
 		foreach($closeIndxx['values'] as $closeprices)
 		{

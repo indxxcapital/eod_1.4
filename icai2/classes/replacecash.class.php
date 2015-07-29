@@ -23,7 +23,7 @@ log_info("In Replace Cash ");
 		
 
 	 $datevalue=date;
-	 $indexdata=$this->db->getResult("select tbl_cash_index_temp.* from tbl_cash_index_temp where 1=1 and status='1' and db_approve='1'  and dateStart='".$this->_date."' ",true);
+	 $indexdata=$this->db->getResult("select tbl_cash_index_temp.* from tbl_cash_index_temp where 1=1 and status='1' and db_approve='1'  and dateStart='".date."' ",true);
 	//$backupIndex= 
 	 	
 	 if(!empty($indexdata))

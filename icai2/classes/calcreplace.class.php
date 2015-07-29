@@ -42,7 +42,7 @@ log_info("In CalcReplace for Live  ");
 	$indxx_data=$this->db->getResult("select tbl_indxx.* from tbl_indxx where id='".$indxx['indxx_id']."'");	
 	if(!empty($indxx_data))
 	{
-		$final_array[$indxx['indxx_id']]['details']=$indxx_data;
+		$final_array[$indxx['id']][$indxx['indxx_id']]['details']=$indxx_data;
 	
 	}
 	
@@ -50,7 +50,7 @@ log_info("In CalcReplace for Live  ");
 			//$this->pr($indxx_value,true);
 			if(!empty($indxx_value))
 			{
-			$final_array[$indxx['indxx_id']]['index_value']=$indxx_value;
+			$final_array[$indxx['id']][$indxx['indxx_id']]['index_value']=$indxx_value;
 			$datevalue=$indxx_value['date'];
 			}
 			
@@ -70,13 +70,13 @@ log_info("In CalcReplace for Live  ");
 		
 		//	$this->pr($indxxprices,true);
 			
-	$final_array[$indxx['indxx_id']]['olddata']=$indxxprices;
+	$final_array[$indxx['id']][$indxx['indxx_id']]['olddata']=$indxxprices;
 
 	//echo 	$datevalue;
 	
 	$oldsecurity=	$this->db->getResult("select security_id from tbl_replace_runnsecurity where req_id='".$indxx['id']."' and  indxx_id='".$indxx['indxx_id']."' ",true);
 	
-	$final_array[$indxx['indxx_id']]['replacesecurity']=$oldsecurity;
+	$final_array[$indxx['id']][$indxx['indxx_id']]['replacesecurity']=$oldsecurity;
 	$newsecurities=	$this->db->getResult("select name, 	isin,ticker,curr,divcurr,sedol,cusip,countryname from tbl_runnsecurities_replaced where req_id='".$indxx['id']."' and  indxx_id='".$indxx['indxx_id']."' ",true);
 	
 	if(!empty($newsecurities))
@@ -94,7 +94,7 @@ log_info("In CalcReplace for Live  ");
 	
 	
 	
-	$final_array[$indxx['indxx_id']]['newsecurity']=$newsecurities;
+	$final_array[$indxx['id']][$indxx['indxx_id']]['newsecurity']=$newsecurities;
 	
 	
 	//$newsecurity=	$this->db->getResult("select indxx_id from tbl_replace_tempindex_req where startdate='".$date."' and adminapprove='1' and dbapprove='1'",true);
@@ -108,10 +108,13 @@ log_info("In CalcReplace for Live  ");
 	{
 	//
 		
-	foreach($final_array as $id=> $indxx_array)
+	foreach($final_array as $rid=> $request_array)
 	{
-		
-		$countnewSeurities= count($indxx_array['newsecurity']);		
+				if(!empty($request_array))
+		{
+foreach($request_array as $id=>$indxx_array)			
+{
+	$countnewSeurities= count($indxx_array['newsecurity']);		
 	if($countnewSeurities)
 	{if(!empty($indxx_array['replacesecurity']))
 	{
@@ -204,6 +207,8 @@ $insertPrice='Insert into tbl_final_price set date="'.$indxx_array['index_value'
 	
 	
 	
+	}
+	}
 	}
 	}
 	

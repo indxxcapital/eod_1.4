@@ -28,7 +28,7 @@ log_info("In Check CA Value ");
 		$this->_meta_keywords=$this->siteconfig->default_meta_keyword;
 		
 		//echo "select tbl_indxx.* from tbl_indxx  where status='1' and usersignoff='1' and dbusersignoff='1' and submitted='1 and id='1'";
-		$indxxs=$this->db->getResult("select tbl_indxx.* from tbl_indxx  where status='1' and usersignoff='1' and dbusersignoff='1' and submitted='1' ",true);	
+	//	$indxxs=$this->db->getResult("select tbl_indxx.* from tbl_indxx  where status='1' and usersignoff='1' and dbusersignoff='1' and submitted='1' ",true);	
 		
 		
 		$checkArray=array();
@@ -51,7 +51,7 @@ log_info("In Check CA Value ");
 	$final_array=array();
 		
 		
-		  $ca_query="select identifier,action_id,id,mnemonic,company_name,eff_date,currency from tbl_ca cat where  eff_date='".$datevalue2."'";
+		  $ca_query="select identifier,action_id,id,mnemonic,company_name,eff_date,currency from tbl_ca cat where  eff_date='".$datevalue2."' order by eff_date asc";
 			
 			//exit;
 			$cas=$this->db->getResult($ca_query,true);	
@@ -108,7 +108,7 @@ log_info("In Check CA Value ");
 			
 			
 			
-		  $ca_query_missing="select identifier,action_id,id,mnemonic,company_name,eff_date,currency from tbl_ca cat where  eff_date>='".$datevalue2."' and  eff_date<='".date("Y-m-d",strtotime($datevalue2)+7*86400)."'  ";
+		  $ca_query_missing="select identifier,action_id,id,mnemonic,company_name,eff_date,currency from tbl_ca cat where  eff_date>='".$datevalue2."' and  eff_date<='".date("Y-m-d",strtotime($datevalue2)+7*86400)."' order by eff_date asc ";
 			
 			//exit;
 			$casmissing=$this->db->getResult($ca_query_missing,true);	
@@ -168,16 +168,17 @@ log_info("In Check CA Value ");
 	//echo $text;
 //exit;
 $to='';
-	$useremails=$this->db->getResult("select email from tbl_ca_user where 1=1",true);
+	/* $useremails=$this->db->getResult("select email from tbl_ca_user where 1=1",true);
 	$emailids=array();
 	foreach($useremails as $key=>$users)
 	{
 		$emailids[]=$users['email'];
 	}
 	
-	$to=implode(',',$emailids);
-	//$to="ggrover@indxx.com";
+	$to=implode(',',$emailids); */
+	$to="ical@indxx.com";
 
+//$to="dbajpai@indxx.com";
 
 	
 	$from = "Indexing <indexing@indxx.com>"; 
@@ -223,6 +224,10 @@ $to='';
 mail($to,$subject,$message,$headers);
 //exit;
 
+
+//$intradaySample="SELECT  identifier,action_id,id,mnemonic,company_name,eff_date,currency  FROM `tbl_ca` where eff_date=CURRENT_DATE-1 and action_id not in (select ca_id from tbl_ca_intraday_check)";
+
+//SELECT tbl_ca.* FROM `tbl_ca`,tbl_ca_intraday_check WHERE eff_date=CURRENT_DATE-1 and action_id!=ca_id group by action_id
 $intraDayText='';
 	if(date("D")=="Mon")
 	$intraDayDate=date("Y-m-d",strtotime(date)-3*86400);
@@ -230,7 +235,7 @@ $intraDayText='';
 	$IntraDayDate=date("Y-m-d",strtotime(date)-86400);
 	
 $intraDayText='';
-$IntraDayCAQuery="select identifier,action_id,id,mnemonic,company_name,eff_date,currency from tbl_ca cat where  ann_date='".$datemodified."' and eff_date='".$datemodified."'   ";
+  $IntraDayCAQuery="SELECT  identifier,action_id,id,mnemonic,company_name,eff_date,currency  FROM `tbl_ca` where eff_date='".$IntraDayDate."' and action_id not in (select ca_id from tbl_ca_intraday_check);";
 			
 			//exit;
 			$IntraDayCA=$this->db->getResult($IntraDayCAQuery,true);
@@ -262,11 +267,17 @@ $message.=$intraDayText;
 	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 	
 	mail($to,$subject,$message,$headers);
-	//echo $to;
+//		echo "mail send";
 	//exit;
+	$this->db->query("delete from tbl_ca_intraday_check  ");
+	$this->db->query("insert into tbl_ca_intraday_check (ca_id,date) select action_id,eff_date from tbl_ca where eff_date='".date("Y-m-d")."' ");
+	//echo $to; 
+	//echo $to;
+	///exit;
+	
 	$text2="";
 	
-	  $ca_query2="select identifier,action_id,id,mnemonic,company_name,eff_date,currency from tbl_ca cat where  eff_date='".$datevalue2."'   ";
+	  $ca_query2="select identifier,action_id,id,mnemonic,company_name,eff_date,currency from tbl_ca cat where  eff_date='".$datevalue2."' order by eff_date asc  ";
 		//	exit;
 			//exit;
 			$cas2=$this->db->getResult($ca_query2,true);
@@ -301,12 +312,12 @@ $message.=$intraDayText;
 	
 	mail($to,$subject,$message,$headers);
 			
-				//mail($to,"Todays Corporate Action ICALC 1.4",);
+			//	mail($to,"Todays Corporate Action ICALC 1.4",);
 			
 	
 	$text3="";
 	
-	  $ca_query3="select identifier,action_id,id,mnemonic,company_name,eff_date,currency from tbl_ca cat where  eff_date<='".date("Y-m-d",strtotime($datevalue2)+7*86400)."' and  eff_date>='".$datevalue2."' ";
+	  $ca_query3="select identifier,action_id,id,mnemonic,company_name,eff_date,currency from tbl_ca cat where  eff_date<='".date("Y-m-d",strtotime($datevalue2)+7*86400)."' and  eff_date>='".$datevalue2."' order by eff_date asc ";
 			
 			//exit;
 			$cas3=$this->db->getResult($ca_query3,true);
@@ -351,7 +362,7 @@ mail($to,$subject,$message,$headers);
 	$datemodified=date("Y-m-d",strtotime(date)-86400);
 	
 $lastDayModifiedText='';
-$lastDayModifiedCA="select identifier,action_id,id,mnemonic,company_name,eff_date,currency from tbl_ca cat where  amd_date='".$datemodified."' and eff_date<='".date("Y-m-d",strtotime($datemodified)+15*86400)."' and eff_date>='".$datemodified."'   ";
+$lastDayModifiedCA="select identifier,action_id,id,mnemonic,company_name,eff_date,currency from tbl_ca cat where  amd_date='".$datemodified."' and eff_date<='".date("Y-m-d",strtotime($datemodified)+15*86400)."' and eff_date>='".date."' order by eff_date asc  ";
 			
 			//exit;
 			$caslastDayModified=$this->db->getResult($lastDayModifiedCA,true);
@@ -391,9 +402,21 @@ $from = "Indexing <indexing@indxx.com>";
 	
 	
 			
+$lastDayEvents=$this->db->getResult("select ca_id from tbl_ca_event_check");
 
+$lastDayEventArray=array();
+if(!empty($lastDayEvents))
+{
+	foreach($lastDayEvents as $a)
+	{
+	$lastDayEventArray[]=$a['ca_id'];
+	
+	}
+	
+}
+//$this->pr($lastDayEventArray,true);
 	$SpecialCAText='';
-$SpecialCAQuery="select identifier,action_id,id,mnemonic,company_name,eff_date,currency,flag from tbl_ca cat where  eff_date>='".$datevalue2."'  and mnemonic in('ACQUIS','DELIST','RECLASS') ";
+$SpecialCAQuery="select identifier,action_id,id,mnemonic,company_name,eff_date,currency,flag from tbl_ca cat where  eff_date>='".$datevalue2."'  and mnemonic in('ACQUIS','DELIST','RECLASS') order by eff_date asc";
 			
 			//exit;
 			$SpecialCA=$this->db->getResult($SpecialCAQuery,true);
@@ -406,16 +429,20 @@ $SpecialCAQuery="select identifier,action_id,id,mnemonic,company_name,eff_date,c
 			<th>Effective Date</th>
 			</tr>";
 			foreach($SpecialCA as $allca){
-				if($allca['flag']=="N")
-			$SpecialCAText.="<tr style='color:#008000'><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$_SESSION['variable'][$allca['mnemonic']]."</td><td>".$allca['eff_date']."</td></tr>";
-			else
+				if(!in_array($allca['action_id'],$lastDayEventArray))
+				{
+				
+					$SpecialCAText.="<tr style='color:#008000'><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$_SESSION['variable'][$allca['mnemonic']]."</td><td>".$allca['eff_date']."</td></tr>";
+				}else
+				{
+
 			$SpecialCAText.="<tr><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$_SESSION['variable'][$allca['mnemonic']]."</td><td>".$allca['eff_date']."</td></tr>";
-			
+				}
 				}
 					$SpecialCAText.="</table>";
 			}
-			
-
+		//echo $SpecialCAText;	
+//exit;
 $from = "Indexing <indexing@indxx.com>"; 
     $subject ="Corporate Actions : Upcoming Events"; 
   	$message='';
@@ -429,8 +456,8 @@ $from = "Indexing <indexing@indxx.com>";
 	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 	
 	mail($to,$subject,$message,$headers);
-
-	
+$this->db->query("delete from tbl_ca_event_check");
+	$this->db->query("insert into tbl_ca_event_check (ca_id,date) select action_id,eff_date from tbl_ca where  mnemonic in('ACQUIS','DELIST','RECLASS')");
 		$this->saveProcess();
 
 $this->Redirect("index.php?module=calcspinstockadd&log_file=".basename(log_file)."&date=".date,"","");	

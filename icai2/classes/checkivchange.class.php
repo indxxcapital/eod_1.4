@@ -72,7 +72,7 @@ class Checkivchange extends Application{
 		if($str)
 		{
 			
-			$emailQueries='select email from tbl_ca_user where status="1" and type!="1" ';
+		/* 	$emailQueries='select email from tbl_ca_user where status="1" and type!="1" ';
 		$email_res=mysql_query($emailQueries);
 		if(mysql_num_rows($email_res)>0)
 		{
@@ -81,13 +81,12 @@ class Checkivchange extends Application{
 			{
 			$emailsids[]=$email['email'];
 			}
-		}
+		} */
 			
-			if(!empty($emailsids))	
-		{
-			 $emailsids	=implode(',',$emailsids);
+		
+			// $emailsids	=implode(',',$emailsids);
 			 
-			//$emailsids.=',dbajpai@indxx.com';
+			$emailsids.='ical@indxx.com';
 			
 			$msg='Hi <br>
 			Index Value Change Notification <br/>
@@ -114,7 +113,7 @@ $headers .= 'From: Indexing <indexing@indxx.com>' . "\r\n"."CC: indexing@indxx.c
 					
 			
 			
-		}
+		
 		}
 		$this->saveProcess(2);
 		$this->Redirect2("index.php?module=checkpvchange&date=" .date. "&log_file=" . basename(log_file),"","");	

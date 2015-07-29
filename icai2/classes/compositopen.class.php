@@ -1,6 +1,6 @@
 <?php
 
-class Compositclose extends Application{
+class Compositopen extends Application{
 
 	function __construct()
 	{

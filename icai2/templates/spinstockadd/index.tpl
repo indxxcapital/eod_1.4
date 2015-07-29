@@ -1,5 +1,4 @@
 <!-- BEGIN Main Content -->
-{include file='notice.tpl'}
 {literal}
  <script type='text/javascript'>
  
@@ -278,7 +277,8 @@ $.ajax({
              <!-- <td>{if $point.notifiedtoclient==0}<span class="label label-important">Pending!</span>{else}<span class="badge badge-success">Notified</span>{/if}</td>-->
             <td>
                 <div class="btn-group">
-                    <a class="btn btn-small show-tooltip" title="View All Fields" href="index.php?module=spinstockadd&event=view&id={$point.id}"><i class="icon-zoom-in"></i></a>
+                    <a class="btn btn-small show-tooltip" title="View All Fields" href="index.php?module=spinstockadd&event=view&id={$point.id}">View</a>
+                    <a class="btn btn-small show-tooltip" title="Delete Fields" href="index.php?module=spinstockadd&event=delete&id={$point.action_id}">Delete</a>
                     
                     
                 </div>

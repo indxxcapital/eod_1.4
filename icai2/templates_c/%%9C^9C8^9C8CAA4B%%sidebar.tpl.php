@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-06-17 04:13:03
+<?php /* Smarty version 2.6.14, created on 2015-07-14 08:40:57
          compiled from sidebar.tpl */ ?>
 <div id="sidebar" class="nav-collapse">
                 <!-- BEGIN Navlist -->
@@ -46,6 +46,7 @@
                <!--          <li><a href="index.php?module=benchmarkindex">USD Benchmark Index</a></li> 
 			<li><a href="index.php?module=adjbenchmarkindex">Local Benchmark Index</a></li>-->
                             <li><a href="index.php?module=casecurities">Securities</a></li>
+                          
                           <!--  <li><a href="index.php?module=updatecusip">Update Cusip</a></li>
                             <li><a href="index.php?module=updatesedol">Update Sedol</a></li>-->
                             <?php if ($this->_tpl_vars['sessData']['User']['type'] == 3): ?><li><a href="index.php?module=uniquesecurities">Active Unique Securities</a></li>
@@ -53,8 +54,65 @@
                             <?php endif; ?>
                                       </ul>
                         <!-- END Submenu -->
+                        
+                        
+                        
                     </li>
 <?php endif; ?>
+
+
+
+
+
+					<?php if ($this->_tpl_vars['sessData']['User']['type'] == '1' || $this->_tpl_vars['sessData']['User']['type'] == '2'): ?>
+                    <li <?php if ($this->_tpl_vars['currentClass'] == 'rebalancing'): ?> class="active"<?php endif; ?>>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-list"></i>
+                            <span>Rebalancing</span>
+                            <b class="arrow icon-angle-right"></b>
+                        </a>
+
+                        <!-- BEGIN Submenu -->
+                       
+                        <ul class="submenu">
+                        <li><a href="index.php?module=rebalancing">Add New Rebalancing</a></                            <li><a href="index.php?module=rebalancing&event=download">Download Tickers</a></li>
+                          <li><a href="index.php?module=rebalancing&event=upload">Upload Share/ Weights</a></li>
+                            <!--  <li><a href="index.php?module=updatecusip">Update Cusip</a></li>
+                            <li><a href="index.php?module=updatesedol">Update Sedol</a></li>-->
+                                     </ul>
+                        <!-- END Submenu -->
+                        
+                        
+                        
+                    </li>
+					<?php endif; ?>
+
+					<?php if ($this->_tpl_vars['sessData']['User']['type'] == '1' || $this->_tpl_vars['sessData']['User']['type'] == '2'): ?>
+                    <li <?php if ($this->_tpl_vars['currentClass'] == 'reconstitution'): ?> class="active"<?php endif; ?>>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-list"></i>
+                            <span>Reconstitution</span>
+                            <b class="arrow icon-angle-right"></b>
+                        </a>
+
+                        <!-- BEGIN Submenu -->
+                       
+                        <ul class="submenu">
+                        <li><a href="index.php?module=reconstitution&event=prepare">Prepare Input File</a></li>
+                        <li><a href="index.php?module=reconstitution&event=addNew">Add New Reconstitution</a></li>
+                          <li><a href="index.php?module=reconstitution&event=upload">Upload Share/ Weights</a></li>
+                            <!--  <li><a href="index.php?module=updatecusip">Update Cusip</a></li>
+                            <li><a href="index.php?module=updatesedol">Update Sedol</a></li>-->
+                                     </ul>
+                        <!-- END Submenu -->
+                        
+                        
+                        
+                    </li>
+					<?php endif; ?>
+
+
+
                      <?php if ($this->_tpl_vars['sessData']['User']['type'] == '1' || $this->_tpl_vars['sessData']['User']['type'] == '2'): ?>
                      
                            <li <?php if ($this->_tpl_vars['currentClass'] == 'csi'): ?> class="active"<?php endif; ?>>
@@ -117,12 +175,12 @@
                      
                      <?php endif; ?>
 <?php if ($this->_tpl_vars['sessData']['User']['type'] == '1' || $this->_tpl_vars['sessData']['User']['type'] == '2'): ?>
-                 <!--   <li <?php if ($this->_tpl_vars['currentClass'] == 'cacalendar'): ?> class="active"<?php endif; ?>>
+                    <li <?php if ($this->_tpl_vars['currentClass'] == 'cacalendar'): ?> class="active"<?php endif; ?>>
                         <a href="index.php?module=cacalendar" class="dropdown-toggle">
                             <i class="icon-list"></i>
                             <span>CA Calendar</span>
                             
-                        </a>-->
+                        </a>
 
                         <!-- BEGIN Submenu -->
                         <!--<ul class="submenu">
@@ -131,7 +189,7 @@
                             <li><a href="table_dynamic.html">Dynamic</a></li>
                         </ul>-->
                         <!-- END Submenu -->
-                   <!-- </li>-->
+                   </li>
 <?php endif; ?>
                     
                     <!--<li>
@@ -295,6 +353,32 @@
                        
                      
                     </li>-->
+                    
+                    
+                    <?php if ($this->_tpl_vars['sessData']['User']['type'] == '1'): ?>
+                    <li <?php if ($this->_tpl_vars['currentClass'] == 'security'): ?> class="active"<?php endif; ?>>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-list"></i>
+                            <span>Security Prices</span>
+                            <b class="arrow icon-angle-right"></b>
+                        </a>
+
+                        <!-- BEGIN Submenu -->
+                       
+                        <ul class="submenu">
+                        <li><a href="index.php?module=security&event=add_security">Add Security Prices</a></li>
+                        <li><a href="index.php?module=security&event=add_currency">Add Currency Prices</a></li>
+                            <!--  <li><a href="index.php?module=updatecusip">Update Cusip</a></li>
+                            <li><a href="index.php?module=updatesedol">Update Sedol</a></li>-->
+                                     </ul>
+                        <!-- END Submenu -->
+                        
+                        
+                        
+                    </li>
+					<?php endif; ?>
+                    
+                    
 					<li <?php if ($this->_tpl_vars['currentClass'] == 'useraction'): ?> class="active"<?php endif; ?>>
                         <a href="index.php?module=useraction">
                             <i class="icon-th"></i>

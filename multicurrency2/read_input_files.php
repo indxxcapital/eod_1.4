@@ -1,8 +1,8 @@
 <?php include("function.php");
  include("convert_prices.php");
  include("convert_hedged_security_price.php");
-error_reporting(2);
-set_error_handler("error_handler", E_ALL);
+error_reporting(0);
+//set_error_handler("error_handler", 2);
 
 //$start_time = get_time();
 
@@ -21,6 +21,9 @@ else
 		define("date", date("Y-m-d"));
 		//define("date","2015-05-25");
 	}
+
+	//echo date("Y-m-d H:i:s");
+	//exit;
 	save_process("Closing",date,"0");
 
 	//echo date;

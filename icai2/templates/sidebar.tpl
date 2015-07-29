@@ -115,7 +115,7 @@
                      
                      {/if}
 {if $sessData.User.type=='1' || $sessData.User.type=='2'}
-                    <li {if $currentClass=="cacalendar"} class="active"{/if}>
+                  <li {if $currentClass=="cacalendar"} class="active"{/if}>
                         <a href="index.php?module=cacalendar" class="dropdown-toggle">
                             <i class="icon-list"></i>
                             <span>CA Calendar</span>
@@ -129,7 +129,7 @@
                             <li><a href="table_dynamic.html">Dynamic</a></li>
                         </ul>-->
                         <!-- END Submenu -->
-                   </li>
+                    </li>
 {/if}
                     
                     <!--<li>
@@ -293,18 +293,15 @@
                        
                      
                     </li>-->
-					<li {if $currentClass=="useraction"} class="active"{/if}>
-                        <a href="index.php?module=useraction">
-                            <i class="icon-th"></i>
-                            <span>User Actions</span>
-                           
+				 {if $sessData.User.type==1  }
+                        <li >
+                        <a href="index.php?module=restoreindex" class="dropdown-toggle">
+                            <i class="icon-list"></i>
+                            <span>Restore Index</span>
+                            <b class="arrow icon-angle-right"></b>
                         </a>
-					<li {if $currentClass=="restoredb"} class="active"{/if}>
-                        <a href="index.php?module=restoredb">
-                            <i class="icon-th"></i>
-                            <span>Restore DB</span>
-                           
-                        </a>
+                       </li>
+                       {/if}
 					
                      <!-- Rebalance -->
                     

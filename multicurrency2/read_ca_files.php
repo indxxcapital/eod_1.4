@@ -1,7 +1,7 @@
 <?php include("function.php");
 
-error_reporting(2);
-set_error_handler("error_handler",2);
+error_reporting(0);
+//set_error_handler("error_handler",2);
 
 //$start_time = get_time();
 

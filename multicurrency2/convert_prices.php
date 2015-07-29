@@ -1,6 +1,75 @@
 <pre>
 <?php
+function getPrices(){
+	
+mysql_query("delete from tbl_prices_local_curr where price not REGEXP '^[0-9\.]+$' or price='0' or price='0.00'");	
 
+$security_values = mysql_query("SELECT ticker,price, isin,curr from tbl_prices_local_curr where date ='" .date. 
+								"'");
+								
+								$array=array();
+if(mysql_num_rows($security_values)>0)
+{
+while($row=mysql_fetch_assoc($security_values))
+{
+$array[$row['isin']]=$row;
+
+}
+
+}
+	return $array;							
+}
+
+function getcurrPrices(){
+mysql_query("delete from tbl_curr_prices where price not REGEXP '^[0-9\.]+$' or price='0' or price='0.00' ");	
+
+//echo "SELECT currencyticker,price,currency from tbl_curr_prices where date ='" .date. 
+								"'";
+								
+$security_values = mysql_query("SELECT currencyticker,price,currency from tbl_curr_prices where date ='" .date. 
+								"'");
+								
+								$array=array();
+if(mysql_num_rows($security_values)>0)
+{
+while($row=mysql_fetch_assoc($security_values))
+{
+$array[str_replace("  Curncy",'',$row['currencyticker'])]=$row;
+
+}
+
+}
+
+if(!empty($array))
+{
+	foreach($array as $key=>$value)
+	{
+	
+$var=	str_split($key,3);
+//print_r($var);
+
+if(!array_key_exists($var[1].$var[0],$array))
+{$array[$var[1].$var[0]]['price']=1/$value['price'];
+$array[$var[1].$var[0]]['currency']=$var[0];
+$array[$var[1].$var[0]]['currencyticker']=$value['currencyticker'];
+}	}
+}
+//exit;
+	return $array;							
+}
+
+function getLastPrice($ticker)
+{
+	$security_price = mysql_query("SELECT price, isin,ticker,curr,date from tbl_prices_local_curr where isin ='" .$ticker. 
+								"'order by date desc limit 0,1");
+if(mysql_num_rows($security_price)>0)
+{
+	$row=mysql_fetch_assoc($security_price);
+	mail("ical@indxx.com","Old Price Used for Ticker.".$ticker,"Old Price Used for isin .".$ticker ." of date ".$row['date']);
+	return $row;
+}
+	return 0;
+}
 function check_security_price_fluctuations()
 {
 	$msg = '';
@@ -24,6 +93,7 @@ function check_security_price_fluctuations()
 				
 		if ($row1['price'] && $row2['price'])
 		{
+		if($row2['price']>0)
 			$diff = 100 * (($row1['price'] - $row2['price']) / $row2['price']);
 
 			if(($diff >= 5) || ($diff <= - 5))
@@ -92,37 +162,15 @@ function send_index_deactivation_mail($keyindex, $valueindex, $index_type)
 	}		
 }
 
-function check_for_zero(){
-
-$errortext='';
-$securities = mysql_query("SELECT id,isin,ticker from tbl_prices_local_curr  WHERE price='N.A.' ");
-
-	if ($err_code = mysql_errno())
-		mail_exit(__FILE__, __LINE__);	
-		while ($security = mysql_fetch_assoc($securities))
-	{
-	$errortext.="Price is N.A. of ".$security['ticker']."-".$security['isin'];
-	$res=mysql_query("Select * from tbl_prices_local_curr where ticker='".$security['ticker']."' order by date desc limit 0,1");
-	if(mysql_num_rows($res)>0)
-	{
-	$row=mysql_fetch_assoc($res);
-	mysql_query("update tbl_prices_local_curr set price='".$row['price']."', curr='".$row['curr']."',isin='".$row['isin']."' where id='".$security['id']."' ");
-	}
-	}
-		
-	if($errortext)
-	{
-	mail_info($errortext);
-	}	
-}
-
-
 function convert_prices()
 {
 	//$start = get_time();
-check_for_zero();
+$prices=getPrices();
+$currPrices=getcurrPrices();
+//print_r($currPrices);
+//exit;
 	/* Check if the security price has fluctuated more than 5%, if so send email. */
-	check_security_price_fluctuations();
+	//check_security_price_fluctuations();
 	
 	$index_query =	mysql_query("SELECT id, currency_hedged, curr FROM `tbl_indxx` WHERE `status` = '1' 
 									AND `usersignoff` = '1'	AND `dbusersignoff` = '1' AND `submitted` = '1'");
@@ -163,10 +211,9 @@ check_for_zero();
 			/* Start processing the securities for this index */
 			if($convert_flag)
 			{
-				$res = mysql_query("SELECT it.isin, it.ticker, pf.price as localprice , pf.curr as local_currency, 
-									it.curr as ticker_currency 
-									FROM tbl_indxx_ticker it left join tbl_prices_local_curr pf on pf.isin=it.isin 
-									where it.indxx_id='".$index_id."' and pf.date='".date."'");
+				$res = mysql_query("SELECT it.isin, it.ticker,it.curr as ticker_currency 
+									FROM tbl_indxx_ticker it  
+									where it.indxx_id='".$index_id."' ");
 				log_info("	Securities in index = " .mysql_num_rows($res));
 
 				if (($err_code = mysql_errno()))
@@ -179,6 +226,19 @@ check_for_zero();
 				$row = 0;				
 				while(false != ($priceRow = mysql_fetch_assoc($res)))
 				{
+					
+					
+					if(!in_array($priceRow['isin'],array_keys($prices)))
+						{$p=getLastPrice($priceRow['isin']);
+							if($p)
+							{	$prices[$priceRow['isin']]=$p;
+							}else{
+									$prices[$priceRow['isin']]['price']=0;
+									mail("ical@indxx.com","price 0 of ticker ".$priceRow['ticker'],"Price of Input Ticker ".$priceRow['ticker']." is Zero");
+							}
+						}	
+					
+					
 					$currencyPrice = 0;
 					//log_info("	Processing security isin = " .$priceRow['isin']);
 						
@@ -186,37 +246,61 @@ check_for_zero();
 					 * Check if got the right currency for the security from Bloomberg.
 					 * If not, raise alert and disable this index.
 					 */					
-					if($priceRow['local_currency'] != $priceRow['ticker_currency'])
+					if($prices[$priceRow['isin']]['curr'] != $priceRow['ticker_currency'])
 					{
+						/* echo "Currency mismatch for index=" .$index_id."=>".$priceRow['ticker']. "[localcurrency=" 
+									.$prices[$priceRow['isin']]['curr']. "][ticker_curr=" .$priceRow['ticker_currency']. "]";
+									exit; */
 						mail_info("Currency mismatch for index=" .$index_id. "[localcurrency=" 
-									.$priceRow['local_currency']. "][ticker_curr=" .$priceRow['ticker_currency']. "]");
-						
+									.$prices[$priceRow['isin']]['curr']. "][ticker_curr=" .$priceRow['ticker_currency']. "]");
+						mail("ical@indxx.com","currency mismatch icalC 1.4","Currency mismatch for Ticker=" .$priceRow['ticker']. "[localcurrency=" 
+									.$prices[$priceRow['isin']]['curr']. "][ticker_curr=" .$priceRow['ticker_currency']. "]");
 						$indexarray[$index_id] = $priceRow['ticker'];
 						break;
 					}
 					else
 					{
 						$currencyPrice = 1;
-						$final_price_array[$index_id][$row]['price'] = $priceRow['localprice'];
+						//echo $prices[$priceRow['ticker']]['price'];
+						//exit;//!$prices[$priceRow['ticker']]['price']
+								
+						$final_price_array[$index_id][$row]['price'] = $prices[$priceRow['isin']]['price'];
 												
-						if($index['curr'] && ($index['curr'] != $priceRow['local_currency']))
+						if($index['curr'] && ($index['curr'] != $prices[$priceRow['isin']]['curr']))
 						{
-							//log_info("	Conversion Required for ".$index['curr'].$priceRow['local_currency']);
-							$cfactor_code = $index['curr'].$priceRow['local_currency'];
+							//log_info("	Conversion Required for ".$index['curr'].$prices[$priceRow['ticker']]['curr']);
+							$cfactor_code = $index['curr'].$prices[$priceRow['isin']]['curr'];
 
-							$cfactor = getPriceforCurrency($cfactor_code, date);
+							 //$cfactor = getPriceforCurrency($index['curr'],$prices[$priceRow['isin']]['curr'], date);
+							$cfactor=$currPrices[strtoupper($index['curr'].$prices[$priceRow['isin']]['curr'])]['price'];
+							
+							//echo $index['curr'].$prices[$priceRow['isin']]['curr']."=>".$cfactor;
+							if(!$cfactor){
+							$newCurrPrice= getPriceforCurrency5($index['curr'],$prices[$priceRow['isin']]['curr'], date);
+							if(!empty($newCurrPrice))
+							{
+								//print_r($newCurrPrice);
+								$currPrices[$index['curr'].$prices[$priceRow['isin']]['curr']]=$newCurrPrice;
+						$cfactor=$currPrices[$index['curr'].$prices[$priceRow['isin']]['curr']]['price'];
+						}else{
+							$indexarray[$index_id] = $priceRow['ticker'];
+							break;
+						}
+							
+							}
+							
 							$currencyPrice = $cfactor;
-							$final_price_array[$index_id][$row]['price'] = $priceRow['localprice']/$cfactor;
+							$final_price_array[$index_id][$row]['price'] = $prices[$priceRow['isin']]['price']/$cfactor;
 
 							/* Some currency tickers are in cents - GBP/GBp */
-							if($priceRow['local_currency']=="KWd")
+							if($prices[$priceRow['isin']]['curr']=="KWd")
                                                             $final_price_array[$index_id][$row]['price'] /= 1000;
 							elseif(strcmp($cfactor_code, strtoupper($cfactor_code)))
 								$final_price_array[$index_id][$row]['price'] /= 100;
 						}
 
 						$final_price_array[$index_id][$row]['isin'] = $priceRow['isin'];
-						$final_price_array[$index_id][$row]['localprice'] = $priceRow['localprice'];
+						$final_price_array[$index_id][$row]['localprice'] = $prices[$priceRow['isin']]['price'];
 						$final_price_array[$index_id][$row]['currencyfactor'] = $currencyPrice; //TODO: Should not this be cfactor?
 					}
 					$row++;
@@ -249,7 +333,8 @@ check_for_zero();
 		}
 
 		/* Update tbl_final_price table for rest of the indexes */
-		
+	//	print_r($currPrices);
+	//exit;
 		if(!empty($final_price_array))
 		{
 			foreach($final_price_array as $indxx_id => $ival)
@@ -317,7 +402,8 @@ check_for_zero();
 function convert_security_to_indxx_curr_upcomingindex()
 {
 	//$start = get_time();
-
+$prices=getPrices();
+$currPrices=getcurrPrices();
 	$final_price_array	=	array();
 	$indexarray			=	array();
 	
@@ -354,12 +440,13 @@ function convert_security_to_indxx_curr_upcomingindex()
 				$convert_flag = true;
 			}
 			
+			
 			if($convert_flag)
 			{
-				$res = mysql_query("SELECT it.isin, it.ticker, pf.price as localprice , pf.curr as local_currency,
+				$res = mysql_query("SELECT it.isin, it.ticker, 
 									it.curr as ticker_currency
-									FROM tbl_indxx_ticker_temp it left join tbl_prices_local_curr pf on pf.isin=it.isin
-									where it.indxx_id='".$index_id."' and pf.date='".date."'");
+									FROM tbl_indxx_ticker_temp it  
+									where it.indxx_id='".$index_id."' ");
 
 				log_info("	Securities in index = " .mysql_num_rows($res));
 				
@@ -373,6 +460,18 @@ function convert_security_to_indxx_curr_upcomingindex()
 				$row = 0;
 				while(false != ($priceRow = mysql_fetch_assoc($res)))
 				{
+					
+					
+					if(!in_array($priceRow['isin'],array_keys($prices)))
+						{$p=getLastPrice($priceRow['isin']);
+							if($p)
+							{	$prices[$priceRow['isin']]=$p;
+							}else{
+									$prices[$priceRow['isin']]['price']=0;
+									mail("ical@indxx.com","price 0 of ticker ".$priceRow['ticker'],"Price of Input Ticker ".$priceRow['ticker']." is Zero");
+							}
+						}
+					
 					$currencyPrice = 0;
 					log_info("	Processing security isin = " .$priceRow['isin']);
 						
@@ -380,36 +479,48 @@ function convert_security_to_indxx_curr_upcomingindex()
 					 * Check if got the right currency for the security from Bloomberg.
 					 * If not, raise alert and disable this index.
 					 */
-					if($priceRow['local_currency'] != $priceRow['ticker_currency'])
+					if($prices[$priceRow['isin']]['curr'] != $priceRow['ticker_currency'])
 					{
 						mail_info("	Currency mismatch for index=" .$index_id. "[localcurrency="
-								.$priceRow['local_currency']. "][ticker_curr=" .$priceRow['ticker_currency']. "]");
-
+								.$prices[$priceRow['isin']]['curr']. "][ticker_curr=" .$priceRow['ticker_currency']. "]");
+	mail("ical@indxx.com","currency mismatch icalC 1.4","Currency mismatch for Ticker=" .$priceRow['ticker']. "[localcurrency=" 
+									.$prices[$priceRow['isin']]['curr']. "][ticker_curr=" .$priceRow['ticker_currency']. "]");
 						$indexarray[$index_id] = $priceRow['ticker'];
 						break;
 					}
 					else
 					{
 						$currencyPrice = 1;
-						$final_price_array[$index_id][$row]['price'] = $priceRow['localprice'];
+						
+						
+						
+						$final_price_array[$index_id][$row]['price'] = $prices[$priceRow['isin']]['price'];
 
-						if($index['curr'] && ($index['curr'] != $priceRow['local_currency']))
+						if($index['curr'] && ($index['curr'] != $prices[$priceRow['isin']]['curr']))
 						{
-							$cfactor_code = $index['curr'].$priceRow['local_currency'];
-
-							$cfactor = getPriceforCurrency($cfactor_code, date);
-							$currencyPrice = $cfactor;
-
-							$final_price_array[$index_id][$row]['price']= $priceRow['localprice']/$cfactor;
+							$cfactor_code = $index['curr'].$prices[$priceRow['isin']]['curr'];
+//echo $index['curr'].$prices[$priceRow['ticker']]['curr'];
+								$cfactor=$currPrices[strtoupper($index['curr'].$prices[$priceRow['isin']]['curr'])]['price'];
+							if(!$cfactor){
+							$newCurrPrice= getPriceforCurrency5($index['curr'],$prices[$priceRow['isin']]['curr'], date);
+							if(!empty($newCurrPrice))
+							{$currPrices[$index['curr'].$prices[$priceRow['isin']]['curr']]=$newCurrPrice;
+						$cfactor=$currPrices[$index['curr'].$prices[$priceRow['isin']]['curr']]['price'];
+						}else{
+							$indexarray[$index_id] = $priceRow['ticker'];
+							break;
+						}
 							
-							if($priceRow['local_currency']=="KWd")
+							}
+							$currencyPrice=$cfactor;
+							if($prices[$priceRow['isin']]['curr']=="KWd")
                                 $final_price_array[$index_id][$row]['price'] /= 1000;
 							elseif(strcmp($cfactor_code,strtoupper($cfactor_code)))
 								$final_price_array[$index_id][$row]['price'] /= 100;
 						}
 					
 						$final_price_array[$index_id][$row]['isin'] = $priceRow['isin'];
-						$final_price_array[$index_id][$row]['localprice'] = $priceRow['localprice'];
+						$final_price_array[$index_id][$row]['localprice'] = $prices[$priceRow['isin']]['price'];
 						$final_price_array[$index_id][$row]['currencyfactor'] = $currencyPrice;
 					}
 					$row++;
@@ -495,7 +606,7 @@ function convert_security_to_indxx_curr_upcomingindex()
 					". Exiting closing file process.");
 		mail_exit(__FILE__, __LINE__);
 	}	
-	
+	//exit;
 	//$finish = get_time();
 	//$total_time = round(($finish - $start), 4);
 	
