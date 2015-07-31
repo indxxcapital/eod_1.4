@@ -20,15 +20,15 @@ exit;
 $command ='';
 ini_set("display_errors", 0);
 	
-	$restore_file = "C:/xampp/htdocs/eod/files/db-backup/"  .$_GET['DBNAME'];
- 	$command = "mysql -u" .$db_user. " -p" .$db_password.  " " .$db_name. "  <  " .$restore_file;
+	$restore_file = "C:/Users/Rishab/Desktop/opening_backup_admin_icai14_2015-07-31_03-00-32.sql";
+ 	$command = "C:/xampp/mysql/bin/mysql.exe -u" .$db_user. " -p" .$db_password.  " " .$db_name. "  <  " .$restore_file;
 	
 
 	
 
 
 
-echo $command . "<br>";
+//echo $command . "<br>";
 //exit;
 
 $res=0;

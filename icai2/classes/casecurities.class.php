@@ -422,7 +422,22 @@ if (!in_array($_FILES['inputfile']['type'], $csv_mimetypes)) {
 				if(!empty($data))
 				{
 					
+					$indxx_id=0;
+						if($_SESSION['NewIndxxId'])
+						{
+						$indxx_id=$_SESSION['NewIndxxId'];
+						}elseif($_SESSION['tempindexid'])
+						{
+						$indxx_id=$_SESSION['tempindexid'];
+						}else{
+						
+						 $check=false;
+						$errormsg="Invalid Index";
+						break;
+						}
 					
+					
+					$this->db->query("delete from tbl_indxx_ticker_temp where indxx_id='".$indxx_id."'");
 					$query="INSERT into tbl_indxx_ticker_temp (status,name,isin,ticker,weight,curr,divcurr,sedol,cusip,countryname,indxx_id) values ";
 					$queryArray=array();
 					foreach($data as $security)
@@ -448,32 +463,13 @@ if (!in_array($_FILES['inputfile']['type'], $csv_mimetypes)) {
 						$check=false;
 						$errormsg="Dividend Currency not valid for ".$security['3'];
 						break;
-						}elseif (preg_match('/,;/', $security['1']) || preg_match('/,;/', $security['2']) || preg_match('/,;/', $security['3']) || preg_match('/,;/', $security['4']) || preg_match('/,;/', $security['5']) || preg_match('/,;/', $security['6']) || preg_match('/,;/', $security['7']) || preg_match('/,;/', $security['8']) )
-{
-   
-   $check=false;
-						$errormsg="one or more of the 'special characters' found for ".$security['3'];
-						break;
-    // one or more of the 'special characters' found in $string
-}
-						
-						$indxx_id=0;
-						if($_SESSION['NewIndxxId'])
-						{
-						$indxx_id=$_SESSION['NewIndxxId'];
-						}elseif($_SESSION['tempindexid'])
-						{
-						$indxx_id=$_SESSION['tempindexid'];
-						}else{
-						
-						 $check=false;
-						$errormsg="Invalid Index";
-						break;
 						}
+						
+						
 						
 						if($security[2]!='' && $security[3]!='')
 						{
-					$queryArray[]="('0','".mysql_real_escape_string($security[1])."','".mysql_real_escape_string($security[2])."','".mysql_real_escape_string($security[3])."','0','".mysql_real_escape_string($security[4])."','".mysql_real_escape_string($security[5])."','".mysql_real_escape_string($security[6])."','".mysql_real_escape_string($security[7])."','".mysql_real_escape_string($security[8])."','".mysql_real_escape_string($indxx_id)."')";
+					$queryArray[]="('0','".mysql_real_escape_string(str_replace(array(",",";")," ",$security[1]))."','".mysql_real_escape_string(str_replace(array(",",";")," ",$security[2]))."','".mysql_real_escape_string(str_replace(array(",",";")," ",$security[3]))."','0','".mysql_real_escape_string(str_replace(array(",",";")," ",$security[4]))."','".mysql_real_escape_string(str_replace(array(",",";")," ",$security[5]))."','".mysql_real_escape_string(str_replace(array(",",";")," ",$security[6]))."','".mysql_real_escape_string(str_replace(array(",",";")," ",$security[7]))."','".mysql_real_escape_string(str_replace(array(",",";")," ",$security[8]))."','".mysql_real_escape_string($indxx_id)."')";
 						
 							$added++;
 		

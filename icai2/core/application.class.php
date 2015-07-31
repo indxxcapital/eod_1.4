@@ -14,6 +14,8 @@ class Application extends Functions{
 	var $viewFields=array();
 	var $_database="";
 	var $db = ""; 
+	var $closing = ""; 
+	var $opening = ""; 
 	var $gridItemDiabled=array("add"=>true,"edit"=>true,"view"=>true,"update"=>true,"delete"=>true,"status"=>true);
 	var $siteconfig;
 	var $gridButtons=array();
@@ -44,6 +46,8 @@ class Application extends Functions{
 			$this->tempFolder = '';
 			
 			$this->db = new Db($dbData,$this->objStart);
+			$this->closing = new Closing($this->objStart,$this->db);
+			$this->opening = new Opening($this->objStart,$this->db);
 			$this->smarty = new Smarty;
 			$this->smarty->compile_check = true;
 			$this->smarty->debugging = $this->debugging;

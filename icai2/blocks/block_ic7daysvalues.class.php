@@ -110,7 +110,7 @@ $dataarray[]=	 $substr.implode(',',$VALARRAY)."]";
 	if(!empty($liveindexes)){
 	foreach($liveindexes as $key=>$value)
 	{
-		$liveindexvalues=$this->db->getResult("SELECT tbl_indxx_value.indxx_id,tbl_indxx_value.date,tbl_indxx_value.indxx_value,tbl_indxx.code,tbl_indxx.name,tbl_indxx.id FROM tbl_indxx left join tbl_indxx_value on tbl_indxx_value.indxx_id=tbl_indxx.id where tbl_indxx.id='".$value['id']."'order by date desc limit 0,2",true);
+		$liveindexvalues=$this->db->getResult("SELECT tbl_indxx_value.indxx_id,tbl_indxx_value.date,tbl_indxx_value.indxx_value,tbl_indxx.code,tbl_indxx.name FROM tbl_indxx left join tbl_indxx_value on tbl_indxx_value.indxx_id=tbl_indxx.id where tbl_indxx.id='".$value['id']."'order by date desc limit 0,2",true);
 		$indxxvaluesarray[]=$liveindexvalues;
 		
 	}}

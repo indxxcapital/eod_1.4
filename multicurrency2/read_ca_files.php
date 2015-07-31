@@ -1,7 +1,7 @@
 <?php include("function.php");
 
-error_reporting(0);
-//set_error_handler("error_handler",2);
+error_reporting(2);
+set_error_handler("error_handler",2);
 
 //$start_time = get_time();
 
@@ -26,7 +26,7 @@ if ("Fri" == date("D", strtotime(file_date)))
 	define("date", date("Y-m-d", strtotime("+3 day", strtotime(file_date))));
 else
 	define("date", date("Y-m-d", strtotime("+1 day", strtotime(file_date))));	
-save_process("CA",date,"0");
+save_process("CA",date("Y-m-d"),"0");
 
 
 define("log_file", get_logs_folder() . "ca_process_logs_" . date('Y-m-d_H-i-s', $_SERVER ['REQUEST_TIME']) . ".txt");

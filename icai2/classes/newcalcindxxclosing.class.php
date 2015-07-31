@@ -10,6 +10,8 @@ class Newcalcindxxclosing extends Application{
 	
 	function index()
 	{
+		$this->closing->preclosing();
+		//exit;
 		$this->closing->closingLive();
 		//sleep(1);
 		$this->closing->closingTemp();

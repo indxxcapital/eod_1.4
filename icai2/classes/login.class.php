@@ -77,7 +77,7 @@ $this->addJs('assets/bootstrap/bootstrap.min.js');
 				$_SESSION['User']['time']=$lastlogintime;
 		
 		
-		
+		$this->pr($_SESSION);
 		
 		
 	$this->Redirect($this->baseUrl."index.php?module=home",'success','Logged in successfully');

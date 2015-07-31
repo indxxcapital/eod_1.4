@@ -305,14 +305,16 @@ $body.='Your Indxx '.$indxx['name'].'('.$indxx['code'].') has been deleted by ad
 								 "is_required" =>"",
 								 //"feild_tpl" =>"selectsearch",
 								  "model"=>array("0"=>"Gross Amount","1"=>"Net Ammount"),
-								 );											 
-	 $this->validData[]=array("feild_label" =>"Ignore Corporate Actions",
-	 							"feild_code" =>"ica",
+								 );
+$this->validData[]=array("feild_label" =>"Cash Dividend Adjustment",
+	 							"feild_code" =>"cash_adjust",
 								 "feild_type" =>"select",
 								 "is_required" =>"",
 								 //"feild_tpl" =>"selectsearch",
-								  "model"=>$this->GetYesNo(),
-								 );
+								  "model"=>array("0"=>"Divisor","1"=>"Stock"),
+								 );	
+								 
+	 
 								 	
 									
 		$this->validData[]=array("feild_label" =>"Currency Hedged Index",
@@ -410,7 +412,7 @@ $body.='Your Indxx '.$indxx['name'].'('.$indxx['code'].') has been deleted by ad
 					$old_index_data=$this->db->getResult("select tbl_indxx_temp.* from tbl_indxx_temp where code='".mysql_real_escape_string($_POST['code'])."'");
 					if(empty($old_index_data))
 					{
-		$this->db->query("INSERT into tbl_indxx_temp set addtype='1', status='0',name='".mysql_real_escape_string($_POST['name'])."',code='".mysql_real_escape_string($_POST['code'])."',investmentammount='0',divisor='0',type='".mysql_real_escape_string($_POST['type'])."',zone='".mysql_real_escape_string($_POST['zone'])."',curr='".mysql_real_escape_string($_POST['curr'])."',lastupdated='".date("Y-m-d h:i:s")."',dateStart='".$_POST['dateStart']."',cash_adjust='".$_POST['cash_adjust']."',client_id='".$_POST['client_id']."',ica='".$_POST['ica']."',display_currency='1',ireturn='".$_POST['ireturn']."',div_type='".$_POST['div_type']."',currency_hedged='".$_POST['currency_hedged']."'");
+		$this->db->query("INSERT into tbl_indxx_temp set addtype='1', status='0',name='".mysql_real_escape_string($_POST['name'])."',code='".mysql_real_escape_string(trim($_POST['code']))."',investmentammount='0',divisor='0',type='".mysql_real_escape_string($_POST['type'])."',zone='".mysql_real_escape_string($_POST['zone'])."',curr='".mysql_real_escape_string($_POST['curr'])."',lastupdated='".date("Y-m-d h:i:s")."',dateStart='".$_POST['dateStart']."',cash_adjust='".$_POST['cash_adjust']."',client_id='".$_POST['client_id']."',ica='".$_POST['ica']."',display_currency='1',ireturn='".$_POST['ireturn']."',div_type='".$_POST['div_type']."',currency_hedged='".$_POST['currency_hedged']."'");
 		//
 		$indexid=mysql_insert_id();
 		
@@ -887,6 +889,8 @@ $body.='Your Indxx '.$indxx['name'].'('.$indxx['code'].') has been deleted by ad
 		$this->addfield();
 		$editdata=$this->db->getResult("select tbl_indxx.* from tbl_indxx  where tbl_indxx.id='".$_GET['id']."'");
 		//$this->pr($editdata,true);
+		//echo $editdata['code']=trim($editdata['code']);
+		//exit;
 		$this->smarty->assign("postData",$editdata);
 		
 		
@@ -914,7 +918,7 @@ $body.='Your Indxx '.$indxx['name'].'('.$indxx['code'].') has been deleted by ad
 					
 					
 					
-					$this->db->query("INSERT into tbl_indxx_temp set status='0',recalc='1',name='".mysql_real_escape_string($_POST['name'])."',code='".mysql_real_escape_string($_POST['code'])."',type='".mysql_real_escape_string($_POST['type'])."',curr='".mysql_real_escape_string($_POST['curr'])."',lastupdated='".date("Y-m-d H:i:s")."',dateStart='".$_POST['dateStart']."',client_id='".mysql_real_escape_string($_POST['client_id'])."',display_currency='1',ireturn='".mysql_real_escape_string($_POST['ireturn'])."',ica='".mysql_real_escape_string($_POST['ica'])."',currency_hedged='".mysql_real_escape_string($_POST['currency_hedged'])."'");
+					$this->db->query("INSERT into tbl_indxx_temp set status='0',recalc='1',name='".mysql_real_escape_string($_POST['name'])."',code='".mysql_real_escape_string($_POST['code'])."',cash_adjust='".mysql_real_escape_string($_POST['cash_adjust'])."',curr='".mysql_real_escape_string($_POST['curr'])."',lastupdated='".date("Y-m-d H:i:s")."',dateStart='".$_POST['dateStart']."',client_id='".mysql_real_escape_string($_POST['client_id'])."',display_currency='1',ireturn='".mysql_real_escape_string($_POST['ireturn'])."',ica='".mysql_real_escape_string($_POST['ica'])."',currency_hedged='".mysql_real_escape_string($_POST['currency_hedged'])."',div_type='".mysql_real_escape_string($_POST['div_type'])."'");
 					
 					$tempindexid=mysql_insert_id();
 					

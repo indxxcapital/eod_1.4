@@ -20,7 +20,7 @@ define("date",date("Y-m-d"));
 
 log_info("In Replace Cash Index (Go-live) of index ");
 	 $datevalue2=date;
-$this->update_process("CA",date,"1");	
+$this->update_process("CA",date("Y-m-d"),"1");	
 /*
 // set up basic connection
 $conn_id = ftp_connect("ftp.processdo.com");

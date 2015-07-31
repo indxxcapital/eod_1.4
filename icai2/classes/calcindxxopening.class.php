@@ -20,12 +20,12 @@ class Calcindxxopening extends Application{
 			define("date", $_GET['date']);
 			else
 			define("date", date("Y-m-d"));
-		$this->save_process("Opening",date,"0");
-
+		
 		prepare_logfile();
 		define("log_file", $this->get_opening_logs_file());
 		//echo log_file;
 		//exit;
+		$this->save_process("Opening",date,"0");
 		 $this->log_info(log_file, "Opening file generation process started for live indexes");
 		 
 		 $datevalue2=date;

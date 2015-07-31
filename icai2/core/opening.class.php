@@ -740,7 +740,10 @@ $this->log_info(log_file, "Calculated index  : ". $closeIndxx['code'].",file is 
 	{
 		echo "in 2nd block";
 //	$priorityArray=max($_SESSION['priority']);
-		
+		if($_GET['date'])
+			define("date", $_GET['date']);
+			else
+			define("date", date("Y-m-d"));
 	
 		//exit;
 		
@@ -776,7 +779,7 @@ $this->log_info(log_file, "Calculated index  : ". $closeIndxx['code'].",file is 
 		//$this->pr($indxxs,true);
 		$type="open";
 		
-		 $datevalue2=$this->_date;
+		 $datevalue2=date;
 //	exit;
 	
 	//	 $datevalue='';

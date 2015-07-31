@@ -65,13 +65,13 @@ $date=date("Y-m-d",strtotime($this->_date)-(86400*3));
 FROM tbl_indxx_ticker c2, tbl_ca c1
 LEFT JOIN tbl_ca_admin_approve ON c1.action_id = tbl_ca_admin_approve.ca_action_id
 WHERE c1.identifier = c2.ticker
-AND c2.indxx_id in (".implode(",",$array).") and  c1.eff_date>='".$date."'
+AND c2.indxx_id in (".implode(",",$array).")
 ",true);
 else
 		$ca_array=	$this->db->getResult("SELECT c1.id, c1.action_id, c1.identifier, c1.mnemonic, c1.company_name, c1.ann_date, c1.eff_date, c1.flag, c1.status, tbl_ca_admin_approve.user_id as approved
 FROM tbl_indxx_ticker c2, tbl_ca c1
 LEFT JOIN tbl_ca_admin_approve ON c1.action_id = tbl_ca_admin_approve.ca_action_id
-WHERE c1.identifier = c2.ticker  and  c1.eff_date>='".$date."'
+WHERE c1.identifier = c2.ticker 
 ",true);
 
 		
@@ -210,13 +210,13 @@ $date=date("Y-m-d",strtotime($this->_date)-(86400*3));
 FROM tbl_indxx_ticker_temp c2, tbl_ca c1
 LEFT JOIN tbl_ca_admin_approve_temp  ON c1.action_id = tbl_ca_admin_approve_temp.ca_action_id
 WHERE c1.identifier = c2.ticker
-AND c2.indxx_id in (".implode(",",$array).")  and  c1.eff_date>='".$date."'
+AND c2.indxx_id in (".implode(",",$array).") 
 ",true);
 else
 		$ca_array=	$this->db->getResult("SELECT c1.id, c1.action_id, c1.identifier, c1.mnemonic, c1.company_name, c1.ann_date, c1.eff_date, c1.flag, c1.status, tbl_ca_admin_approve_temp.user_id as approved
 FROM tbl_indxx_ticker_temp c2, tbl_ca c1
 LEFT JOIN tbl_ca_admin_approve_temp ON c1.action_id = tbl_ca_admin_approve_temp.ca_action_id
-WHERE c1.identifier = c2.ticker  and  c1.eff_date>='".$date."'
+WHERE c1.identifier = c2.ticker 
 ",true);
 
 		

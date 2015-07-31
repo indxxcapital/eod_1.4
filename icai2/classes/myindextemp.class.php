@@ -91,7 +91,7 @@ $date=date("Y-m-d",strtotime($this->_date)-(86400*3));
 FROM tbl_indxx_ticker_temp c2, tbl_ca c1
 LEFT JOIN tbl_ca_admin_approve_temp caat ON c1.action_id = caat.ca_action_id
 WHERE c1.identifier = c2.ticker
-AND c2.indxx_id =".$_GET['id']." and   c1.eff_date>='".$date."'
+AND c2.indxx_id =".$_GET['id']." 
 ",true);
 		//$this->pr($ca_array,true);
 		/*$indxxticker=	$this->db->getResult("select distinct(ticker) as indxxticker from tbl_indxx_ticker_temp where indxx_id ='".$_GET['id']."'",	true);

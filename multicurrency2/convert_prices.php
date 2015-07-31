@@ -513,6 +513,8 @@ $currPrices=getcurrPrices();
 							
 							}
 							$currencyPrice=$cfactor;
+							$final_price_array[$index_id][$row]['price'] = $prices[$priceRow['isin']]['price']/$cfactor;
+
 							if($prices[$priceRow['isin']]['curr']=="KWd")
                                 $final_price_array[$index_id][$row]['price'] /= 1000;
 							elseif(strcmp($cfactor_code,strtoupper($cfactor_code)))

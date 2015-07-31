@@ -4,13 +4,15 @@ class Checkpvchange extends Application{
 
 	function __construct()
 	{
+	//	echo "deepak";
 		parent::__construct();
 	}
 	
 	
+	
 	function index()
 	{
-		
+	//echo "SELECT distinct(ticker)  FROM tbl_indxx_ticker WHERE status='1' union SELECT distinct(ticker)  FROM tbl_indxx_ticker_temp WHERE status='1' ";	
 					if($_GET['date'])
 			define("date", $_GET['date']);
 			else
@@ -59,29 +61,30 @@ class Checkpvchange extends Application{
 		
 		
 		
+		$str1='';
 		
-		
-	$str.= $indxx['ticker']."(".$indxx['values'][0]['isin'].") -".$indxx['values'][0]['curr']." " .$diff."% : ";
+	$str1= "<tr><td>".$indxx['ticker']."(".$indxx['values'][0]['isin'].") </td><td>".$indxx['values'][0]['curr']."</td><td>".$diff."% :</td> <td>";
 		$this->log_info(log_file, "Ticker Price value change ".$indxx['ticker']."(".$indxx['values'][0]['isin'].") -".$indxx['values'][0]['curr']." " .$diff."%") ." ";
 	
 	
 	$indxxes=$this->db->getResult("SELECT name,code FROM `tbl_indxx` where id in (select indxx_id from tbl_indxx_ticker where ticker='".$indxx['ticker']."')",true);
 		foreach($indxxes as $index)
 		{
-		$str.=$index['name']."(".$index['code']."), ";
+		$str1.="".$index['name']."(".$index['code'].") ";
 		}
-	$str.="<br>";
-	
+	$str1.="</td></tr>";
+	$str.=$str1;
 	}
 	if($diff==0)
-	{
-		$str.= $indxx['ticker']."(".$indxx['values'][0]['isin'].") -".$indxx['values'][0]['curr']." " .$diff."% : ";
+	{$str2='';
+		$str2.= "<tr><td>".$indxx['ticker']."(".$indxx['values'][0]['isin'].")</td><td>".$indxx['values'][0]['curr']."</td><td>" .$diff."% :</td><td> ";
 		$indxxes=$this->db->getResult("SELECT name,code FROM `tbl_indxx` where id in (select indxx_id from tbl_indxx_ticker where ticker='".$indxx['ticker']."')",true);
 		foreach($indxxes as $index)
 		{
-		$str.=$index['name']."(".$index['code']."), ";
+		$str2.="".$index['name']."(".$index['code'].")";
 		}
-	$str.="<br>";
+	$str2.="</td></tr> ";
+	$str.=$str2;
 	$this->log_info(log_file, "Ticker Price value change ".$indxx['ticker']."(".$indxx['values'][0]['isin'].") -".$indxx['values'][0]['curr']." " .$diff."%");
 	}
 		
@@ -91,7 +94,7 @@ class Checkpvchange extends Application{
 	//	exit;
 		if($str)
 		{
-		/* 	
+			
 			$emailQueries='select email from tbl_ca_user where status="1" and type!="1" ';
 		$email_res=mysql_query($emailQueries);
 		if(mysql_num_rows($email_res)>0)
@@ -101,15 +104,18 @@ class Checkpvchange extends Application{
 			{
 			$emailsids[]=$email['email'];
 			}
-		} */
+		}
 			
-		
-			 
-			$emailsids='ical@indxx.com';
+			if(!empty($emailsids))	
+		{
+			 $emailsids	=implode(',',$emailsids);
+			 $emailsids='sumitag@indxx.com';
+			//$emailsids.=',dbajpai@indxx.com';
 			
-			$msg='Hi <br>
-			Local Price Change Notification <br/>
-			'.$str." <br>Thanks <br>";
+//			$msg='Hi <br>
+	//		Local Price Change Notification <br/>
+	//		'.$str." <br>Thanks <br>";
+					
 					
 					// To send HTML mail, the Content-type header must be set
 			$headers  = 'MIME-Version: 1.0' . "\r\n";
@@ -121,6 +127,15 @@ $headers .= 'From: Indexing <indexing@indxx.com>' . "\r\n"."CC: indexing@indxx.c
 					//echo $emailsids;
 					//echo $msg;
 				//	exit;
+								 $msg = '';
+	$msg.="<table  border='1'><tr>
+			<th>Ticker</th>	<th>Currency</th>
+			<th>%change</th>
+			<th>Index</th>
+			</tr>";
+	$msg.=$str."</table>";
+		
+				
 						if(mail($emailsids,"Price Change Notification",$msg,$headers))
 					{
 						echo "Mail Send ";
@@ -134,12 +149,12 @@ $headers .= 'From: Indexing <indexing@indxx.com>' . "\r\n"."CC: indexing@indxx.c
 					
 			
 			
-		//}
+		}
 		}
 		
 		$this->saveProcess(2);
-		$this->update_process("Closing",date,"1");	
-		$this->Redirect2("../multicurrency2/db_backup.php?date=" .date. "&log_file=" . basename(log_file),"","");	
+		//$this->update_process("Closing",date,"1");	
+	//	$this->Redirect2("../multicurrency2/db_backup.php?date=" .date. "&log_file=" . basename(log_file),"","");	
 	}
 
 }?>

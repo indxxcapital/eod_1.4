@@ -43,10 +43,9 @@ $finalArray=array();
 		foreach($data2 as  $tickerKey=>$indxx)
 		{
 		$indxx_value=$this->db->getResult("select tbl_indxx_value_temp.* from tbl_indxx_value_temp where indxx_id='".$indxx['indxx_id']."' order by date desc ",false,1);	
-		
 		if(!empty($indxx_value))
 		{
-		$ticker_details=$this->db->getResult("SELECT  it.id,it.name,it.isin,it.ticker,curr,divcurr,curr,sedol,cusip,countryname,(select price from tbl_final_price_temp fp where fp.isin=it.isin  and fp.date='".$indxx_value['date']."' and fp.indxx_id='".$indxx['indxx_id']."') as calcprice,(select localprice from tbl_final_price_temp fp where fp.isin=it.isin  and fp.date='".$indxx_value['date']."' and fp.indxx_id='".$indxx['indxx_id']."') as localprice(select share from tbl_share_temp sh where sh.isin=it.isin  and sh.indxx_id='".$indxx['indxx_id']."') as calcshare FROM `tbl_indxx_ticker_temp` it where it.indxx_id='".$indxx['indxx_id']."' and ticker='".$newcTicker['identifier']."'",false,1);	
+		$ticker_details=$this->db->getResult("SELECT  it.id,it.name,it.isin,it.ticker,curr,divcurr,curr,sedol,cusip,countryname,(select price from tbl_final_price_temp fp where fp.isin=it.isin  and fp.date='".$indxx_value['date']."' and fp.indxx_id='".$indxx['indxx_id']."') as calcprice,(select localprice from tbl_final_price_temp fp where fp.isin=it.isin  and fp.date='".$indxx_value['date']."' and fp.indxx_id='".$indxx['indxx_id']."') as localprice,(select share from tbl_share_temp sh where sh.isin=it.isin  and sh.indxx_id='".$indxx['indxx_id']."') as calcshare FROM `tbl_indxx_ticker_temp` it where it.indxx_id='".$indxx['indxx_id']."' and ticker='".$newcTicker['identifier']."'",false,1);	
 		
 		
 		$finalArray[$key]['newTickers'][$tickerKey]['old_ticker']=$ticker_details;
@@ -75,7 +74,7 @@ $finalArray=array();
 	
 	}
 	}	
-	$this->pr($finalArray,true);
+	//$this->pr($finalArray,true);
 		
 	if(!empty($finalArray))
 	{

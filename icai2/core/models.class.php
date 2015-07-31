@@ -516,7 +516,13 @@ function object_2_array($result)
 	}
 	
 	
+	function gettempIndexId($code){
 	
+	$sql="SELECT id FROM tbl_indxx_temp WHERE code='".$code."' ";
+		  
+		  $indxx = $this->db->getResult($sql,false,1);
+		  return $indxx['id'];
+	}
 	 function getTempIndexes(){
 		
 		 $sql="SELECT id,name FROM tbl_indxx_temp WHERE status='1' ";
@@ -2699,7 +2705,7 @@ function getCaStr3($indxxticker,$date,$indxxname=''){
 
 	$entry='';	
 	$catype='("DVD_CASH","CHG_ID","CHG_NAME","CHG_TKR","DELIST","DVD_STOCK","RECLASS","RIGHTS_OFFER","SPIN","STOCK_SPLT")';
-		$ca=	$this->db->getResult("select id,identifier,mnemonic,company_name,ann_date,eff_date,action_id, secid_type,secid,currency from tbl_ca where identifier ='".$indxxticker."' and eff_date>='".date("Y-m-d",strtotime($date)-86400)."' and eff_date<='".date("Y-m-d",strtotime($date)+(15*68400))."'  and mnemonic in ".$catype."  ",true);
+		$ca=	$this->db->getResult("select id,identifier,mnemonic,company_name,ann_date,eff_date,action_id, secid_type,secid,currency from tbl_ca where identifier ='".$indxxticker."' and eff_date>='".date("Y-m-d",strtotime($date)-86400)."' and eff_date<='".date("Y-m-d",strtotime($date)+(15*68400))."'  and mnemonic in ".$catype."   ",true);
 		if(!empty($ca))
 		{
 		foreach($ca as $cas)

@@ -105,13 +105,13 @@ else{
 								 //"feild_tpl" =>"selectsearch",
 								  "model"=>$this->getReturnTypes(),
 								 );	
-	  $this->validData[]=array("feild_label" =>"Ignore Corporate Actions",
+	  /*$this->validData[]=array("feild_label" =>"Ignore Corporate Actions",
 	 							"feild_code" =>"ica",
 								 "feild_type" =>"select",
 								 "is_required" =>"",
 								 //"feild_tpl" =>"selectsearch",
 								  "model"=>$this->GetYesNo(),
-								 );	
+								 );	*/
 		$this->validData[]=array("feild_label" =>"Cash Dividend Adjustment",
 	 							"feild_code" =>"cash_adjust",
 								 "feild_type" =>"select",
@@ -232,7 +232,7 @@ else{
 		$_SESSION['indxx_type']=$editdata['type'];
 			
 			
-			/*$checkdata=$this->db->getResult("select tbl_indxx_temp.* from tbl_indxx_temp  where tbl_indxx_temp.code='".$_POST['code']."' and tbl_indxx_temp.dateStart='".$_POST['dateStart']."'");*/
+			$checkdata=$this->db->getResult("select tbl_indxx_temp.* from tbl_indxx_temp  where tbl_indxx_temp.code='".$_POST['code']."' and tbl_indxx_temp.dateStart='".$_POST['dateStart']."'");
 			/*if(empty($checkdata))
 			{
 					$this->db->query("INSERT into tbl_indxx_temp set name='".mysql_real_escape_string($_POST['name'])."',code='".mysql_real_escape_string($_POST['code'])."',investmentammount='".mysql_real_escape_string($_POST['investmentammount'])."',indexvalue='".mysql_real_escape_string($_POST['indexvalue'])."',type='".mysql_real_escape_string($_POST['type'])."',zone='".mysql_real_escape_string($_POST['zone'])."',curr='".mysql_real_escape_string($_POST['curr'])."',lastupdated='".date("Y-m-d H:i:s")."',dateStart='".$_POST['dateStart']."',cash_adjust='".$_POST['cash_adjust']."'");
@@ -256,7 +256,7 @@ else{
 			//}
 			
 			$_SESSION['liveindexid']=$_GET['id'];
-		$_SESSION['tempindexid']=$tempindexid;
+		$_SESSION['tempindexid']=$_GET['id'];
 		
 		
 		//$this->pr(	$checkdata,true);
@@ -442,8 +442,10 @@ if(!empty($tickerdata))
 	foreach($tickerdata as $ticker)
 	$isinArray[]=$ticker['isin'];
 }
-//$this->pr($isinArray,true);
+//$this->pr($_SESSION);
+//echo count($data)."=>".count($tickerdata);
 
+//exit;
 if(count($data)!=count($tickerdata))
 {
 	$this->Redirect("index.php?module=caupcomingindex&event=uploadSharesforRunning","No. Of Securities not equal !!! <br> Please add again","error");	
@@ -493,7 +495,7 @@ if(count($data)!=count($tickerdata))
 						$check=false;
 						$errormsg="ISIN not valid for ".$security['1'];
 						break;
-						}elseif (preg_match('/[\'^£$&()}{@#~?><>,|=_+¬-]/', $security['1']) || preg_match('/[\'^£$&()}{@#~?><>,|=_+¬-]/', $security['2']) || preg_match('/[\'^£$&()}{@#~?><>,|=_+¬-]/', $security['3']) || preg_match('/[\'^£$&()}{@#~?><>,|=_+¬-]/', $security['4']) )
+						}elseif (preg_match('/,;/', $security['1']) || preg_match('/,;/', $security['2']) || preg_match('/,;/', $security['3']) || preg_match('/,;/', $security['4']) )
 {
   
    $check=false;

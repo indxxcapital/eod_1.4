@@ -81,7 +81,7 @@ left join tbl_share sh on sh.isin=it.isin
 		$tempMarketCap=0;
 		
 		
-	if(!empty($indxx_array['removesecurity']))
+	if(!empty($indxx_array['removesecurity']) && !empty($indxx_array['olddata']))
 	{
 		foreach($indxx_array['removesecurity'] as $removedSecurtity)
 		{

@@ -1,5 +1,6 @@
 <?php 
 
+error_reporting(0);
 include("core/function.php");
 require_once 'PHPExcel/Classes/PHPExcel.php';
 require_once 'PHPExcel/Classes//PHPExcel/Cell/AdvancedValueBinder.php';

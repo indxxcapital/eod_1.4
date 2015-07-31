@@ -1,6 +1,6 @@
 <?php
 
-class Mycalcindxxclosing extends Application{
+class Calcindxxclosing extends Application{
 
 	function __construct()
 	{
@@ -21,10 +21,19 @@ class Mycalcindxxclosing extends Application{
 		
 		$type="close";
 		
-		$datevalue=$this->_date;
+		//$datevalue=$this->_date;
 		
-		$datevalue=date("Y-m-d",strtotime($datevalue)-86400);
-		$datevalue="2015-04-24";
+		//$datevalue=date("Y-m-d",strtotime($datevalue)-86400);
+		if($_GET['log_file'])
+			define("log_file", $_GET['log_file']);
+							if($_GET['date'])
+			define("date", $_GET['date']);
+			else
+			define("date", date("Y-m-d"));
+
+		$datevalue=date;
+		
+				$this->log_info(log_file, "Closing file generation process started for live indexes.");
 		if($_GET['id'])
 		{
 			$page=$_GET['id'];	
@@ -35,28 +44,28 @@ class Mycalcindxxclosing extends Application{
 		}
 		
 		$limit=5;
-		//echo "select tbl_indxx.* from tbl_indxx  where status='1' and id='63' and usersignoff='1' and dbusersignoff='1' and submitted='1'  limit $page,1";
+		//echo "select tbl_indxx.* from tbl_indxx  where status='1' and usersignoff='1' and dbusersignoff='1' and submitted='1' limit $page,3";
 		//exit;
-		$indxxs=$this->db->getResult("select tbl_indxx.* from tbl_indxx  where status='1' and id='151' and usersignoff='1' and dbusersignoff='1' and submitted='1'  limit $page,1",true);
+		$indxxs=mysql_query("select tbl_indxx.* from tbl_indxx  where status='1' and usersignoff='1' and dbusersignoff='1' and submitted='1' ");
 		
-		$totalindxxs=$this->db->getResult("select tbl_indxx.id from tbl_indxx  where status='1'  and id='151' and usersignoff='1' and dbusersignoff='1'  and submitted='1'",true);
-		
-		$totalindexes=count($totalindxxs);
-		
+		if ($err_code = mysql_errno())
+		{
+			$this->log_error(log_file, "Unable to read live indexes. MYSQL error code " . $err_code .
+					". Exiting closing file process.");
+			$this->mail_exit(log_file, __FILE__, __LINE__);
+		}
 		
 		$final_array=array();
 		
-		if(!empty($indxxs))
+			while(false != ($row = mysql_fetch_assoc($indxxs)))
 		{
-			
-			
-			foreach($indxxs as $row)
-			{
 	//$this->pr($indxxs,true);
 					
+					
+					$this->log_info(log_file, "Processing closing data file for index = " . $row['code']);
 		//if($row['id']==31)
 		//{
-if($this->checkHoliday($row['zone'],$datevalue)){
+			
 				$final_array[$row['id']]=$row;
 			
 			
@@ -68,6 +77,8 @@ if($this->checkHoliday($row['zone'],$datevalue)){
 			$client=$this->db->getResult("select tbl_ca_client.ftpusername from tbl_ca_client where id='".$row['client_id']."'",false,1);	
 		//	
 		$final_array[$row['id']]['client']=$client['ftpusername'];
+			
+			$this->log_info(log_file, "FTP folder of " . $row['code'] ." is :".$client['ftpusername'] );
 			
 			$indxx_value=$this->db->getResult("select tbl_indxx_value_open.* from tbl_indxx_value_open where indxx_id='".$row['id']."' order by date desc ",false,1);	
 		//	$this->pr($indxx_value,true);
@@ -94,29 +105,34 @@ if($this->checkHoliday($row['zone'],$datevalue)){
 			//$indxx_value=$this->db->getResult("select tbl_indxx_value_open.* from tbl_indxx_value_open where indxx_id='".$row['id']."' order by date desc ",false,1);	
 			
 			
-			$query="SELECT  it.id,it.name,it.isin,it.ticker,curr,sedol,cusip,countryname,(select price from tbl_final_price fp where fp.isin=it.isin  and fp.date='".$datevalue."' and fp.indxx_id='".$row['id']."') as calcprice,(select localprice from tbl_final_price fp where fp.isin=it.isin  and fp.date='".$datevalue."' and fp.indxx_id='".$row['id']."') as localprice,(select currencyfactor from tbl_final_price fp where fp.isin=it.isin  and fp.date='".$datevalue."' and fp.indxx_id='".$row['id']."') as currencyfactor,(select share from tbl_share sh where sh.isin=it.isin  and sh.indxx_id='".$row['id']."') as calcshare FROM `tbl_indxx_ticker` it where it.indxx_id='".$row['id']."'";			
+			$query = "SELECT  it.id, it.name, it.isin, it.ticker, it.curr, it.sedol, it.cusip, it.countryname, 
+							fp.localprice, fp.currencyfactor, fp.price as calcprice, sh.share as calcshare 
+							FROM `tbl_indxx_ticker` it left join tbl_final_price fp on fp.isin=it.isin 
+							left join tbl_share sh on sh.isin=it.isin where it.indxx_id='" . $row['id'] . "' 
+							and fp.indxx_id='" . $row['id'] . "' and sh.indxx_id='" . $row['id'] . "' and fp.date='" . $datevalue . "'";			
 		
 		
 		
-			$indxxprices=	$this->db->getResult($query,true);	
+			$indxxpricesres=	mysql_query($query);	
 		
 		//$this->pr($indxxprices,true);
-		
-			if(!empty($indxxprices))
-			{
-			foreach($indxxprices as $key=> $indxxprice)
-			{
+		$indxxprices=array();
+			
+				
+		while(false != ($indxxprice = mysql_fetch_assoc($indxxpricesres)))
+		{
+			$indxxprices[]=$indxxprice;
+			
 				
 			$indxx_dp_value=$this->db->getResult("select tbl_dividend_ph.* from tbl_dividend_ph where indxx_id='".$row['id']."' and ticker_id ='".$indxxprice['id']."' ",false,1);	
 			if(!empty($indxx_dp_value))
 			{
 			foreach($indxx_dp_value as $dpvalue)
 			{	$final_array[$row['id']]['divpvalue']+=$dpvalue['share']*$dpvalue['dividend'];
-			}}
+			}
+			}
 				
 				
-			$ca_query="select identifier,action_id,id,mnemonic,field_id,company_name,ann_date,eff_date,amd_date,currency from tbl_ca where  eff_date='".$datevalue."' and identifier='".$indxxprice['ticker']."'  and status='1'";
-			$cas=$this->db->getResult($ca_query,true);	
 			/*if(!empty($cas))
 			{
 			foreach($cas as $cakey=> $ca)
@@ -131,56 +147,64 @@ if($this->checkHoliday($row['zone'],$datevalue)){
 			
 			//$indxxprices[$key]['ca']=$cas;
 			}
-			}
+			
 			
 			$final_array[$row['id']]['values']=$indxxprices;
-		
-		
+		unset($indxxprices);
+			mysql_free_result($indxxpricesres);
 		//$this->pr($indxxprices);	
 			
 			
-			}	
+				
 		
 			}
 			
 		//}
 			
 
-		}
-		
-		
+	//	$this->pr($final_array,true);	
+			mysql_free_result($indxxs);
+		$backup_folder = "../files/output/backup/";
+		if (!file_exists($backup_folder))
+			mkdir($backup_folder, 0777, true);
 		//$this->pr($final_array,true);
 		if($type=='close')
 {	
-		  file_put_contents('../files2/backup/preclosedata'.date("Y-m-d-H-i-s").time().'.json', json_encode($final_array));
+		//  file_put_contents('../files/backup/preclosedata'.date("Y-m-d-H-i-s").time().'.json', json_encode($final_array));
 	if(!empty($final_array))
 	{
 		foreach($final_array as $indxxKey=> $closeIndxx)
 		{
 			
+			//$this->pr($closeIndxx,true);
 			if(!$closeIndxx['client'])
-			$file="../files2/ca-output/Closing-".$closeIndxx['code']."-".$datevalue.".txt";
-			else
-			$file="../files2/ca-output/".$closeIndxx['client']."/Closing-".$closeIndxx['code']."-".$datevalue.".txt";
-			
+			{$file="../files/ca-output/Closing-".$closeIndxx['code']."-".$datevalue.".txt";
+			}else
+			{$file="../files/ca-output/".$closeIndxx['client']."/Closing-".$closeIndxx['code']."-".$datevalue.".txt";
+			$client_folder = "../files/ca-output/".$closeIndxx['client']."/";
+			if (!file_exists($client_folder))
+			mkdir($client_folder, 0777, true);
+
+			}
 			$open=fopen($file,"w+");
 
 			$entry1='Date'.",";
 			$entry1.=date("Y-m-d",strtotime($datevalue)).",\n";
-			$entry1.='INDEX VALUE'.",";
-			$entry3='EFFECTIVE DATE'.",";
-			$entry3.='TICKER'.",";
-			$entry3.='NAME'.",";
-			$entry3.='ISIN'.",";
-			$entry3.='SEDOL'.",";
-			$entry3.='CUSIP'.",";
-			$entry3.='COUNTRY'.",";
-			$entry3.='INDEX SHARES'.",";
-			$entry3.='PRICE'.",";
+			$entry1.='Index value'.",";
+			$entry3='Effective Date'.",";
+			$entry3.='Ticker'.",";
+			$entry3.='Name'.",";
+			$entry3.='Isin'.",";
+			$entry3.='Sedol'.",";
+			$entry3.='Cusip'.",";
+			$entry3.='Country'.",";
+			$entry3.='Index share'.",";
+			$entry3.='Weight'.",";
+			$entry3.='Price'.",";
 			
 			if($closeIndxx['display_currency'])
-			{$entry3.='CURRENCY'.",";
-			$entry3.='CURRENCY FACTOR'.",";
+			{$entry3.='Currency'.",";
+			$entry3.='Currency factor'.",";
 			}$entry4='';
 			
 			
@@ -223,7 +247,7 @@ if($this->checkHoliday($row['zone'],$datevalue)){
 		//	$sumofDividendes;
 		//exit;
 			
-			$entry4.= "\n".date("Ymd",strtotime($datevalue)).",";
+			/*$entry4.= "\n".date("Ymd",strtotime($datevalue)).",";
             $entry4.=  $closeprices['ticker'].",";
             $entry4.= $closeprices['name'].",";
             $entry4.=$closeprices['isin'].",";;
@@ -235,7 +259,7 @@ if($this->checkHoliday($row['zone'],$datevalue)){
 			if($closeIndxx['display_currency'])
 	     	{$entry4.=$closeprices['curr'].",";
 			$entry4.=number_format($closeprices['currencyfactor'],6,'.','').",";
-			}
+			}*/
 
 			}
 		
@@ -255,11 +279,45 @@ else
  {$newindexvalue=number_format(($marketValue/$newDivisor),2,'.','');
  }	
  
+ $weightArray=array();
+ foreach($closeIndxx['values'] as $closeprices)
+			{
+				$localprice=(float)$closeprices['localprice'];
+				
+			$entry4.= "\n".date("Ymd",strtotime($datevalue)).",";
+            $entry4.=  $closeprices['ticker'].",";
+            $entry4.= $closeprices['name'].",";
+            $entry4.=$closeprices['isin'].",";;
+            $entry4.=$closeprices['sedol'].",";;
+            $entry4.=$closeprices['cusip'].",";;
+            $entry4.=$closeprices['countryname'].",";
+            $entry4.=$closeprices['calcshare'].",";
+       		$weight=(($closeprices['calcshare']*$closeprices['calcprice'])/$marketValue);
+			$entry4.=$weight.",";
+			$entry4.=number_format($localprice,2,'.','').",";
+			if($closeIndxx['display_currency'])
+	     	{$entry4.=$closeprices['curr'].",";
+			$entry4.=number_format($closeprices['currencyfactor'],6,'.','').",";
+			}
+			$weightArray[]="('".$closeprices['isin']."','".$weight."','".$closeprices['calcprice']."','".$closeprices['calcshare']."','".$datevalue."','".$closeIndxx['code']."','".$closeIndxx['id']."')";
+			
+			
+			}
+ if(!empty($weightArray))
+{
+	//echo "insert into tbl_weights (isin,weight,price,share,date,code,indxx_id) values " .implode(",",$weightArray).";";
+	 $this->db->query("insert into tbl_weights (isin,weight,price,share,date,code,indxx_id) values " .implode(",",$weightArray).";");
+}
+ 
+ 
  //	$newindexvalue=number_format(($marketValue/$newDivisor),2,'.','');
 		$entry2=$newindexvalue.",\n";
+		$entry2.="Divisor,".$newDivisor.",\n";
+		$entry2.="Market Value,".$marketValue.",\n\n";
 		//echo $entry1.$entry2.$entry3.$entry4;
 		//exit;
-	$insertQuery='INSERT into tbl_indxx_value (indxx_id,code,market_value,indxx_value,date,olddivisor,newdivisor) values ("'.$closeIndxx['id'].'","'.$closeIndxx['code'].'","'.$marketValue.'","'.$newindexvalue.'","'.$datevalue.'","'.$oldDivisor.'","'.$newDivisor.'")';
+	 $insertQuery='INSERT into tbl_indxx_value (indxx_id,code,market_value,indxx_value,date,olddivisor,newdivisor) values ("'.$closeIndxx['id'].'","'.$closeIndxx['code'].'","'.$marketValue.'","'.$newindexvalue.'","'.$datevalue.'","'.$oldDivisor.'","'.$newDivisor.'")';
+		//exit;
 		$this->db->query($insertQuery);	
 		
 		if($open){   
@@ -275,24 +333,20 @@ echo "file Writ for ".$closeIndxx['code']."<br>";
 }  
 
 		
+		
+		
+		unset($final_array[$indxxKey]);
 		}
+		
 	}
 	
-	  file_put_contents('../files2/backup/postclosedata'.date("Y-m-d-H-i-s").time().'.json', json_encode($final_array));
+	 // file_put_contents('../files/backup/postclosedata'.date("Y-m-d-H-i-s").time().'.json', json_encode($final_array));
 }
-		
-		if($totalindexes<=$page)
-		{
-		//echo "Completed";	
+		unset($final_array);
 		
 		$this->saveProcess(2);
-	//	$this->Redirect2("index.php?module=calcindxxclosingtemp","","");		
-		}
-		else
-		{
-			$this->saveProcess(2);
-		//	$this->Redirect2("index".rand(1,2).".php?module=calcindxxclosing&event=index&id=".($page+1),"","");	
-		}
+	$this->Redirect2("index.php?module=calcindxxclosingtemp&date=" .date. "&log_file=" . basename(log_file),"","");		
+		
 		
 	}
 		
