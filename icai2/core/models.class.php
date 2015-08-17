@@ -2699,8 +2699,89 @@ return $ca[0]['factor'];
 return 0;
 }
 
+function getAllTickerIndex(){
+	
+$tickers=$this->db->getResult("SELECT tbl_indxx_ticker.ticker, group_concat( tbl_indxx.code,' ' ) as indxx_code FROM tbl_indxx_ticker, tbl_indxx WHERE tbl_indxx_ticker.indxx_id = tbl_indxx.id GROUP BY tbl_indxx_ticker.ticker ");
+	//$this->pr($tickers,true);
+	$array=array();
+if(!empty($tickers))
+{
+foreach($tickers as $ticker)
+{
+	$array[$ticker['ticker']]=$ticker['indxx_code'];
+}
 
+}	
+return $array;
+}
+function getSpecialCashId()
+{$array=array();
+//echo "SELECT ca_action_id FROM `tbl_ca_values` where field_value='1001' and field_name='CP_DVD_TYP'";
+	$values=$this->db->getResult("SELECT ca_action_id FROM `tbl_ca_values` where field_value='1001' and field_name='CP_DVD_TYP'",true);
+if(!empty($values))
+{
+	foreach($values as $myvalue)
+	{
+	$array[]=$myvalue['ca_action_id'];
+	
+	}
+}//print_r($array);
+	return $array;
+	}
 
+	
+	
+	function getTodaysValue($action_id){
+	$array=array();
+		$cas=$this->db->getResult("select field_name,field_value from tbl_ca_values where ca_action_id='".$action_id."' ");
+	if(!empty($cas))
+	{
+		foreach($cas as $ca)
+		{
+			$array[$ca['field_name']]=$ca['field_value'];
+		}
+	}
+	return $array;
+	}
+	function getPreviousDayValue($action_id){
+	$array=array();
+		$cas=$this->db->getResult("select field_name,field_value from tbl_ca_values_user where ca_action_id='".$action_id."' ");
+	if(!empty($cas))
+	{
+		foreach($cas as $ca)
+		{
+			$array[$ca['field_name']]=$ca['field_value'];
+		}
+	}
+	return $array;
+	}
+	
+function getAcquisionTargetCompanyStatus($action_id){
+
+// "select field_name,field_value from tbl_ca_values where ca_action_id='".$action_id."' and field_name in ('CP_TARGET_TKR','CP_STAT')";
+
+	$cas=$this->db->getResult("select field_name,field_value from tbl_ca_values where ca_action_id='".$action_id."' and field_name in ('CP_TARGET_TKR','CP_STAT')");
+$text="";
+$status=array("1"=>"Pending","2"=>"Terminate","3"=>"Complete","4"=>"Lapsed","5"=>"Proposed","6"=>"Withdrawn");
+if(!empty($cas))
+{
+foreach($cas as $ca )
+{
+if($ca['field_name']=="CP_TARGET_TKR")
+{
+	$text.="Target Company-".$ca['field_value'].",";
+}
+
+if($ca['field_name']=="CP_STAT")
+{
+	$text.="Status- ".$status[$ca['field_value']].",";
+}
+
+}	
+}	
+
+return $text;
+	}
 function getCaStr3($indxxticker,$date,$indxxname=''){
 
 	$entry='';	

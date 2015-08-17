@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2014-06-04 10:40:46
+<?php /* Smarty version 2.6.14, created on 2015-08-06 09:31:30
          compiled from users/index.tpl */ ?>
 <!-- BEGIN Main Content -->
 <?php $_smarty_tpl_vars = $this->_tpl_vars;
@@ -140,8 +140,8 @@ $.ajax({
            
             <td>
                 <div class="btn-group">
-                    <!--<a class="btn btn-small show-tooltip" title="View Indexes" href="index.php?module=users&event=view&id=<?php echo $this->_tpl_vars['point']['userid']; ?>
-"><i class="icon-zoom-in"></i></a>-->
+                    <a class="btn btn-small show-tooltip" title="View Indexes" href="index.php?module=users&event=view&id=<?php echo $this->_tpl_vars['point']['userid']; ?>
+"><i class="icon-zoom-in"></i></a>
                     <a class="btn btn-small show-tooltip" title="Edit" href="index.php?module=users&event=edit&id=<?php echo $this->_tpl_vars['point']['userid']; ?>
 "><i class="icon-edit"></i></a>
                     <a class="btn btn-small btn-danger show-tooltip" title="Delete" href="#" id="a1" onclick="confirmdelete(<?php echo $this->_tpl_vars['point']['userid']; ?>

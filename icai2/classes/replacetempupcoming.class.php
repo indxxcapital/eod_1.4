@@ -20,11 +20,11 @@ $this->addJs('js/flaty.js');
 	{
 		
 		$this->_baseTemplate="inner-template";
-	$this->_bodyTemplate="replacetempupcoming/index";
+	    $this->_bodyTemplate="replacetempupcoming/index";
 		$this->_title=$this->siteconfig->site_title;
 		$this->_meta_description=$this->siteconfig->default_meta_description;
 		$this->_meta_keywords=$this->siteconfig->default_meta_keyword;
-//	$this->addfield();
+       //	$this->addfield();
 
 		$this->smarty->assign('pagetitle','Index');
 		$this->smarty->assign('bredcrumssubtitle','Index');
@@ -104,6 +104,109 @@ $this->addJs('js/flaty.js');
 	}
 
 
+function uploadSecuritiesforreplacement(){
+	
+	
+			
+		//	$this->pr($_SESSION,true);
+			
+			$this->_baseTemplate="inner-template";
+			$this->_bodyTemplate="replacerunning/uploadforrunning";
+			
+			
+			if(isset($_POST['submit'])){
+		
+		//$this->pr($_POST,true);
+			if($this->validatPost()){	
+			$fields=array("1",'2','3','4','5','6','7','8','9','10','11');		
+				$data = csv::import($fields,$_FILES['inputfile']['tmp_name']);	
+//$this->pr($data,true);
+	$added=0;
+		$errormsg='';
+		$check=true;
+				if(!empty($data))
+				{
+					
+					
+					$query="INSERT into tbl_tempsecurities_replaced (status,name,isin,ticker,weight,curr,divcurr,sedol,cusip,countryname,sector,industry,subindustry,indxx_id,req_id) values ";
+					$queryArray=array();
+					foreach($data as $security)
+					{
+						if(count($security)!=11)
+						{
+						$check=false;
+						$errormsg=" Column Count Not matched  for ".$security[3];
+						break;
+						}elseif(strlen($security['2'])!=12)
+						{
+						$check=false;
+						$errormsg="ISIN not valid for ".$security['3'];
+						break;
+						}elseif(strlen($security['4'])!=3)
+						{
+						$check=false;
+						$errormsg="Currency not valid for ".$security['3'];
+						break;
+						}
+						elseif(strlen($security['5'])!=3)
+						{
+						$check=false;
+						$errormsg="Dividend Currency not valid for ".$security['3'];
+						break;
+						}
+						
+						
+						
+						
+						if($security[2]!='' && $security[3]!='')
+						{
+					$queryArray[]="('0','".mysql_real_escape_string($security[1])."','".mysql_real_escape_string($security[2])."','".mysql_real_escape_string($security[3])."','0','".mysql_real_escape_string($security[4])."','".mysql_real_escape_string($security[5])."','".mysql_real_escape_string($security[6])."','".mysql_real_escape_string($security[7])."','".mysql_real_escape_string($security[8])."','".mysql_real_escape_string($security[9])."','".mysql_real_escape_string($security[10])."','".mysql_real_escape_string($security[11])."','".mysql_real_escape_string($_GET['indxx_id'])."','".mysql_real_escape_string($_GET{'reqid'})."')";
+						
+							$added++;
+		
+						}
+					}
+					if(!empty($queryArray) && $check)
+					{
+						//echo $query.implode(",",$queryArray).";";
+					//	exit;
+						$this->db->query($query.implode(",",$queryArray).";");
+					}
+				}
+if(!$check)
+{
+
+$this->Redirect("index.php?module=replacerunningsecurities&event=uploadSecuritiesforreplacement&indxx_id=".$_GET['indxx_id']."&req_id=".$_GET['req_id'],"Error in imput :".$errormsg,"error");	
+}
+	elseif($added>=1)
+		{
+			$this->Redirect("index.php?module=replacetempupcoming&event=addNewNext&total=".$added."&id=".$_GET['indxx_id']."&reqid=".$_GET['reqid'],"success");	
+		}
+				else
+		{
+			$this->Redirect("index.php?module=replacerunningsecurities","No security added!!! <br> Please add again","error");	
+		}
+
+			}
+			}
+			
+		
+	$this->uploadfield2();
+	
+	 $this->show();
+	
+	}
+	function uploadfield2(){
+		 $this->validData[]=array("feild_label" =>"Security input sheet",
+		 							"feild_code" =>"inputfile",
+								 "feild_type" =>"file",
+								 "is_required" =>"1",
+								
+								 );
+		
+	$this->getValidFeilds();
+	}
+
 
 function addNew3()
 	{
@@ -139,7 +242,14 @@ function addNew3()
 				if($_POST['name'][$i] && $_POST['isin'][$i] && $_POST['ticker'][$i] && $_POST['divcurr'][$i] && $_POST['curr'][$i])
 				{
 					//$this->pr($_POST,true);	
-					$this->db->query("INSERT into tbl_tempsecurities_replaced set status='0',name='".mysql_real_escape_string($_POST['name'][$i])."',isin='".mysql_real_escape_string($_POST['isin'][$i])."',ticker='".mysql_real_escape_string($_POST['ticker'][$i])."',curr='".mysql_real_escape_string($_POST['curr'][$i])."',divcurr='".mysql_real_escape_string($_POST['divcurr'][$i])."',indxx_id='".mysql_real_escape_string($_GET['indxx_id'])."',req_id='".mysql_real_escape_string($_GET['reqid'])."'");
+					$this->db->query("INSERT into tbl_tempsecurities_replaced set status='0',name='".mysql_real_escape_string($_POST['name'][$i])."',isin='".mysql_real_escape_string($_POST['isin'][$i])."',ticker='".mysql_real_escape_string($_POST['ticker'][$i])."',curr='".mysql_real_escape_string($_POST['curr'][$i])."',divcurr='".mysql_real_escape_string($_POST['divcurr'][$i])."',
+					sedol='".mysql_real_escape_string($_POST['sedol'][$i])."',
+					cusip='".mysql_real_escape_string($_POST['cusip'][$i])."',
+					countryname='".mysql_real_escape_string($_POST['countryname'][$i])."',
+					sector='".mysql_real_escape_string($_POST['sector'][$i])."',
+					industry='".mysql_real_escape_string($_POST['industry'][$i])."',
+					subindustry='".mysql_real_escape_string($_POST['subindustry'][$i])."',
+					indxx_id='".mysql_real_escape_string($_GET['indxx_id'])."',req_id='".mysql_real_escape_string($_GET['reqid'])."'");
 					$added++;
 		
 				}	
@@ -434,14 +544,14 @@ function editrunning(){
 	   $this->validData[]=array("feild_label" =>"Security Name",
 	   								"feild_code" =>"name[".$i.']',
 								 "feild_type" =>"text",
-								 "feild_tpl" =>"place_text3",
+								 "feild_tpl" =>"place_text1_1",
 								 "is_required" =>"",
 								
 								 );
 		 $this->validData[]=array("feild_label" =>"Security Isin",
 		 							"feild_code" =>"isin[".$i.']',
 								 "feild_type" =>"text",
-								 "feild_tpl" =>"place_text2",
+								 "feild_tpl" =>"place_text1_1",
 								 "is_required" =>"",
 								
 								 );
@@ -449,16 +559,16 @@ function editrunning(){
 		 $this->validData[]=array("feild_label" =>"Security Ticker",
 		 							"feild_code" =>"ticker[".$i.']',
 								 "feild_type" =>"text",
-								  "feild_tpl" =>"place_text2",
+								  "feild_tpl" =>"place_text1_1",
 								 "is_required" =>"",
 								
 								 );
 								 
 								 
-								  $this->validData[]=array(	"feild_label"=>"Currency",
+		$this->validData[]=array(	"feild_label"=>"Currency",
 	 							"feild_code" =>"curr[".$i.']',
 								 "feild_type" =>"text",
-								  "feild_tpl" =>"place_text2",
+								  "feild_tpl" =>"place_text1_1",
 								 "is_required" =>"",
 								
 								 );	 
@@ -468,7 +578,7 @@ function editrunning(){
 		 							"feild_code" =>"divcurr[".$i.']',
 								 "feild_type" =>"text",
 								 "is_required" =>"",
-								  "feild_tpl" =>"place_text2",
+								  "feild_tpl" =>"place_text1_1",
 								);
 	
 	
@@ -489,6 +599,54 @@ function editrunning(){
 								   "feild_tpl" =>"hidden2",
 								 'value'=>$_GET['indxx_id']
 								 );
+	 $this->validData[]=array(	"feild_label"=>"Sedol",
+	 							"feild_code" =>"sedol[".$i.']',
+								 "feild_type" =>"text",
+								  "feild_tpl" =>"place_text1_1",
+								 "is_required" =>"",
+								
+								 );	 
+								 
+	$this->validData[]=array(	"feild_label"=>"Cusip",
+	 							"feild_code" =>"cusip[".$i.']',
+								 "feild_type" =>"text",
+								  "feild_tpl" =>"place_text1_1",
+								 "is_required" =>"",
+								
+								 );
+								 
+	$this->validData[]=array(	"feild_label"=>"Country Name",
+	 							"feild_code" =>"countryname[".$i.']',
+								 "feild_type" =>"text",
+								  "feild_tpl" =>"place_text1_1",
+								 "is_required" =>"",
+								
+ 								 );	 	
+								 						 	 						 
+   	$this->validData[]=array(	"feild_label"=>"Sector",
+	 							"feild_code" =>"sector[".$i.']',
+								 "feild_type" =>"text",
+								  "feild_tpl" =>"place_text1_1",
+								 "is_required" =>"",
+								
+								 );		
+								 				
+	$this->validData[]=array(	"feild_label"=>"Inustry",
+	 							"feild_code" =>"industry[".$i.']',
+								 "feild_type" =>"text",
+								  "feild_tpl" =>"place_text1_1",
+								 "is_required" =>"",
+								
+								 );						
+								 
+	$this->validData[]=array(	"feild_label"=>"SubInustry",
+	 							"feild_code" =>"subindustry[".$i.']',
+								 "feild_type" =>"text",
+								  "feild_tpl" =>"place_text1_1",
+								 "is_required" =>"",
+								
+								 );												 
+								 
 	
 	
 }

@@ -175,6 +175,8 @@ $.ajax({
                           <th>Cusip</th>  
                                 <th>Country</th>      
                <th>Weight</th>
+			   <th>Last Converted Price</th>
+			   <th>Share</th>
               <th>Currency</th>  <th>Div Currency</th><!--<th style="width:100px">Submit adjustment factor</th>-->
               
             <!--<th>Effective Date</th>
@@ -194,6 +196,8 @@ $.ajax({
                 <td>{$point.cusip}</td>
                   <td>{$point.countryname}</td>
             <td>{$point.weight}</td>
+			<td>{$point.price}</td>
+			<td>{$point.share}</td>
             <td>{$point.curr}</td>
              <td>{$point.divcurr}</td>
             <!-- <td>

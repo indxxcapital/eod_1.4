@@ -271,7 +271,7 @@ if (!file_exists(currencyfactor_file))
 		log_error("Currency factor file not available. Exiting closing file process.");
 	}
 	
-	$query = "LOAD DATA INFILE '" . str_replace("\\", "/", realpath(currencyfactor_file)) .
+	 $query = "LOAD DATA INFILE '" . str_replace("\\", "/", realpath(currencyfactor_file)) .
 				"' INTO TABLE tbl_curr_prices
 				FIELDS TERMINATED BY '|'
 				LINES TERMINATED BY '\n'
@@ -407,6 +407,19 @@ if (!file_exists(price_file))
 function delete_old_ca() 
 {
 	mysql_query ( 'TRUNCATE TABLE tbl_ca ' );
+	if (($err_code = mysql_errno()))
+	{
+		log_error("MYSQL query failed, error code " . $err_code .". Exiting CA process.");
+		mail_exit(__FILE__, __LINE__);
+	}
+
+	mysql_query ('TRUNCATE TABLE tbl_ca_values_user' );
+	if (($err_code = mysql_errno()))
+	{
+		log_error("MYSQL query failed, error code " . $err_code .". Exiting CA process.");
+		mail_exit(__FILE__, __LINE__);
+	}
+	mysql_query ('insert into `tbl_ca_values_user`  select * from tbl_ca_values' );
 	if (($err_code = mysql_errno()))
 	{
 		log_error("MYSQL query failed, error code " . $err_code .". Exiting CA process.");

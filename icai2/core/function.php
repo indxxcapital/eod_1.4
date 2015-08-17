@@ -440,7 +440,7 @@ mysql_query($query);
 }
 function checkformemorial(){
  $query='update  `tbl_ca_values` 
-set `field_value` =  "1001" WHERE  `field_value` =  "1011"
+set `field_value` =  "1001" WHERE  `field_value` in  (1011,1034,1035,1009,1018,1021,1027,1028,1029,1030,1014,1026,1017)
 AND field_name =  "CP_DVD_TYP"';    
  mysql_query($query);
 //exit;    

@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-06-17 02:54:31
+<?php /* Smarty version 2.6.14, created on 2014-06-13 16:01:59
          compiled from adjbenchmarkindex/index.tpl */ ?>
 <!-- BEGIN Main Content -->
 <?php $_smarty_tpl_vars = $this->_tpl_vars;

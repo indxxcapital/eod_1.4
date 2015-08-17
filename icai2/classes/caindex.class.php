@@ -415,6 +415,15 @@ $this->validData[]=array("feild_label" =>"Cash Dividend Adjustment",
 		$this->db->query("INSERT into tbl_indxx_temp set addtype='1', status='0',name='".mysql_real_escape_string($_POST['name'])."',code='".mysql_real_escape_string(trim($_POST['code']))."',investmentammount='0',divisor='0',type='".mysql_real_escape_string($_POST['type'])."',zone='".mysql_real_escape_string($_POST['zone'])."',curr='".mysql_real_escape_string($_POST['curr'])."',lastupdated='".date("Y-m-d h:i:s")."',dateStart='".$_POST['dateStart']."',cash_adjust='".$_POST['cash_adjust']."',client_id='".$_POST['client_id']."',ica='".$_POST['ica']."',display_currency='1',ireturn='".$_POST['ireturn']."',div_type='".$_POST['div_type']."',currency_hedged='".$_POST['currency_hedged']."'");
 		//
 		$indexid=mysql_insert_id();
+		$this->db->query("delete from tbl_indxx_value_temp where indxx_id='".$indexid."'");
+		$this->db->query("delete from tbl_indxx_value_open_temp where indxx_id='".$indexid."'");
+		$this->db->query("delete from tbl_final_price_temp where indxx_id='".$indexid."'");
+		$this->db->query("delete from tbl_share_temp where indxx_id='".$indexid."'");
+		$this->db->query("delete from tbl_indxx_ticker_temp where indxx_id='".$indexid."'");
+		$this->db->query("delete from tbl_replace_tempindex_req where indxx_id='".$indexid."'");
+		$this->db->query("delete from tbl_spin_stock_add_securities_temp where indxx_id='".$indexid."'");
+		
+		
 		
 		
 		if($_SESSION['User']['type']=='1')
@@ -639,15 +648,19 @@ $this->validData[]=array("feild_label" =>"Cash Dividend Adjustment",
 		
 		$viewdata=$this->db->getResult("select tbl_indxx.*,tbl_index_types.name as indexname from tbl_indxx left join tbl_index_types on tbl_index_types.id=tbl_indxx.type where tbl_indxx.id='".$_GET['id']."'",true);
 		//$this->pr($viewdata,true);
+	
 		$this->smarty->assign("viewindexdata",$viewdata);
 		
 		$lastCloseData=$this->db->getResult('SELECT * FROM tbl_indxx_value where indxx_id="'.$_GET['id'].'" order by id desc',false,1);
-		$sequruityData=$this->db->getResult('SELECT * FROM tbl_indxx_ticker where indxx_id="'.$_GET['id'].'"',true);
+
+		$sequruityData=$this->db->getResult('SELECT tbl_indxx_ticker.name,tbl_indxx_ticker.ticker,tbl_indxx_ticker.isin,tbl_indxx_ticker.sedol,tbl_indxx_ticker.cusip,tbl_indxx_ticker.countryname,tbl_indxx_ticker.curr,tbl_indxx_ticker.divcurr,tbl_weights.weight,tbl_weights.price,tbl_weights.share FROM tbl_indxx_ticker left join tbl_weights on tbl_indxx_ticker.isin=tbl_weights.isin  where tbl_indxx_ticker.indxx_id="'.$_GET['id'].'" and tbl_weights.date="'.$lastCloseData['date'].'"',true);
+	
+		
 	//	$this->pr($sequruityData,true);
 		$this->smarty->assign("indexSecurity",$sequruityData);
 			$this->smarty->assign("lastCloseData",$lastCloseData);
 		$this->smarty->assign("totalindexSecurityrows",count($sequruityData));
-		
+		//$this->smarty->assign("indexSecurityweights",$sequruityWeight);
 		
 		 $this->show();
 			
@@ -666,18 +679,29 @@ $this->validData[]=array("feild_label" =>"Cash Dividend Adjustment",
 		$this->smarty->assign('bredcrumssubtitle','ViewIndex');
 		
 		//$this->pr($_SESSION,true);
+
 		
 		$viewadmindata=$this->db->getResult("select isAdmin from tbl_assign_index_temp where indxx_id='".$_GET['id']."' and user_id='".$_SESSION['User']['id']."'",true);
 		//$this->pr($viewadmindata,true);
 		$this->smarty->assign("viewadmindata",$viewadmindata);
 		
+		
 		$viewdata=$this->db->getResult("select tbl_indxx_temp.*,tbl_index_types.name as indexname from tbl_indxx_temp left join tbl_index_types on tbl_index_types.id=tbl_indxx_temp.type where tbl_indxx_temp.id='".$_GET['id']."'",true);
 		//$this->pr($viewdata,true);
 		$this->smarty->assign("viewindexdata",$viewdata);
 		
+		$lastCloseData=$this->db->getResult('SELECT * FROM tbl_indxx_value_temp where indxx_id="'.$_GET['id'].'" order by id desc',false,1);
+
+        if($lastCloseData['id']!=''){
+		$sequruityData=$this->db->getResult('SELECT tbl_indxx_ticker_temp.name,tbl_indxx_ticker_temp.ticker,tbl_indxx_ticker_temp.isin,tbl_indxx_ticker_temp.sedol,tbl_indxx_ticker_temp.cusip,tbl_indxx_ticker_temp.countryname,tbl_indxx_ticker_temp.curr,tbl_indxx_ticker_temp.divcurr,tbl_weights_temp.weight,tbl_weights_temp.price,tbl_weights_temp.share FROM tbl_indxx_ticker_temp left join tbl_weights_temp on tbl_indxx_ticker_temp.isin=tbl_weights_temp.isin  where tbl_indxx_ticker_temp.indxx_id="'.$_GET['id'].'" and tbl_weights_temp.date="'.$lastCloseData['date'].'"',true);
+		echo "a";
+		}
+		else
+	    {$sequruityData=$this->db->getResult('SELECT * FROM tbl_indxx_ticker_temp where indxx_id="'.$_GET['id'].'"',true);
+		echo "b";
+		}
 		
-		$sequruityData=$this->db->getResult('SELECT * FROM tbl_indxx_ticker_temp where indxx_id="'.$_GET['id'].'"',true);
-	//	$this->pr($sequruityData,true);
+	$this->pr($sequruityData,true);
 		$this->smarty->assign("indexSecurity",$sequruityData);
 		$this->smarty->assign("totalindexSecurityrows",count($sequruityData));
 		
@@ -921,6 +945,15 @@ $this->validData[]=array("feild_label" =>"Cash Dividend Adjustment",
 					$this->db->query("INSERT into tbl_indxx_temp set status='0',recalc='1',name='".mysql_real_escape_string($_POST['name'])."',code='".mysql_real_escape_string($_POST['code'])."',cash_adjust='".mysql_real_escape_string($_POST['cash_adjust'])."',curr='".mysql_real_escape_string($_POST['curr'])."',lastupdated='".date("Y-m-d H:i:s")."',dateStart='".$_POST['dateStart']."',client_id='".mysql_real_escape_string($_POST['client_id'])."',display_currency='1',ireturn='".mysql_real_escape_string($_POST['ireturn'])."',ica='".mysql_real_escape_string($_POST['ica'])."',currency_hedged='".mysql_real_escape_string($_POST['currency_hedged'])."',div_type='".mysql_real_escape_string($_POST['div_type'])."'");
 					
 					$tempindexid=mysql_insert_id();
+					
+					$this->db->query("delete from tbl_indxx_value_temp where indxx_id='".$tempindexid."'");
+		$this->db->query("delete from tbl_indxx_value_open_temp where indxx_id='".$tempindexid."'");
+		$this->db->query("delete from tbl_final_price_temp where indxx_id='".$tempindexid."'");
+		$this->db->query("delete from tbl_share_temp where indxx_id='".$tempindexid."'");
+		$this->db->query("delete from tbl_indxx_ticker_temp where indxx_id='".$tempindexid."'");
+		$this->db->query("delete from tbl_replace_tempindex_req where indxx_id='".$tempindexid."'");
+		$this->db->query("delete from tbl_spin_stock_add_securities_temp where indxx_id='".$tempindexid."'");
+					
 					
 					if($_SESSION['User']['type']=='1')
 					{
@@ -2365,9 +2398,10 @@ $body.='You have new upcoming indxx for aupload and Approval , <br> Please visit
 	function exportlive()
 	{
 	
-	$viewdata=$this->db->getResult("select tbl_indxx.*,tbl_index_types.name as indextype from tbl_indxx left join tbl_index_types on tbl_index_types.id=tbl_indxx.type where tbl_indxx.id='".$_GET['id']."'",true);
+	$data=$this->db->getResult("select tbl_indxx.*,tbl_index_types.name as indextype from tbl_indxx left join tbl_index_types on tbl_index_types.id=tbl_indxx.type where tbl_indxx.id='".$_GET['id']."'",true);
 	//$this->pr($viewdata,true);
-	$sequruityData=$this->db->getResult('SELECT * FROM tbl_indxx_ticker where indxx_id="'.$_GET['id'].'"',true);
+	$lastCloseData=$this->db->getResult('SELECT * FROM tbl_indxx_value where indxx_id="'.$_GET['id'].'" order by id desc',false,1);
+	$sequruityData=$this->db->getResult('SELECT tbl_indxx_ticker.name,tbl_indxx_ticker.ticker,tbl_indxx_ticker.isin,tbl_indxx_ticker.sedol,tbl_indxx_ticker.cusip,tbl_indxx_ticker.countryname,tbl_indxx_ticker.curr,tbl_indxx_ticker.divcurr,tbl_weights.weight,tbl_weights.price,tbl_weights.share FROM tbl_indxx_ticker left join tbl_weights on tbl_indxx_ticker.isin=tbl_weights.isin  where tbl_indxx_ticker.indxx_id="'.$_GET['id'].'" and tbl_weights.date="'.$lastCloseData['date'].'"',true);
 	$shareData=$this->db->getResult('SELECT * FROM tbl_share where indxx_id="'.$_GET['id'].'"',true);
 	
 	$shares=array();
@@ -2384,7 +2418,7 @@ $body.='You have new upcoming indxx for aupload and Approval , <br> Please visit
 	$data = array(
         1 => array ('Name', 'Code', 'Currency'),
         2 => array ($viewdata[0]['name'],$viewdata[0]['code'], $viewdata[0]['curr']),
-        3 => array ('Security Name', 'Ticker', 'ISIN','Cusip','Sedol','Country', 'Weight','Share', 'Currency'),
+        3 => array ('Security Name', 'Ticker', 'ISIN','Cusip','Sedol','Country', 'Weight','Price','Share', 'Currency'),
 	  
 	    );
 	
@@ -2400,7 +2434,7 @@ $body.='You have new upcoming indxx for aupload and Approval , <br> Please visit
 	$k=4;
 foreach($sequruityData as $data)
 		{
-			$moredata[$k++]=array($data['name'],$data['ticker'],$data['isin'],$data['cusip'],$data['sedol'],$data['countryname'],$data['weight'],$shares[$data['isin']],$data['curr']);
+			$moredata[$k++]=array($data['name'],$data['ticker'],$data['isin'],$data['cusip'],$data['sedol'],$data['countryname'],$data['weight'],$data['price'],$data['share'],$data['curr']);
 			
 		
 		}
@@ -2417,7 +2451,19 @@ $xls->generateXML('indxx-data-'.$viewdata[0]['code']."-".$this->_date);
 	
 	$viewdata=$this->db->getResult("select tbl_indxx_temp.*,tbl_index_types.name as indextype from tbl_indxx_temp left join tbl_index_types on tbl_index_types.id=tbl_indxx_temp.type where tbl_indxx_temp.id='".$_GET['id']."'",true);
 	//$this->pr($viewdata,true);
-	$sequruityData=$this->db->getResult('SELECT * FROM tbl_indxx_ticker_temp where indxx_id="'.$_GET['id'].'"',true);
+		$lastCloseData=$this->db->getResult('SELECT * FROM tbl_indxx_value_temp where indxx_id="'.$_GET['id'].'" order by id desc',false,1);
+
+        if($lastCloseData['id']!=''){
+		$sequruityData=$this->db->getResult('SELECT tbl_indxx_ticker_temp.name,tbl_indxx_ticker_temp.ticker,tbl_indxx_ticker_temp.isin,tbl_indxx_ticker_temp.sedol,tbl_indxx_ticker_temp.cusip,tbl_indxx_ticker_temp.countryname,tbl_indxx_ticker_temp.curr,tbl_indxx_ticker_temp.divcurr,tbl_weights_temp.weight,tbl_weights_temp.price,tbl_weights_temp.share FROM tbl_indxx_ticker_temp left join tbl_weights_temp on tbl_indxx_ticker_temp.isin=tbl_weights_temp.isin  where tbl_indxx_ticker_temp.indxx_id="'.$_GET['id'].'" and tbl_weights_temp.date="'.$lastCloseData['date'].'"',true);
+		}
+		else
+	    $sequruityData=$this->db->getResult('SELECT * FROM tbl_indxx_ticker_temp where indxx_id="'.$_GET['id'].'"',true);
+		
+	
+	
+	
+	
+	//$sequruityData=$this->db->getResult('SELECT * FROM tbl_indxx_ticker_temp where indxx_id="'.$_GET['id'].'"',true);
 	$shareData=$this->db->getResult('SELECT * FROM tbl_share_temp where indxx_id="'.$_GET['id'].'"',true);
 	
 	$shares=array();
@@ -2434,7 +2480,7 @@ $xls->generateXML('indxx-data-'.$viewdata[0]['code']."-".$this->_date);
 	$data = array(
         1 => array ('Name', 'Code', 'Investment Amount', 'Index Value', 'Currency'),
         2 => array ($viewdata[0]['name'],$viewdata[0]['code'], $viewdata[0]['investmentammount'], $viewdata[0]['indexvalue'],$viewdata[0]['curr']),
-        3 => array ('Security Name', 'Ticker', 'ISIN', 'Weight','Share', 'Currency'),
+        3 => array ('Security Name', 'Ticker', 'ISIN', 'Weight','Price','Share', 'Currency'),
 	  
 	    );
 	
@@ -2450,7 +2496,7 @@ $xls->generateXML('indxx-data-'.$viewdata[0]['code']."-".$this->_date);
 	$k=4;
 foreach($sequruityData as $data)
 		{
-			$moredata[$k++]=array($data['name'],$data['ticker'],$data['isin'],$data['weight'],$shares[$data['isin']],$data['curr']);
+			$moredata[$k++]=array($data['name'],$data['ticker'],$data['isin'],$data['weight'],$data['price'],$shares[$data['isin']],$data['curr']);
 			
 		
 		}

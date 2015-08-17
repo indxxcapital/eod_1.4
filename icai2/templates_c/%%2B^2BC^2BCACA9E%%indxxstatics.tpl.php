@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-06-17 02:12:50
+<?php /* Smarty version 2.6.14, created on 2015-06-18 06:47:49
          compiled from blocks/indxxstatics.tpl */ ?>
 <div class="span5">
                         <div class="box">

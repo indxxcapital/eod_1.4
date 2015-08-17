@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-04-23 06:55:34
+<?php /* Smarty version 2.6.14, created on 2015-07-03 16:05:19
          compiled from myca/view.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('modifier', 'count', 'myca/view.tpl', 118, false),)), $this); ?>
@@ -350,6 +350,27 @@ $.ajax({
                  <?php endif; ?>
                      
                      <?php endif; ?>
+                 
+                 
+                 <form method="post">
+
+<input type="hidden" name="caid" value="<?php echo $this->_tpl_vars['viewdata']['0']['id']; ?>
+" />
+<input type="hidden" name="id" value="<?php echo $this->_tpl_vars['viewdata']['0']['action_id']; ?>
+" />
+<input type="hidden" name="status" value="<?php echo $this->_tpl_vars['viewdata']['0']['status']; ?>
+" />
+<input type="hidden" name="spcash" value="<?php echo $this->_tpl_vars['scflag']; ?>
+" />
+ <label>&nbsp;</label>
+                 <div class="form-actions">
+                                       <button type="submit" class="btn btn-primary" name="submit" id="submit"  value="1"><i class="icon-ok"></i><?php if ($this->_tpl_vars['viewdata']['0']['status'] == 1): ?>Inactivate for All<?php else: ?> Activate for All<?php endif; ?></button>
+                                      <?php if ($this->_tpl_vars['scflag'] && $this->_tpl_vars['sessData']['User']['type'] == '1'): ?> <button type="submit" class="btn btn-primary" name="scflagbtn" value="1" id="submit"><i class="icon-ok"></i> Convert To Special Cash</button> <?php endif; ?>
+                                     <?php if ($this->_tpl_vars['sessData']['User']['type'] == '1'): ?>   <button type="submit" class="btn btn-primary" name="iactive" value="1" id="submit"><i class="icon-ok"></i> Make Inactive for Index Wise</button>
+                                      <?php endif; ?>
+                                    
+                                    </div>
+                 </form>
                  
                  </td></tr>
                     </table>

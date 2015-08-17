@@ -126,7 +126,7 @@ $.ajax({
            
             <td>
                 <div class="btn-group">
-                    <!--<a class="btn btn-small show-tooltip" title="View Indexes" href="index.php?module=users&event=view&id={$point.userid}"><i class="icon-zoom-in"></i></a>-->
+                    <a class="btn btn-small show-tooltip" title="View Indexes" href="index.php?module=users&event=view&id={$point.userid}"><i class="icon-zoom-in"></i></a>
                     <a class="btn btn-small show-tooltip" title="Edit" href="index.php?module=users&event=edit&id={$point.userid}"><i class="icon-edit"></i></a>
                     <a class="btn btn-small btn-danger show-tooltip" title="Delete" href="#" id="a1" onclick="confirmdelete({$point.userid})"><i class="icon-trash"></i></a>
                 </div>

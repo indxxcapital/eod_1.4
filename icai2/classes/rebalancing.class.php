@@ -33,6 +33,8 @@ class Rebalancing extends Application{
 		$this->smarty->assign('bredcrumssubtitle','Rebalance');
 		$this->addfield();
 		$myids='';
+		$_SESSION["new_added_temp_index"]=array();
+
 		if(!empty($_SESSION['Index']))
 		$myids=implode($_SESSION['Index']);
 		
@@ -86,11 +88,12 @@ class Rebalancing extends Application{
 		
 		
 		$indxx_id= mysql_insert_id();
+		$_SESSION["new_added_temp_index"][]=$indxx_id;
 		$this->db->query("insert into tbl_assign_index_temp (user_id, indxx_id,status) values('".$_SESSION['User']['id']."','".$indxx_id."','1');");
 		
 //	echo "insert into tbl_indxx_ticker_temp (name,ticker,isin,curr,divcurr,sedol,cusip,countryname,status,indxx_id)  select name,ticker,isin,curr,divcurr,sedol,cusip,countryname,status,'".$indxx_id."' from tbl_indxx_ticker where indxx_id='".$oldindxx['id']."' ";
 		$this->db->query("insert into tbl_indxx_ticker_temp (name,ticker,isin,curr,divcurr,sedol,cusip,countryname,status,indxx_id)  select name,ticker,isin,curr,divcurr,sedol,cusip,countryname,status,'".$indxx_id."' from tbl_indxx_ticker where indxx_id='".$oldindxx['id']."' ");
-		$this->db->query("insert into tbl_final_price_temp(indxx_id,isin,date,price,currencyfactor,localprice) select '".$indxx_id."',isin,date,price,currencyfactor,localprice from tbl_final_price where indxx_id='".$oldindxx['id']."' ");
+		//$this->db->query("insert into tbl_final_price_temp(indxx_id,isin,date,price,currencyfactor,localprice) select '".$indxx_id."',isin,date,price,currencyfactor,localprice from tbl_final_price where indxx_id='".$oldindxx['id']."' ");
 		
 		}
 		}		
@@ -147,8 +150,18 @@ class Rebalancing extends Application{
 		$indxxdata=$this->db->getResult("select name, code,dateStart,id from tbl_indxx_temp where 1=1",true);
 		//echo"select name, code,id from tbl_indxx_temp where 1=1";
 		//$this->pr($indxxdata,true);
+		
+		foreach($indxxdata as $key=> $indxx)
+		{
+		if(in_array($indxx['id'],$_SESSION["new_added_temp_index"]))
+		$indxxdata[$key]['selected']=1;
+		}
+		//$this->pr($indxxdata,true);
 		$this->smarty->assign("indexdata",$indxxdata);
 		
+		//$this->pr($_SESSION["new_added_temp_index"],true);
+		
+		//$this->smarty->assign("selected",$indxxdata);
 		if(!empty($_GET['submit']))
 		{
 		//$this->pr($_GET,true);
@@ -171,7 +184,7 @@ fclose($output) or die("Can't close php://output");
 	}
 		
 		}
-		
+		unset($_SESSION["new_added_temp_index"]);
 		$this->show();
 	}
 	

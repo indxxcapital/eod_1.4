@@ -52,7 +52,7 @@
                                             <tbody>
                                                 {foreach from=$indexdata item=point key=k}
                                                 <tr>
-                                                    <td><input type="checkbox" id="checkboxid"  name="checkboxid[]" value="{$point.id}" /></td>
+                                                    <td><input type="checkbox" id="checkboxid" {if $point.selected}checked{/if} name="checkboxid[]" value="{$point.id}" /></td>
                                                     <td>{$point.name}</td>
                                                     <td>{$point.code}</td>
                                                     <td>{$point.dateStart}</td>

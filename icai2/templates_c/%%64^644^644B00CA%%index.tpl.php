@@ -1,13 +1,13 @@
-<?php /* Smarty version 2.6.14, created on 2015-07-07 03:35:40
+<?php /* Smarty version 2.6.14, created on 2015-07-15 12:05:55
          compiled from rebalance/index.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
-smarty_core_load_plugins(array('plugins' => array(array('modifier', 'count', 'rebalance/index.tpl', 7, false),array('block', 'field', 'rebalance/index.tpl', 34, false),)), $this); ?>
+smarty_core_load_plugins(array('plugins' => array(array('modifier', 'count', 'rebalance/index.tpl', 7, false),array('block', 'field', 'rebalance/index.tpl', 53, false),)), $this); ?>
 <!-- BEGIN Main Content -->
  <?php echo '
  <script>
     function copy_data(val){
      var a = document.getElementById(val.id).value;
-  
+
 	';  if (count($this->_tpl_vars['indexdata']) > 0): ?>
 	<?php $_from = $this->_tpl_vars['indexdata']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }if (count($_from)):
     foreach ($_from as $this->_tpl_vars['k'] => $this->_tpl_vars['point']):
@@ -20,6 +20,28 @@ smarty_core_load_plugins(array('plugins' => array(array('modifier', 'count', 're
 	<?php endif; ?>
 	<?php echo '
 	}    
+	
+function toggleme(val) {
+
+ $( "#startDate_"+val ).toggle();
+ }
+
+function toggleall(){
+	';  if (count($this->_tpl_vars['indexdata']) > 0): ?>
+	<?php $_from = $this->_tpl_vars['indexdata']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }if (count($_from)):
+    foreach ($_from as $this->_tpl_vars['k'] => $this->_tpl_vars['point']):
+?>
+	<?php echo '
+	toggleme(';  echo $this->_tpl_vars['point']['id'];  echo ');
+	    '; ?>
+
+	<?php endforeach; endif; unset($_from); ?>
+	<?php endif; ?>
+
+ 
+ <?php echo '
+
+}	
     </script>
  
  '; ?>
@@ -56,7 +78,7 @@ unset($_smarty_tpl_vars);
                                         <table class="table table-advance" id="table1">
                                             <thead>
                                                 <tr>
-                                                    <th style="width:100px"><input type="checkbox" /></th>
+                                                    <th style="width:100px"><input onclick="toggleall();" type="checkbox" /></th>
                                                     <th>Name</th>
                                                     <th>Code</th>
                                                     <th>Pre-Closing Date</th>
@@ -67,13 +89,14 @@ unset($_smarty_tpl_vars);
     foreach ($_from as $this->_tpl_vars['k'] => $this->_tpl_vars['point']):
 ?>
                                                 <tr>
-                                                    <td><input type="checkbox" id="checkboxid"  name="checkboxid[]" value="<?php echo $this->_tpl_vars['point']['id']; ?>
+                                                    <td><input type="checkbox" id="checkboxid"  onclick="toggleme(<?php echo $this->_tpl_vars['point']['id']; ?>
+);" name="checkboxid[]" value="<?php echo $this->_tpl_vars['point']['id']; ?>
 " /></td>
                                                     <td><?php echo $this->_tpl_vars['point']['name']; ?>
 </td>
                                                     <td><?php echo $this->_tpl_vars['point']['code']; ?>
 </td>
-                                                    <td><input type="text" placeholder="YYYY-MM-DD" name="startDate_<?php echo $this->_tpl_vars['point']['id']; ?>
+                                                    <td><input style="display:none;" type="text" placeholder="YYYY-MM-DD" name="startDate_<?php echo $this->_tpl_vars['point']['id']; ?>
 " id="startDate_<?php echo $this->_tpl_vars['point']['id']; ?>
 " value="" class="date-pick date-picker"></td>
                                                     

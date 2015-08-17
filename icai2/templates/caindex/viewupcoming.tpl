@@ -142,6 +142,8 @@ $.ajax({
               <th>Ticker</th>
               <th>ISIN</th>       
                <th>Weight</th>
+               <th>Last Converted Price</th>
+               <th>Share</th>
               <th>Ticker Currency</th> 
               <th>Dividend Currency</th>
             <!--<th>Effective Date</th>
@@ -157,7 +159,15 @@ $.ajax({
             <td>{$point.name}</td>
             <td>{$point.ticker}</td>
             <td>{$point.isin}</td>
+            {if $point.weight!=''}
             <td>{$point.weight}</td>
+            <td>{$point.price}</td>
+            <td>{$point.share}</td>
+            {else}
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            {/if}
             <td>{$point.curr}</td>
             <td>{$point.divcurr}</td>
 

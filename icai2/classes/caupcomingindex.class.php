@@ -367,7 +367,14 @@ function editrunning(){
 					//$this->pr($_POST,true);
 					
 						
-					$this->db->query("INSERT into tbl_indxx_ticker_temp set status='1',name='".mysql_real_escape_string($_POST['name'][$i])."',isin='".mysql_real_escape_string($_POST['isin'][$i])."',ticker='".mysql_real_escape_string($_POST['ticker'][$i])."',weight='0',curr='".mysql_real_escape_string($_POST['curr'][$i])."',divcurr='".mysql_real_escape_string($_POST['divcurr'][$i])."',indxx_id='".mysql_real_escape_string($_SESSION['tempindexid'])."'");
+					$this->db->query("INSERT into tbl_indxx_ticker_temp set status='1',name='".mysql_real_escape_string($_POST['name'][$i])."',isin='".mysql_real_escape_string($_POST['isin'][$i])."',ticker='".mysql_real_escape_string($_POST['ticker'][$i])."',weight='0',curr='".mysql_real_escape_string($_POST['curr'][$i])."',divcurr='".mysql_real_escape_string($_POST['divcurr'][$i])."',
+					sedol='".mysql_real_escape_string($_POST['sedol'][$i])."',
+					cusip='".mysql_real_escape_string($_POST['cusip'][$i])."',
+					countryname='".mysql_real_escape_string($_POST['countryname'][$i])."',
+					sector='".mysql_real_escape_string($_POST['sector'][$i])."',
+					industry='".mysql_real_escape_string($_POST['industry'][$i])."',
+					subindustry='".mysql_real_escape_string($_POST['subindustry'][$i])."',
+					indxx_id='".mysql_real_escape_string($_SESSION['tempindexid'])."'");
 					
 					$this->db->query("INSERT into tbl_share_temp set isin='".mysql_real_escape_string($_POST['isin'][$i])."',date='".$this->_date."',share='".mysql_real_escape_string($_POST['share'][$i])."',indxx_id='".mysql_real_escape_string($_SESSION['tempindexid'])."'");
 					$added++;
@@ -684,7 +691,12 @@ $this->Redirect("index.php?module=caupcomingindex&event=uploadSharesforRunning",
 			$array['ticker['.($i+1).']']=$tickerdata[$i]['ticker'];
 			$array['divcurr['.($i+1).']']=$tickerdata[$i]['divcurr'];
 			$array['curr['.($i+1).']']=$tickerdata[$i]['curr'];
-			
+				$array['sedol['.($i+1).']']=$tickerdata[$i]['sedol'];
+					$array['countryname['.($i+1).']']=$tickerdata[$i]['countryname'];
+				$array['cusip['.($i+1).']']=$tickerdata[$i]['cusip'];
+				$array['sector['.($i+1).']']=$tickerdata[$i]['sector'];
+				$array['industry['.($i+1).']']=$tickerdata[$i]['industry'];
+				$array['subindustry['.($i+1).']']=$tickerdata[$i]['subindustry'];	
 			//$array[]=	
 		}
 		//$this->pr($array,true);
@@ -710,7 +722,13 @@ $this->Redirect("index.php?module=caupcomingindex&event=uploadSharesforRunning",
 					//$this->pr($_POST,true);
 					
 						
-					$this->db->query("INSERT into tbl_indxx_ticker_temp set name='".mysql_real_escape_string($_POST['name'][$i])."',isin='".mysql_real_escape_string($_POST['isin'][$i])."',ticker='".mysql_real_escape_string($_POST['ticker'][$i])."',divcurr='".mysql_real_escape_string($_POST['divcurr'][$i])."',curr='".mysql_real_escape_string($_POST['curr'][$i])."',indxx_id='".mysql_real_escape_string($_SESSION['tempindexid'])."'");
+					$this->db->query("INSERT into tbl_indxx_ticker_temp set name='".mysql_real_escape_string($_POST['name'][$i])."',isin='".mysql_real_escape_string($_POST['isin'][$i])."',ticker='".mysql_real_escape_string($_POST['ticker'][$i])."',divcurr='".mysql_real_escape_string($_POST['divcurr'][$i])."',curr='".mysql_real_escape_string($_POST['curr'][$i])."',
+					sedol='".mysql_real_escape_string($_POST['sedol'][$i])."',
+					cusip='".mysql_real_escape_string($_POST['cusip'][$i])."',
+					countryname='".mysql_real_escape_string($_POST['countryname'][$i])."',
+					sector='".mysql_real_escape_string($_POST['sector'][$i])."',
+					industry='".mysql_real_escape_string($_POST['industry'][$i])."',
+					subindustry='".mysql_real_escape_string($_POST['subindustry'][$i])."',indxx_id='".mysql_real_escape_string($_SESSION['tempindexid'])."'");
 					
 					$added++;
 		
@@ -763,7 +781,14 @@ $this->Redirect("index.php?module=caupcomingindex&event=uploadSharesforRunning",
 				if($_POST['name'][$i] && $_POST['isin'][$i] && $_POST['ticker'][$i] && $_POST['weight'][$i] && $_POST['curr'][$i])
 				{
 					//$this->pr($_POST,true);	
-					$this->db->query("INSERT into tbl_indxx_ticker_temp set status='0',name='".mysql_real_escape_string($_POST['name'][$i])."',isin='".mysql_real_escape_string($_POST['isin'][$i])."',ticker='".mysql_real_escape_string($_POST['ticker'][$i])."',weight='".mysql_real_escape_string($_POST['weight'][$i])."',curr='".mysql_real_escape_string($_POST['curr'][$i])."',indxx_id='".mysql_real_escape_string($_SESSION['NewIndxxId'])."'");
+					$this->db->query("INSERT into tbl_indxx_ticker_temp set status='0',name='".mysql_real_escape_string($_POST['name'][$i])."',isin='".mysql_real_escape_string($_POST['isin'][$i])."',ticker='".mysql_real_escape_string($_POST['ticker'][$i])."',weight='".mysql_real_escape_string($_POST['weight'][$i])."',curr='".mysql_real_escape_string($_POST['curr'][$i])."',
+					sedol='".mysql_real_escape_string($_POST['sedol'][$i])."',
+					cusip='".mysql_real_escape_string($_POST['cusip'][$i])."',
+					countryname='".mysql_real_escape_string($_POST['countryname'][$i])."',
+					sector='".mysql_real_escape_string($_POST['sector'][$i])."',
+					industry='".mysql_real_escape_string($_POST['industry'][$i])."',
+					subindustry='".mysql_real_escape_string($_POST['subindustry'][$i])."'
+					indxx_id='".mysql_real_escape_string($_SESSION['NewIndxxId'])."'");
 					$added++;
 		
 				}	
@@ -796,14 +821,14 @@ $this->Redirect("index.php?module=caupcomingindex&event=uploadSharesforRunning",
 	   $this->validData[]=array("feild_label" =>"Security Name",
 	   								"feild_code" =>"name[".$i.']',
 								 "feild_type" =>"text",
-								 "feild_tpl" =>"place_text3",
+								 "feild_tpl" =>"place_text1_1",
 								 "is_required" =>"",
 								
 								 );
 		 $this->validData[]=array("feild_label" =>"Security Isin",
 		 							"feild_code" =>"isin[".$i.']',
 								 "feild_type" =>"text",
-								 "feild_tpl" =>"place_text2",
+								 "feild_tpl" =>"place_text1_1",
 								 "is_required" =>"",
 								
 								 );
@@ -811,7 +836,7 @@ $this->Redirect("index.php?module=caupcomingindex&event=uploadSharesforRunning",
 		 $this->validData[]=array("feild_label" =>"Security Ticker",
 		 							"feild_code" =>"ticker[".$i.']',
 								 "feild_type" =>"text",
-								  "feild_tpl" =>"place_text2",
+								  "feild_tpl" =>"place_text1_1",
 								 "is_required" =>"",
 								
 								 );
@@ -829,7 +854,7 @@ $this->Redirect("index.php?module=caupcomingindex&event=uploadSharesforRunning",
 	 $this->validData[]=array(	"feild_label"=>"Currency",
 	 							"feild_code" =>"curr[".$i.']',
 								 "feild_type" =>"text",
-								  "feild_tpl" =>"place_text2",
+								  "feild_tpl" =>"place_text1_1",
 								 "is_required" =>"",
 								
 								 );	 
@@ -837,8 +862,56 @@ $this->Redirect("index.php?module=caupcomingindex&event=uploadSharesforRunning",
 		 							"feild_code" =>"divcurr[".$i.']',
 								 "feild_type" =>"text",
 								 "is_required" =>"",
-								  "feild_tpl" =>"place_text2",
+								  "feild_tpl" =>"place_text1_1",
 								);
+		$this->validData[]=array(	"feild_label"=>"Sedol",
+	 							"feild_code" =>"sedol[".$i.']',
+								 "feild_type" =>"text",
+								  "feild_tpl" =>"place_text1_1",
+								 "is_required" =>"",
+								
+								 );	 
+								 
+	$this->validData[]=array(	"feild_label"=>"Cusip",
+	 							"feild_code" =>"cusip[".$i.']',
+								 "feild_type" =>"text",
+								  "feild_tpl" =>"place_text1_1",
+								 "is_required" =>"",
+								
+								 );
+								 
+	$this->validData[]=array(	"feild_label"=>"Country Name",
+	 							"feild_code" =>"countryname[".$i.']',
+								 "feild_type" =>"text",
+								  "feild_tpl" =>"place_text1_1",
+								 "is_required" =>"",
+								
+ 								 );	 	
+								 						 	 						 
+   	$this->validData[]=array(	"feild_label"=>"Sector",
+	 							"feild_code" =>"sector[".$i.']',
+								 "feild_type" =>"text",
+								  "feild_tpl" =>"place_text1_1",
+								 "is_required" =>"",
+								
+								 );		
+								 				
+	$this->validData[]=array(	"feild_label"=>"Inustry",
+	 							"feild_code" =>"industry[".$i.']',
+								 "feild_type" =>"text",
+								  "feild_tpl" =>"place_text1_1",
+								 "is_required" =>"",
+								
+								 );						
+								 
+	$this->validData[]=array(	"feild_label"=>"SubInustry",
+	 							"feild_code" =>"subindustry[".$i.']',
+								 "feild_type" =>"text",
+								  "feild_tpl" =>"place_text1_1",
+								 "is_required" =>"",
+								
+								 );								 		 
+								 								
 	
 }
 	$this->getValidFeilds();
@@ -853,14 +926,14 @@ $this->Redirect("index.php?module=caupcomingindex&event=uploadSharesforRunning",
 	   $this->validData[]=array("feild_label" =>"Security Name",
 	   								"feild_code" =>"name[".$i.']',
 								 "feild_type" =>"text",
-								 "feild_tpl" =>"place_text3",
+								 "feild_tpl" =>"place_text1_1",
 								 "is_required" =>"",
 								
 								 );
 		 $this->validData[]=array("feild_label" =>"Security Isin",
 		 							"feild_code" =>"isin[".$i.']',
 								 "feild_type" =>"text",
-								 "feild_tpl" =>"place_text2",
+								 "feild_tpl" =>"place_text1_1",
 								 "is_required" =>"",
 								
 								 );
@@ -868,7 +941,7 @@ $this->Redirect("index.php?module=caupcomingindex&event=uploadSharesforRunning",
 		 $this->validData[]=array("feild_label" =>"Security Ticker",
 		 							"feild_code" =>"ticker[".$i.']',
 								 "feild_type" =>"text",
-								  "feild_tpl" =>"place_text2",
+								  "feild_tpl" =>"place_text1_1",
 								 "is_required" =>"",
 								
 								 );
@@ -878,7 +951,7 @@ $this->Redirect("index.php?module=caupcomingindex&event=uploadSharesforRunning",
 		 							"feild_code" =>"share[".$i.']',
 								 "feild_type" =>"text",
 								 "is_required" =>"",
-								  "feild_tpl" =>"place_text2",
+								  "feild_tpl" =>"place_text1_1",
 								);
 		}
 	else{
@@ -901,7 +974,7 @@ $this->Redirect("index.php?module=caupcomingindex&event=uploadSharesforRunning",
 	 $this->validData[]=array(	"feild_label"=>"Ticker Currency",
 	 							"feild_code" =>"curr[".$i.']',
 								 "feild_type" =>"text",
-								  "feild_tpl" =>"place_text2",
+								  "feild_tpl" =>"place_text1_1",
 								 "is_required" =>"",
 							// "feildValues"=>array("onclick"=>"checkvalue('".$id."')"),
 								
@@ -909,10 +982,57 @@ $this->Redirect("index.php?module=caupcomingindex&event=uploadSharesforRunning",
 	$this->validData[]=array(	"feild_label"=>"Dividend Currency",
 	 							"feild_code" =>"divcurr[".$i.']',
 								 "feild_type" =>"text",
-								  "feild_tpl" =>"place_text2",
+								  "feild_tpl" =>"place_text1_1",
 								 "is_required" =>"",
 								
 								 );	 
+     $this->validData[]=array(	"feild_label"=>"Sedol",
+	 							"feild_code" =>"sedol[".$i.']',
+								 "feild_type" =>"text",
+								  "feild_tpl" =>"place_text1_1",
+								 "is_required" =>"",
+								
+								 );	 
+								 
+	$this->validData[]=array(	"feild_label"=>"Cusip",
+	 							"feild_code" =>"cusip[".$i.']',
+								 "feild_type" =>"text",
+								  "feild_tpl" =>"place_text1_1",
+								 "is_required" =>"",
+								
+								 );
+								 
+	$this->validData[]=array(	"feild_label"=>"Country Name",
+	 							"feild_code" =>"countryname[".$i.']',
+								 "feild_type" =>"text",
+								  "feild_tpl" =>"place_text1_1",
+								 "is_required" =>"",
+								
+ 								 );	 	
+								 						 	 						 
+   	$this->validData[]=array(	"feild_label"=>"Sector",
+	 							"feild_code" =>"sector[".$i.']',
+								 "feild_type" =>"text",
+								  "feild_tpl" =>"place_text1_1",
+								 "is_required" =>"",
+								
+								 );		
+								 				
+	$this->validData[]=array(	"feild_label"=>"Inustry",
+	 							"feild_code" =>"industry[".$i.']',
+								 "feild_type" =>"text",
+								  "feild_tpl" =>"place_text1_1",
+								 "is_required" =>"",
+								
+								 );						
+								 
+	$this->validData[]=array(	"feild_label"=>"SubInustry",
+	 							"feild_code" =>"subindustry[".$i.']',
+								 "feild_type" =>"text",
+								  "feild_tpl" =>"place_text1_1",
+								 "is_required" =>"",
+								
+								 );								 		 								 
 }
 	$this->getValidFeilds();
 	}

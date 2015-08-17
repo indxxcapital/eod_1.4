@@ -1,11 +1,6 @@
-<?php /* Smarty version 2.6.14, created on 2015-04-23 13:26:20
+<?php /* Smarty version 2.6.14, created on 2015-07-14 07:56:36
          compiled from spinstockadd/index.tpl */ ?>
 <!-- BEGIN Main Content -->
-<?php $_smarty_tpl_vars = $this->_tpl_vars;
-$this->_smarty_include(array('smarty_include_tpl_file' => 'notice.tpl', 'smarty_include_vars' => array()));
-$this->_tpl_vars = $_smarty_tpl_vars;
-unset($_smarty_tpl_vars);
- ?>
 <?php echo '
  <script type=\'text/javascript\'>
  
@@ -296,7 +291,9 @@ unset($_smarty_tpl_vars);
             <td>
                 <div class="btn-group">
                     <a class="btn btn-small show-tooltip" title="View All Fields" href="index.php?module=spinstockadd&event=view&id=<?php echo $this->_tpl_vars['point']['id']; ?>
-"><i class="icon-zoom-in"></i></a>
+">View</a>
+                    <a class="btn btn-small show-tooltip" title="Delete Fields" href="index.php?module=spinstockadd&event=delete&id=<?php echo $this->_tpl_vars['point']['action_id']; ?>
+">Delete</a>
                     
                     
                 </div>

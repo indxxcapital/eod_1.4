@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-04-24 08:52:23
+<?php /* Smarty version 2.6.14, created on 2015-07-03 16:05:25
          compiled from myca/addStockforSpin.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('block', 'field', 'myca/addStockforSpin.tpl', 17, false),array('modifier', 'count', 'myca/addStockforSpin.tpl', 50, false),)), $this); ?>

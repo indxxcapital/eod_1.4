@@ -29,7 +29,7 @@ define("currencyfactor_file", get_input_file("CURRENCY_FACTOR", date));
 define("liborrate_file", get_input_file("LIBOR_RATE", date));
 define("cashindex_file", get_input_file("CASH_INDEX", date));
 define("price_file", get_input_file("PRICE_FILE", date));
-//echo currencyfactor_file;
+//echo liborrate_file.",".cashindex_file.",".price_file;
 //exit;
 read_input_files();
 convert_prices();

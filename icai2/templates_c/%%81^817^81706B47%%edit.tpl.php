@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-04-23 07:59:17
+<?php /* Smarty version 2.6.14, created on 2015-06-18 07:08:16
          compiled from caupcomingindex/edit.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('block', 'field', 'caupcomingindex/edit.tpl', 13, false),)), $this); ?>

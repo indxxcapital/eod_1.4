@@ -10,6 +10,10 @@ class Checkcavalue extends Application{
 	
 	function index()
 	{
+		$TickerIndexName=$this->getAllTickerIndex();
+		$special_cash_cas=$this->getSpecialCashId();
+		
+		//$this->pr($special_cash_cas,true);
 		//error_reporting(2);
 							if($_GET['log_file'])
 define("log_file",get_logs_folder().$_GET['log_file']);
@@ -76,8 +80,15 @@ log_info("In Check CA Value ");
 				 $ca_value_query="Select id from tbl_ca_values where ca_id='".$ca['id']."'  and ca_action_id='".$ca['action_id']."' and field_name='".$fieldname."' ";
 			$ca_values=$this->db->getResult($ca_value_query);	
 			if( count($ca_values)<=0)
-			{
-			$text.="<tr><td>".$ca['company_name']."</td><td>".$ca['identifier']."</td><td>".$_SESSION['variable'][$ca['mnemonic']]."</td><td>".$fieldname."</td><td>".$ca['eff_date']."</td></tr>";
+			{$ca_type="";
+				if(in_array($ca['action_id'],$special_cash_cas))
+				{$ca_type="Special Cash";
+					
+				}else{
+					$ca_type=$_SESSION['variable'][$ca['mnemonic']];
+				}
+				
+			$text.="<tr><td>".$ca['company_name']."</td><td>".$ca['identifier']."</td><td>".$TickerIndexName[$nca['identifier']]."</td><td>".$ca_type."</td><td>".$fieldname."</td><td>".$ca['eff_date']."</td></tr>";
 			
 			}
 						
@@ -88,7 +99,15 @@ log_info("In Check CA Value ");
 			$ca_values=$this->db->getResult($ca_value_query);	
 			if( count($ca_values)<=0)
 			{
-			$text.="<tr><td>".$ca['company_name']."</td><td>".$ca['identifier']."</td><td>Cash Dividend</td><td>CP_NET_AMT AND CP_GROSS_AMT </td><td>".$ca['eff_date']."</td><tr>";
+				$ca_type="";
+				if(in_array($ca['action_id'],$special_cash_cas))
+				{$ca_type="Special Cash";
+					
+				}else{
+					$ca_type=$_SESSION['variable'][$ca['mnemonic']];
+				}
+				
+			$text.="<tr><td>".$ca['company_name']."</td><td>".$ca['identifier']."</td><td>".$TickerIndexName[$nca['identifier']]."</td><td>".$ca_type."</td><td>CP_NET_AMT AND CP_GROSS_AMT </td><td>".$ca['eff_date']."</td><tr>";
 			
 			}
 		}
@@ -135,7 +154,16 @@ log_info("In Check CA Value ");
 			if( count($nca_values)<=0)
 			{
 				//echo "found";
-			$missingvalue7daysText.="<tr><td>".$nca['company_name']."</td><td>".$nca['identifier']."</td><td>".$_SESSION['variable'][$ca['mnemonic']]."</td><td>".$nfieldname."</td><td>".$nca['eff_date']."</td></tr>";
+				
+				$ca_type="";
+				if(in_array($nca['action_id'],$special_cash_cas))
+				{$ca_type="Special Cash";
+					
+				}else{
+					$ca_type=$_SESSION['variable'][$nca['mnemonic']];
+				}
+				
+			$missingvalue7daysText.="<tr><td>".$nca['company_name']."</td><td>".$nca['identifier']."</td><td>".$TickerIndexName[$nca['identifier']]."</td><td>".$ca_type."</td><td>".$nfieldname."</td><td>".$nca['eff_date']."</td></tr>";
 			
 			}
 						
@@ -146,7 +174,15 @@ log_info("In Check CA Value ");
 			$nca_values2=$this->db->getResult($nca_value_query2);	
 			if( count($nca_values2)<=0)
 			{
-			 $missingvalue7daysText.="<tr><td>".$nca['company_name']."</td><td>".$nca['identifier']."</td><td>Cash Dividend</td><td>CP_NET_AMT AND CP_GROSS_AMT </td><td>".$nca['eff_date']."</td><tr>";
+				$ca_type="";
+				if(in_array($nca['action_id'],$special_cash_cas))
+				{$ca_type="Special Cash";
+					
+				}else{
+					$ca_type=$_SESSION['variable'][$nca['mnemonic']];
+				}
+				
+			 $missingvalue7daysText.="<tr><td>".$nca['company_name']."</td><td>".$nca['identifier']."</td><td>".$TickerIndexName[$nca['identifier']]."</td><td>".$ca_type."</td><td>CP_NET_AMT AND CP_GROSS_AMT </td><td>".$nca['eff_date']."</td><tr>";
 			
 			}
 		}
@@ -185,7 +221,7 @@ $to='';
     $subject ="Corporate Actions : Missing Values : Effective Today "; 
     $message = "<table  border='1'><tr>
 			<th>Name</th>
-			<th>Ticker</th>
+			<th>Ticker</th><th>Index</th>
 			<th>Action Type</th>
 			<th>Missing Field</th>
 			<th>Effective Date</th>
@@ -209,6 +245,7 @@ $to='';
 	$message.="<table  border='1'><tr>
 			<th>Name</th>
 			<th>Ticker</th>
+			<th>Index</th>
 			<th>Action Type</th>
 			<th>Missing Field</th>
 			<th>Effective Date</th>
@@ -243,12 +280,19 @@ $intraDayText='';
 			{$intraDayText.="<table border='1'><tr>
 			<th>Name</th>
 			<th>Ticker</th>
+			<th>Index</th>
 			<th>Action Type</th>
 			<th>Effective Date</th>
 			</tr>";
 			foreach($IntraDayCA as $allca){
-				
-		$intraDayText.="<tr><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$_SESSION['variable'][$allca['mnemonic']]."</td><td>".$allca['eff_date']."</td></tr>";
+				$ca_type="";
+				if(in_array($allca['action_id'],$special_cash_cas))
+				{$ca_type="Special Cash";
+					
+				}else{
+					$ca_type=$_SESSION['variable'][$allca['mnemonic']];
+				}
+		$intraDayText.="<tr><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$TickerIndexName[$allca['identifier']]."</td><td>".$ca_type."</td><td>".$allca['eff_date']."</td></tr>";
 			
 				}
 					$intraDayText.="</table>";
@@ -285,13 +329,22 @@ $message.=$intraDayText;
 			{$text2.="<table  border='1'><tr>
 			<th>Name</th>
 			<th>Ticker</th>
+			<th>Index</th>
 			<th>Action Type</th>
 			<th>Effective Date</th>
 			</tr>";
 				
 			foreach($cas2 as $allca){
 				
-			$text2.="<tr><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$_SESSION['variable'][$allca['mnemonic']]."</td><td>".$allca['eff_date']."</td></tr>";
+				$ca_type="";
+				if(in_array($allca['action_id'],$special_cash_cas))
+				{$ca_type="Special Cash";
+					
+				}else{
+					$ca_type=$_SESSION['variable'][$allca['mnemonic']];
+				}
+				
+			$text2.="<tr><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$TickerIndexName[$allca['identifier']]."</td><td>".$ca_type."</td><td>".$allca['eff_date']."</td></tr>";
 			
 				}
 				$text2.="</table>";
@@ -326,12 +379,22 @@ $message.=$intraDayText;
 				$text3.="<table  border='1'><tr>
 			<th>Name</th>
 			<th>Ticker</th>
+			<th>Index</th>
 			<th>Action Type</th>
 			<th>Effective Date</th>
 			</tr>";
 			foreach($cas3 as $allca){
 				
-				$text3.="<tr><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$_SESSION['variable'][$allca['mnemonic']]."</td><td>".$allca['eff_date']."</td></tr>";
+					
+				$ca_type="";
+				if(in_array($allca['action_id'],$special_cash_cas))
+				{$ca_type="Special Cash";
+					
+				}else{
+					$ca_type=$_SESSION['variable'][$allca['mnemonic']];
+				}
+				
+				$text3.="<tr><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$TickerIndexName[$allca['identifier']]."</td><td>".$ca_type."</td><td>".$allca['eff_date']."</td></tr>";
 			
 				}
 					$text3.="</table>";
@@ -362,27 +425,61 @@ mail($to,$subject,$message,$headers);
 	$datemodified=date("Y-m-d",strtotime(date)-86400);
 	
 $lastDayModifiedText='';
-$lastDayModifiedCA="select identifier,action_id,id,mnemonic,company_name,eff_date,currency from tbl_ca cat where  amd_date='".$datemodified."' and eff_date<='".date("Y-m-d",strtotime($datemodified)+15*86400)."' and eff_date>='".date."' order by eff_date asc  ";
+   $lastDayModifiedCA="select identifier,action_id,id,mnemonic,company_name,eff_date,currency from tbl_ca cat where  amd_date='".$datemodified."' order by eff_date asc  ";
 			
-			//exit;
+		//	exit;
 			$caslastDayModified=$this->db->getResult($lastDayModifiedCA,true);
 			if(!empty($caslastDayModified))
 			{
 						$lastDayModifiedText.="<table border='1'><tr>
 			<th>Name</th>
 			<th>Ticker</th>
+			<th>Index</th>
 			<th>Action Type</th>
 			<th>Effective Date</th>
+			<th>Modified Terms</th>
+
 			</tr>";
 			foreach($caslastDayModified as $allca){
 				
-			
-				$lastDayModifiedText.="<tr><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$_SESSION['variable'][$allca['mnemonic']]."</td><td>".$allca['eff_date']."</td></tr>";
-			
+			$ca_type="";
+				if(in_array($allca['action_id'],$special_cash_cas))
+				{$ca_type="Special Cash";
+					
+				}else{
+					$ca_type=$_SESSION['variable'][$allca['mnemonic']];
 				}
-					$lastDayModifiedText.="</table>";
+				
+				$text='';
+				$array1=$this->getTodaysValue($allca['action_id']);
+				$array2=$this->getPreviousDayValue($allca['action_id']);
+				
+				$arraydiff=$this->array_diff_assoc_recursive($array1,$array2);
+				
+				$text='';
+				if(empty($arraydiff))
+					$text.="Historical value either not available or only flag updated ";
+				else{
+					//$text.=$allca['action_id']."<br>";
+					//echo $allca['action_id']."<br>";
+					foreach($arraydiff as $key=>$value)
+					$text.=$key."=".$value."<br>";
+					
+				} 
+				
+				//$this->pr($array1);
+				//$this->pr($array2);
+				
+				
+				
+				
+				
+				$lastDayModifiedText.="<tr><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$TickerIndexName[$allca['identifier']]."</td><td>".$ca_type."</td><td>".$allca['eff_date']."</td><td>".$text."</td></tr>";
+			$text='';
+				}
+					 $lastDayModifiedText.="</table>";
 			}
-			
+			//exit;
 
 $from = "Indexing <indexing@indxx.com>"; 
     $subject ="Corporate Actions : Modified : Previous day"; 
@@ -425,18 +522,28 @@ $SpecialCAQuery="select identifier,action_id,id,mnemonic,company_name,eff_date,c
 				$SpecialCAText.="<table border='1'><tr>
 			<th>Name</th>
 			<th>Ticker</th>
+			<th>Index</th>
 			<th>Action Type</th>
 			<th>Effective Date</th>
+			<th>Information</th>
+
 			</tr>";
 			foreach($SpecialCA as $allca){
+				$companyandstatus='';
+				if($allca['mnemonic']=='ACQUIS')
+				{
+					$companyandstatus=$this->getAcquisionTargetCompanyStatus($allca['action_id']);
+				//exit;
+			}
+				
 				if(!in_array($allca['action_id'],$lastDayEventArray))
 				{
 				
-					$SpecialCAText.="<tr style='color:#008000'><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$_SESSION['variable'][$allca['mnemonic']]."</td><td>".$allca['eff_date']."</td></tr>";
+					$SpecialCAText.="<tr style='color:#008000'><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$TickerIndexName[$allca['identifier']]."</td><td>".$_SESSION['variable'][$allca['mnemonic']]."</td><td>".$allca['eff_date']."</td><td>".$companyandstatus."</td></tr>";
 				}else
 				{
 
-			$SpecialCAText.="<tr><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$_SESSION['variable'][$allca['mnemonic']]."</td><td>".$allca['eff_date']."</td></tr>";
+			$SpecialCAText.="<tr><td>".$allca['company_name']."</td><td>".$allca['identifier']."</td><td>".$TickerIndexName[$allca['identifier']]."</td><td>".$_SESSION['variable'][$allca['mnemonic']]."</td><td>".$allca['eff_date']."</td><td>".$companyandstatus."</td></tr>";
 				}
 				}
 					$SpecialCAText.="</table>";
@@ -458,6 +565,7 @@ $from = "Indexing <indexing@indxx.com>";
 	mail($to,$subject,$message,$headers);
 $this->db->query("delete from tbl_ca_event_check");
 	$this->db->query("insert into tbl_ca_event_check (ca_id,date) select action_id,eff_date from tbl_ca where  mnemonic in('ACQUIS','DELIST','RECLASS')");
+		unset($TickerIndexName);
 		$this->saveProcess();
 
 $this->Redirect("index.php?module=calcspinstockadd&log_file=".basename(log_file)."&date=".date,"","");	
@@ -465,6 +573,22 @@ $this->Redirect("index.php?module=calcspinstockadd&log_file=".basename(log_file)
 
 
 }
-   
+   function array_diff_assoc_recursive($array1, $array2) {
+    $difference=array();
+    foreach($array1 as $key => $value) {
+        if( is_array($value) ) {
+            if( !isset($array2[$key]) || !is_array($array2[$key]) ) {
+                $difference[$key] = $value;
+            } else {
+                $new_diff = array_diff_assoc_recursive($value, $array2[$key]);
+                if( !empty($new_diff) )
+                    $difference[$key] = $new_diff;
+            }
+        } else if( !array_key_exists($key,$array2) || $array2[$key] !== $value ) {
+            $difference[$key] = $value;
+        }
+    }
+    return $difference;
+}
 } 
 ?>

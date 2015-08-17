@@ -16,11 +16,11 @@
                             <div class="box-content done"  id="p_scents">
                                 
                                {foreach from=$fields key=p item=item}
-             {if $p%6==0}  <div class="controls step controls-row">
-                                    <span class="formnumber">{$p/6+1}</span>
+             {if $p%12==0}  <div class="controls step controls-row">
+                                    <span class="formnumber">{$p/12+1}</span>
             {/if}                         {field data=$item value=$postData}{/field}
                                       
-                {if $p%6==5}  </div>{/if}                    
+                {if $p%12==11}  </div>{/if}                    
                  {/foreach}    
                             </div>
                             
@@ -28,7 +28,7 @@
                             <div class="form-actions">
                                         <button class="btn btn-primary"  id="addScnt" type="submit"><i class="icon-plus"></i> Add More</button>
                                           <button class="btn btn-primary" name='submit' value="submit" type="submit"><i class="icon-ok"></i> Save</button>
-                                       <button class="btn" type="button">Cancel</button>
+                                       <button class="btn" type="button">CanceL</button>
                                     </div>
                             </div>
                           <!--  <h2><a href="#" id="addScnt">Add Another Input Box</a></h2>-->
@@ -48,7 +48,7 @@ $(function() {
         var scntDiv = $('#p_scents');
         var i = $('#p_scents div').size() + 1;
         $('#addScnt').click( function() {
-             $('<div class="controls step  controls-row"> <span class="formnumber">'+i+'</span><input type="text" placeholder="Security Name" class="span3" name="name['+i+']"><input type="text" name="isin['+i+']" placeholder="ISIN" class="span2"><input  name="ticker['+i+']" type="text" placeholder="Ticker" class="span2"><input name="curr['+i+']" type="text" placeholder="Currency" class="span2"><input type="text" placeholder="Div Curr"  name="divcurr['+i+']" class="span2">').appendTo(scntDiv);
+             $('<div class="controls step  controls-row"> <span class="formnumber">'+i+'</span><input type="text" placeholder="Security Name" class="span1" name="name['+i+']"><input type="text" name="isin['+i+']" placeholder="ISIN" class="span1"><input  name="ticker['+i+']" type="text" placeholder="Ticker" class="span1"><input name="curr['+i+']" type="text" placeholder="Currency" class="span1"><input type="text" placeholder="Div Curr"  name="divcurr['+i+']" class="span1"><input name="sedol['+i+']" type="text" placeholder="Sedol" class="span1"><input name="cusip['+i+']" type="text" placeholder="Cusip" class="span1"><input name="countryname['+i+']" type="text" placeholder="Country Name" class="span1"><input name="sector['+i+']" type="text" placeholder="Sector" class="span1"><input name="industry['+i+']" type="text" placeholder="Inustry" class="span1"><input name="subindustry['+i+']" type="text" placeholder="SubInustry" class="span1">').appendTo(scntDiv);
                 $('#totalfields').val(i);
 				i++;
                 return false;

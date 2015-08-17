@@ -24,7 +24,7 @@
                         <ul class="submenu">
             				<li><a href="index.php?module=caindex2">Running Index</a></li>
                            {if $sessData.User.type!=3}<li><a href="index.php?module=caindex2&event=addNewRunning">Add new Running Index</a></li>{/if}
-                        <li><a href="index.php?module=caupcomingindex2">Upcoming Index</a></li>
+                        <li><a href="index.php?module=caupcomingindex2">ALL Upcoming Index</a></li>
                          <li><a href="index.php?module=benchmarkindex2">USD Benchmark Index</a></li> 
 			<li><a href="index.php?module=adjbenchmarkindex2">Local Benchmark Index</a></li>
                             <li><a href="index.php?module=casecurities2">Securities</a></li>

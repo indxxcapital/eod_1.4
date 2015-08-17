@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-06-17 03:07:16
+<?php /* Smarty version 2.6.14, created on 2015-06-18 06:47:57
          compiled from caindex/index.tpl */ ?>
 <!-- BEGIN Main Content -->
  <?php echo '

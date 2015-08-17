@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-06-17 02:50:16
+<?php /* Smarty version 2.6.14, created on 2015-08-12 07:44:44
          compiled from caindex/view.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('modifier', 'count', 'caindex/view.tpl', 127, false),)), $this); ?>
@@ -195,6 +195,8 @@ $.ajax({
                           <th>Cusip</th>  
                                 <th>Country</th>      
                <th>Weight</th>
+			   <th>Last Converted Price</th>
+			   <th>Share</th>
               <th>Currency</th>  <th>Div Currency</th><!--<th style="width:100px">Submit adjustment factor</th>-->
               
             <!--<th>Effective Date</th>
@@ -223,6 +225,10 @@ $.ajax({
                   <td><?php echo $this->_tpl_vars['point']['countryname']; ?>
 </td>
             <td><?php echo $this->_tpl_vars['point']['weight']; ?>
+</td>
+			<td><?php echo $this->_tpl_vars['point']['price']; ?>
+</td>
+			<td><?php echo $this->_tpl_vars['point']['share']; ?>
 </td>
             <td><?php echo $this->_tpl_vars['point']['curr']; ?>
 </td>

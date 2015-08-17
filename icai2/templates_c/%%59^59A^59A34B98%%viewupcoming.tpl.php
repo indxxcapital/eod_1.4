@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-06-17 02:08:55
+<?php /* Smarty version 2.6.14, created on 2015-07-29 12:39:21
          compiled from caindex/viewupcoming.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('modifier', 'count', 'caindex/viewupcoming.tpl', 153, false),)), $this); ?>
@@ -224,7 +224,7 @@ $.ajax({
                                     <a href="#"><button class="btn btn-danger" onclick="confirmdelete(<?php echo $this->_tpl_vars['viewindexdata']['0']['id']; ?>
 )" id="a1">Delete Index</button></a>
                                     
-                                    
+									                                    
                                     
                                     
                                     
@@ -248,7 +248,7 @@ $.ajax({
                                    <a href="index.php?module=caindex&event=signofftemp&id=<?php echo $this->_tpl_vars['viewindexdata']['0']['id']; ?>
 ">  <button class="btn btn-info">Sign Off </button></a><?php endif; ?>
                                    <?php if ($this->_tpl_vars['viewindexdata']['0']['submitted'] == 1 && $this->_tpl_vars['viewindexdata']['0']['usersignoff'] == 1 && $this->_tpl_vars['viewindexdata']['0']['dbusersignoff'] == 1 && $this->_tpl_vars['viewindexdata']['0']['runindex'] == 0 && $this->_tpl_vars['viewindexdata']['0']['rebalance'] == 0): ?>
-                                   <a href="index.php?module=calcindxxclosingid&id=<?php echo $this->_tpl_vars['viewindexdata']['0']['id']; ?>
+                                   <a href="index.php?module=runindex&id=<?php echo $this->_tpl_vars['viewindexdata']['0']['id']; ?>
 ">  <button class="btn btn-info">Run Index</button></a><?php endif; ?>
                                    
                                    

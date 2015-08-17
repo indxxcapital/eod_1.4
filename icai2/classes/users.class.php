@@ -31,9 +31,7 @@ $this->addJs('assets/data-tables/DT_bootstrap.js');
 $this->addJs('js/flaty.js');
 
 		//$username=$_SESSION['User']['name'];
-		//$userdata=$this->db->getResult("select tbl_ca_user.id as userid,tbl_ca_user.name as username,tbl_ca_user.email,tbl_ca_user.type,count(tbl_indxx.name) as indexes from tbl_assign_index left join tbl_ca_user on tbl_ca_user.id=tbl_assign_index.user_id left join tbl_indxx on tbl_indxx.id=tbl_assign_index.indxx_id group by tbl_ca_user.name");
-		
-		$userdata=$this->db->getResult("select tbl_ca_user.id as userid,tbl_ca_user.name as username,tbl_ca_user.email,tbl_ca_user.type,(select count(id) from tbl_assign_index where user_id=tbl_ca_user.id ) as  indexes from tbl_ca_user " ,true);
+		$userdata=$this->db->getResult("select tbl_ca_user.id as userid,tbl_ca_user.name as username,tbl_ca_user.email,tbl_ca_user.type,(select count(distinct(indxx_id)) from tbl_assign_index where user_id=tbl_ca_user.id and tbl_assign_index.indxx_id in (select id from tbl_indxx) ) as  indexes from tbl_ca_user " ,true);
 		
 		$this->smarty->assign("userdata",$userdata);
 
@@ -206,9 +204,9 @@ $this->addJs('assets/data-tables/DT_bootstrap.js');
 $this->addJs('js/flaty.js');
 	
 	
+	//echo "select tbl_ca_user.id as userid,tbl_ca_user.name as username,tbl_ca_user.email,tbl_ca_user.type,tbl_assign_index.*,tbl_indxx.name as indexname,tbl_indxx.id as indexid from tbl_assign_index left join tbl_ca_user on tbl_ca_user.id=tbl_assign_index.user_id left join tbl_indxx on tbl_indxx.id=tbl_assign_index.indxx_id where tbl_assign_index.user_id='".$_GET['id']."' group by tbl_assign_index.indxx_id";
 	
-	
-		$viewdata=$this->db->getResult("select tbl_ca_user.id as userid,tbl_ca_user.name as username,tbl_ca_user.email,tbl_ca_user.type,tbl_assign_index.*,tbl_indxx.name as indexname,tbl_indxx.id as indexid from tbl_assign_index left join tbl_ca_user on tbl_ca_user.id=tbl_assign_index.user_id left join tbl_indxx on tbl_indxx.id=tbl_assign_index.indxx_id where tbl_assign_index.user_id='".$_GET['id']."'",true);
+		$viewdata=$this->db->getResult("select tbl_ca_user.id as userid,tbl_ca_user.name as username,tbl_ca_user.email,tbl_ca_user.type,tbl_assign_index.*,tbl_indxx.name as indexname,tbl_indxx.id as indexid from tbl_assign_index left join tbl_ca_user on tbl_ca_user.id=tbl_assign_index.user_id left join tbl_indxx on tbl_indxx.id=tbl_assign_index.indxx_id where tbl_assign_index.user_id='".$_GET['id']."' and tbl_indxx.id!='NULL' group by tbl_assign_index.indxx_id",true);
 		
 		$_SESSION['Delete']['UserId']=$viewdata['0']['userid'];
 		
@@ -316,8 +314,10 @@ $this->addJs('js/flaty.js');
 					
 					$indexticker=$indexdata['code'];
 					
+					//$this->pr($_SESSION,true);
+					
 					$strQuery = "delete from tbl_assign_index where tbl_assign_index.user_id='".$_SESSION['Delete']['UserId']."' and indxx_id='".$_GET['id']."'";
-					//$this->db->query($strQuery);
+					$this->db->query($strQuery);
 					
 					
 					$getmailid=$this->db->getResult("select name,email from tbl_ca_user  where tbl_ca_user.id='".$_SESSION['Delete']['UserId']."'");

@@ -7,7 +7,7 @@
  function confirmdelete(id)
  {
 
- var temp=confirm("Are you sure you want to delete this record ")
+ var temp=confirm("Are you sure you want to deallocate this index ")
   if(temp)
    {	
 	
@@ -107,7 +107,7 @@ $.ajax({
     <thead>
         <tr>
             <th style="width:18px"><input type="checkbox" /></th>
-            <th>Index</th>
+            <th>Assigned Index</th>
             <th style="width:100px">Action</th>
         </tr>
     </thead>
@@ -122,7 +122,7 @@ $.ajax({
                 <div class="btn-group">
                     <!--a class="btn btn-small show-tooltip" title="View Indexes" href="index.php?module=users&event=view&id={$point.userid}"><i class="icon-zoom-in"></i></a>
                     <a class="btn btn-small show-tooltip" title="Edit" href="#"><i class="icon-edit"></i></a>-->
-                    <a class="btn btn-small btn-danger show-tooltip" title="Delete" href="#" id="a1" onclick="confirmdelete({$point.indexid})"><i class="icon-trash"></i></a>
+                    <a class="btn btn-small btn-danger show-tooltip" title="De-allocate" href="#" id="a1" onclick="confirmdelete({$point.indexid})"><i class="icon-trash"></i></a>
                 </div>
             </td>
         </tr>

@@ -38,7 +38,7 @@ class Reconstitution extends Application{
 		
 	}
 	
-	function prepare()
+		function prepare()
 	{
 		$this->_baseTemplate="inner-template";
 		$this->_bodyTemplate="reconstitution/prepare";
@@ -83,16 +83,20 @@ if (!in_array($_FILES['inputfile']['type'], $csv_mimetypes)) {
 		foreach($data as $key=> $security)
 		{
 			$newData=$this->getallDataofTicker($security['2']);
-			//$this->pr($newData);
+			 //$this->pr($newData);
 			$outputArray[$key]['index_code']=$security['1'];
-			$outputArray[$key]['ticker']=$security['2'];
-			$outputArray[$key]['isin']=$newData['isin'];
+			
+			$outputArray[$key]['ticker']=$newData['ticker'];
+			$outputArray[$key]['isin']=$security['2'];
 			$outputArray[$key]['name']=$newData['name'];
 			$outputArray[$key]['curr']=$newData['curr'];
 			$outputArray[$key]['divcurr']=$newData['divcurr'];
 			$outputArray[$key]['sedol']=$newData['sedol'];
 			$outputArray[$key]['cusip']=$newData['cusip'];
 			$outputArray[$key]['countryname']=$newData['countryname'];
+			$outputArray[$key]['sector']=$newData['sector'];
+			$outputArray[$key]['industry']=$newData['industry'];
+			$outputArray[$key]['subindustry']=$newData['subindustry'];
 			$outputArray[$key]['shares']="";
 			$outputArray[$key]['weight']="";
 			
@@ -103,7 +107,7 @@ if (!in_array($_FILES['inputfile']['type'], $csv_mimetypes)) {
 		$output = fopen("php://output",'w') or die("Can't open php://output");
 header("Content-Type:application/csv"); 
 header("Content-Disposition:attachment;filename=".$_FILES['inputfile']['name']); 
-fputcsv($output, array('index_code','ticker','isin','name','curr','divcurr','sedol','cusip','countryname','share','weight'));
+fputcsv($output, array('code','ticker','isin','name','curr','divcurr','sedol','cusip','countryname','sector','industry','subindustry','share','weight'));
 foreach($outputArray as $product) {
     fputcsv($output, $product);
 }
@@ -125,12 +129,12 @@ fclose($output) or die("Can't close php://output");
 				
 	}
 	
-	function getallDataofTicker($ticker)
+	function getallDataofTicker($isin)
 	{
 	$indxxdata=array();
-	$indxxdata=$this->db->getResult("select * from tbl_indxx_ticker where ticker='".$ticker."'",false,1);
+	$indxxdata=$this->db->getResult("select * from tbl_indxx_ticker where isin='".$isin."'",false,1);
 		if(empty($indxxdata))
-		$indxxdata=$this->db->getResult("select * from tbl_indxx_ticker_temp where ticker='".$ticker."'",false,1);
+		$indxxdata=$this->db->getResult("select * from tbl_indxx_ticker_temp where isin='".$isin."'",false,1);
 	
 	
 	return $indxxdata;
@@ -230,7 +234,7 @@ if (!in_array($_FILES['inputfile']['type'], $csv_mimetypes)) {
 			}
 			
 			
-			$fields=array("1",'2','3','4','5','6','7','8','9','10','11');		
+			$fields=array("1",'2','3','4','5','6','7','8','9','10','11','12','13','14');		
 			$data = csv::import($fields,$_FILES['inputfile']['tmp_name']);			
 			 $ordered = array();
 			 if(!empty($data))
@@ -274,9 +278,9 @@ if (!in_array($_FILES['inputfile']['type'], $csv_mimetypes)) {
 				if(!empty($indxx))
 				{
 				foreach($indxx as $ticker)
-				{if($ticker['11'])
+				{if($ticker['14'])
 				{
-					$sum+=$ticker['11'];
+					$sum+=$ticker['14'];
 					$check=true;
 				}
 				}
@@ -329,18 +333,18 @@ if (!in_array($_FILES['inputfile']['type'], $csv_mimetypes)) {
 					$tickerArray=array();
 				foreach($indxx as $ticker)
 				{
-				if($ticker['10'])
+				if($ticker['13'])
 				{
-				$share_array[]="('".$indxx_id."','".$ticker[3]."','".$ticker[10]."')";
+				$share_array[]="('".$indxx_id."','".$ticker[3]."','".$ticker[13]."')";
 				}
 				
-				$tickerArray[]="('".$indxx_id."','".$ticker[2]."','".$ticker[3]."','".$ticker[4]."','".$ticker[5]."','".$ticker[6]."','".$ticker[7]."','".$ticker[8]."','".$ticker[9]."','".$ticker[11]."')";
+				$tickerArray[]="('".$indxx_id."','".$ticker[2]."','".$ticker[3]."','".$ticker[4]."','".$ticker[5]."','".$ticker[6]."','".$ticker[7]."','".$ticker[8]."','".$ticker[9]."','".$ticker[10]."','".$ticker[11]."','".$ticker[12]."','".$ticker[14]."')";
 				}
 				
 				if(!empty($share_array))
 				$this->db->query("insert into tbl_share_temp (indxx_id,isin,share) values ".implode(",",$share_array).";");
 				if(!empty($tickerArray))
-				$this->db->query("insert into tbl_indxx_ticker_temp (indxx_id,ticker,isin,name,curr,divcurr,sedol,cusip,countryname,weight) values ".implode(",",$tickerArray).";");
+				$this->db->query("insert into tbl_indxx_ticker_temp (indxx_id,ticker,isin,name,curr,divcurr,sedol,cusip,countryname,sector,industry,subindustry,weight) values ".implode(",",$tickerArray).";");
 				
 				}
 				}

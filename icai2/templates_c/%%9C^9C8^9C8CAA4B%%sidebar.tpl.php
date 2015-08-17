@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-07-14 08:40:57
+<?php /* Smarty version 2.6.14, created on 2015-08-12 10:13:16
          compiled from sidebar.tpl */ ?>
 <div id="sidebar" class="nav-collapse">
                 <!-- BEGIN Navlist -->
@@ -30,7 +30,7 @@
                         </a>
                     </li>-->
 					<?php if ($this->_tpl_vars['sessData']['User']['type'] == '1' || $this->_tpl_vars['sessData']['User']['type'] == '2' || $this->_tpl_vars['sessData']['User']['type'] == '3'): ?>
-                    <li <?php if ($this->_tpl_vars['currentClass'] == 'caindex' || $this->_tpl_vars['currentClass'] == 'casecurities' || $this->_tpl_vars['currentClass'] == 'caupcomingindex' || $this->_tpl_vars['currentClass'] == 'uniquesecurities' || $this->_tpl_vars['currentClass'] == 'uniquecurrencies' || $this->_tpl_vars['currentClass'] == 'updatecusip' || $this->_tpl_vars['currentClass'] == 'benchmarkindex' || $this->_tpl_vars['currentClass'] == 'updatesedol'): ?> class="active"<?php endif; ?>>
+                    <li <?php if ($this->_tpl_vars['currentClass'] == 'caindex' || $this->_tpl_vars['currentClass'] == 'casecurities' || $this->_tpl_vars['currentClass'] == 'editedindex' || $this->_tpl_vars['currentClass'] == 'reconstitution1' || $this->_tpl_vars['currentClass'] == 'caupcomingindex' || $this->_tpl_vars['currentClass'] == 'uniquesecurities' || $this->_tpl_vars['currentClass'] == 'uniquecurrencies' || $this->_tpl_vars['currentClass'] == 'updatecusip' || $this->_tpl_vars['currentClass'] == 'benchmarkindex' || $this->_tpl_vars['currentClass'] == 'updatesedol'): ?> class="active"<?php endif; ?>>
                         <a href="#" class="dropdown-toggle">
                             <i class="icon-desktop"></i>
                             <span>Index</span>
@@ -41,12 +41,13 @@
                        
                         <ul class="submenu">
                         <li><a href="index.php?module=caindex">Running Index</a></li>
+						  <li><a href="index.php?module=reconstitution1&event=prepare">Prepare Input Data for Add new Index</a></li>
                            <?php if ($this->_tpl_vars['sessData']['User']['type'] != 3): ?><li><a href="index.php?module=caindex&event=addNewRunning">Add new Running Index</a></li><?php endif; ?>
-                        <li><a href="index.php?module=caupcomingindex">Upcoming Index</a></li>
+                        <li><a href="index.php?module=caupcomingindex">All Upcoming Index</a></li>
+						  <li><a href="index.php?module=editedindex">Rebalancing and Reconstitution Index </a></li>
                <!--          <li><a href="index.php?module=benchmarkindex">USD Benchmark Index</a></li> 
 			<li><a href="index.php?module=adjbenchmarkindex">Local Benchmark Index</a></li>-->
                             <li><a href="index.php?module=casecurities">Securities</a></li>
-                          
                           <!--  <li><a href="index.php?module=updatecusip">Update Cusip</a></li>
                             <li><a href="index.php?module=updatesedol">Update Sedol</a></li>-->
                             <?php if ($this->_tpl_vars['sessData']['User']['type'] == 3): ?><li><a href="index.php?module=uniquesecurities">Active Unique Securities</a></li>
@@ -54,17 +55,8 @@
                             <?php endif; ?>
                                       </ul>
                         <!-- END Submenu -->
-                        
-                        
-                        
                     </li>
-<?php endif; ?>
-
-
-
-
-
-					<?php if ($this->_tpl_vars['sessData']['User']['type'] == '1' || $this->_tpl_vars['sessData']['User']['type'] == '2'): ?>
+<?php endif; ?>	<?php if ($this->_tpl_vars['sessData']['User']['type'] == '1' || $this->_tpl_vars['sessData']['User']['type'] == '2'): ?>
                     <li <?php if ($this->_tpl_vars['currentClass'] == 'rebalancing'): ?> class="active"<?php endif; ?>>
                         <a href="#" class="dropdown-toggle">
                             <i class="icon-list"></i>
@@ -110,8 +102,6 @@
                         
                     </li>
 					<?php endif; ?>
-
-
 
                      <?php if ($this->_tpl_vars['sessData']['User']['type'] == '1' || $this->_tpl_vars['sessData']['User']['type'] == '2'): ?>
                      
@@ -175,7 +165,7 @@
                      
                      <?php endif; ?>
 <?php if ($this->_tpl_vars['sessData']['User']['type'] == '1' || $this->_tpl_vars['sessData']['User']['type'] == '2'): ?>
-                    <li <?php if ($this->_tpl_vars['currentClass'] == 'cacalendar'): ?> class="active"<?php endif; ?>>
+                 <li <?php if ($this->_tpl_vars['currentClass'] == 'cacalendar'): ?> class="active"<?php endif; ?>>
                         <a href="index.php?module=cacalendar" class="dropdown-toggle">
                             <i class="icon-list"></i>
                             <span>CA Calendar</span>
@@ -189,7 +179,7 @@
                             <li><a href="table_dynamic.html">Dynamic</a></li>
                         </ul>-->
                         <!-- END Submenu -->
-                   </li>
+                   <!-- </li>-->
 <?php endif; ?>
                     
                     <!--<li>
@@ -353,44 +343,65 @@
                        
                      
                     </li>-->
-                    
-                    
-                    <?php if ($this->_tpl_vars['sessData']['User']['type'] == '1'): ?>
-                    <li <?php if ($this->_tpl_vars['currentClass'] == 'security'): ?> class="active"<?php endif; ?>>
+					  
+					  
+ <?php if ($this->_tpl_vars['sessData']['User']['type'] == 1): ?>
+					  <li <?php if ($this->_tpl_vars['currentClass'] == 'security'): ?> class="active"<?php endif; ?>>
                         <a href="#" class="dropdown-toggle">
-                            <i class="icon-list"></i>
-                            <span>Security Prices</span>
-                            <b class="arrow icon-angle-right"></b>
+                            <i class="icon-th"></i>
+                            <span>Input Prices</span>
+                           
                         </a>
-
-                        <!-- BEGIN Submenu -->
-                       
+                        
+                              
                         <ul class="submenu">
-                        <li><a href="index.php?module=security&event=add_security">Add Security Prices</a></li>
-                        <li><a href="index.php?module=security&event=add_currency">Add Currency Prices</a></li>
-                            <!--  <li><a href="index.php?module=updatecusip">Update Cusip</a></li>
-                            <li><a href="index.php?module=updatesedol">Update Sedol</a></li>-->
-                                     </ul>
-                        <!-- END Submenu -->
                         
+                   <li><a href="index.php?module=security&event=add_security">Add Security Prices</a></li>
+				    <li><a href="index.php?module=security&event=add_currency">Add Currency Prices</a></li>
+               
+                                      </ul>
                         
+                        </li><?php endif; ?>
+					  
+ <?php if ($this->_tpl_vars['sessData']['User']['type'] == 4): ?>
+					  <li <?php if ($this->_tpl_vars['currentClass'] == 'restoreindexlive'): ?> class="active"<?php endif; ?>>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-th"></i>
+                            <span>Restore Index</span>
+                           
+                        </a>
                         
-                    </li>
-					<?php endif; ?>
-                    
+                              
+                        <ul class="submenu">
+                        
+                   <li><a href="index.php?module=restoreindexlive">Restore Live Index</a></li>
+               <!-- <li><a href="index.php?module=restoreindexlive&event=upcomming">Restore Upcoming Index</a></li>-->
+                                      </ul>
+                        
+                        </li>
                     
 					<li <?php if ($this->_tpl_vars['currentClass'] == 'useraction'): ?> class="active"<?php endif; ?>>
                         <a href="index.php?module=useraction">
                             <i class="icon-th"></i>
                             <span>User Actions</span>
                            
-                        </a>
+                        </a></li>
 					<li <?php if ($this->_tpl_vars['currentClass'] == 'restoredb'): ?> class="active"<?php endif; ?>>
                         <a href="index.php?module=restoredb">
                             <i class="icon-th"></i>
                             <span>Restore DB</span>
                            
                         </a>
+					</li>
+                     <!-- Rebalance -->
+                    <?php endif; ?>
+                    <!--  <li>
+                        <a href="../multicurrency2/dbcopy.php" target="_blank"  class="dropdown-toggle">
+                            <i class="icon-th"></i>
+                            <span>Update Database</span>
+                           
+                        </a></li>
+					 -->
 					
                      <!-- Rebalance -->
                     

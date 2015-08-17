@@ -6,6 +6,7 @@ header('Content-Type: text/html; charset=iso-8859-1');
 ini_set('display_errors', "on");
 //Report all error except notice//E_ALL ^ E_NOTICE
 ini_set('error_reporting',0);
+
 ini_set('allow_call_time_pass_reference',true);
 // Do not allow php_sess_id to be passed in the querystring and it's use for google search
 ini_set('session.use_only_cookies', 1);

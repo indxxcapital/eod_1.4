@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.14, created on 2015-04-05 08:27:57
+<?php /* Smarty version 2.6.14, created on 2015-06-18 06:47:49
          compiled from blocks/logintab.tpl */ ?>
 <li class="user-profile">
                             <a data-toggle="dropdown" href="#" class="user-menu dropdown-toggle">

@@ -81,12 +81,12 @@ function get_dbbackup_path()
 function get_input_file($file, $date) 
 {
 	
-		log_info("Input files fetched from " .realpath("../files/input"). " directory");
-		$currency_factor = "../files/input/curr1_16g.csv." . date ( "Ymd", strtotime ( $date ) );
-		$libor_rate = "../files/input/libr_16g.csv." . date ( "Ymd", strtotime ( $date ) );
-		$cash_index = "../files/input/cashindex_16g.csv." . date ( "Ymd", strtotime ( $date ) );
-		$price_file = "../files/input/multicurr_16g.csv." . date ( "Ymd", strtotime ( $date ) );
-		$ca_file = "../files/input/ca_16g.csv." . date ( "Ymd", strtotime ( $date ) );
+		log_info("Input files fetched from " .realpath("../../ical1.4.1/files/input"). " directory");
+		$currency_factor = "../../ical1.4.1/files/input/curr1_16g.csv." . date ( "Ymd", strtotime ( $date ) );
+		$libor_rate = "../../ical1.4.1/files/input/libr_16g.csv." . date ( "Ymd", strtotime ( $date ) );
+		$cash_index = "../../ical1.4.1/files/input/cashindex_16g.csv." . date ( "Ymd", strtotime ( $date ) );
+		$price_file = "../../ical1.4.1/files/input/multicurr_16g.csv." . date ( "Ymd", strtotime ( $date ) );
+		$ca_file = "../../ical1.4.1/files/input/ca_16g.csv." . date ( "Ymd", strtotime ( $date ) );
 
 	// echo "Request for input file: " . $file . "[" . $file . "]" . PHP_EOL;
 	switch ($file) {
@@ -112,7 +112,7 @@ function mail_exit($file, $line)
 	
 	log_error("Sending email for abrupt process exit at file=" .$file. " and line=" .$line);
 
-		sendmail(email_errors, "EoD process existed with error.", 
+		sendmail("icalc@indxx.com", "EoD process existed with error.", 
 				"Please check log[" .log_file. "] file for more info.");
 	exit();	
 }
@@ -123,7 +123,7 @@ function mail_skip($file, $line)
 		
 	log_warning("Sending email for anomaly at file=" .$file. " and line=" .$line);
 	
-		mail(email_errors, "EoD process encountered anomaly.",
+		mail("icalc@indxx.com", "EoD process encountered anomaly.",
 				"Please check log[" .log_file. "] file for more info.");
 }
 
@@ -133,7 +133,7 @@ function mail_info($info)
 	log_warning("Sending email for info - " .$info);
 
 	
-		mail(email_errors, "EoD information.", $info);
+		mail("icalc@indxx.com", "EoD information.", $info);
 }
 
 

@@ -28,7 +28,7 @@
                         </a>
                     </li>-->
 					{if $sessData.User.type=='1' || $sessData.User.type=='2' || $sessData.User.type=='3'}
-                    <li {if $currentClass=="caindex" || $currentClass=="casecurities" || $currentClass=="caupcomingindex" || $currentClass=="uniquesecurities"  || $currentClass=="uniquecurrencies" || $currentClass=="updatecusip"  || $currentClass=="benchmarkindex" || $currentClass=="updatesedol" } class="active"{/if}>
+                    <li {if $currentClass=="caindex" || $currentClass=="casecurities" || $currentClass=="editedindex" || $currentClass=="reconstitution1" || $currentClass=="caupcomingindex" || $currentClass=="uniquesecurities"  || $currentClass=="uniquecurrencies" || $currentClass=="updatecusip"  || $currentClass=="benchmarkindex" || $currentClass=="updatesedol" } class="active"{/if}>
                         <a href="#" class="dropdown-toggle">
                             <i class="icon-desktop"></i>
                             <span>Index</span>
@@ -39,8 +39,10 @@
                        
                         <ul class="submenu">
                         <li><a href="index.php?module=caindex">Running Index</a></li>
+						  <li><a href="index.php?module=reconstitution1&event=prepare">Prepare Input Data for Add new Index</a></li>
                            {if $sessData.User.type!=3}<li><a href="index.php?module=caindex&event=addNewRunning">Add new Running Index</a></li>{/if}
-                        <li><a href="index.php?module=caupcomingindex">Upcoming Index</a></li>
+                        <li><a href="index.php?module=caupcomingindex">All Upcoming Index</a></li>
+						  <li><a href="index.php?module=editedindex">Rebalancing and Reconstitution Index </a></li>
                <!--          <li><a href="index.php?module=benchmarkindex">USD Benchmark Index</a></li> 
 			<li><a href="index.php?module=adjbenchmarkindex">Local Benchmark Index</a></li>-->
                             <li><a href="index.php?module=casecurities">Securities</a></li>
@@ -161,12 +163,12 @@
                      
                      {/if}
 {if $sessData.User.type=='1' || $sessData.User.type=='2'}
-                 <!--   <li {if $currentClass=="cacalendar"} class="active"{/if}>
+                 <li {if $currentClass=="cacalendar"} class="active"{/if}>
                         <a href="index.php?module=cacalendar" class="dropdown-toggle">
                             <i class="icon-list"></i>
                             <span>CA Calendar</span>
                             
-                        </a>-->
+                        </a>
 
                         <!-- BEGIN Submenu -->
                         <!--<ul class="submenu">
@@ -339,7 +341,28 @@
                        
                      
                     </li>-->
-					    <li {if $currentClass=="restoreindexlive"} class="active"{/if}>
+					  
+					  
+ {if $sessData.User.type==1  }
+					  <li {if $currentClass=="security"} class="active"{/if}>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-th"></i>
+                            <span>Input Prices</span>
+                           
+                        </a>
+                        
+                              
+                        <ul class="submenu">
+                        
+                   <li><a href="index.php?module=security&event=add_security">Add Security Prices</a></li>
+				    <li><a href="index.php?module=security&event=add_currency">Add Currency Prices</a></li>
+               
+                                      </ul>
+                        
+                        </li>{/if}
+					  
+ {if $sessData.User.type==4  }
+					  <li {if $currentClass=="restoreindexlive"} class="active"{/if}>
                         <a href="#" class="dropdown-toggle">
                             <i class="icon-th"></i>
                             <span>Restore Index</span>
@@ -369,14 +392,14 @@
                         </a>
 					</li>
                      <!-- Rebalance -->
-                    
-                     <li>
+                    {/if}
+                    <!--  <li>
                         <a href="../multicurrency2/dbcopy.php" target="_blank"  class="dropdown-toggle">
                             <i class="icon-th"></i>
                             <span>Update Database</span>
                            
                         </a></li>
-					
+					 -->
 					
                      <!-- Rebalance -->
                     
